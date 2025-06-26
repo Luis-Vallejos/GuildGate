@@ -1,0 +1,121 @@
+/* 
+    Created on : 25 jun. 2025, 12:25:16
+    Author     : Juan - Luis
+*/
+@import url('./marginAdjusters.css');
+@import url('./showModalDesign.css');
+
+body {
+    background-image: url("/GremiosYRaids/imagenes/loginYregistro/Register1.jpg");
+    background-size: cover;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/*Formulario Registro Estilos*/
+#registro {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    height: 100%;
+    width: 25%;
+    color: white;
+    margin-left: 10%;
+}
+
+#registro form{
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    margin-inline: 10px;
+}
+
+#imagenRegistro{
+    padding: 15px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+#imagenRegistro img {
+    width: 200px;
+    height: 200px;
+    object-fit: contain;
+    background-size: cover;
+}
+
+#registro form label{
+    margin-bottom: 2px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+#registro form input {
+    margin-bottom: 20px;
+    width: 95%;
+    height: 40px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background-color 0.3s ease, color 0.3s ease, font-weigth 0.3s ease;
+}
+
+#registro form input:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    font-weight: bolder;
+}
+
+#btn-registro{
+    width: 95%;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgba(0, 123, 255, 1);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-block: 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#btn-registro:hover {
+    background-color: rgba(0, 123, 255, 0.5);
+}
+
+#links-section{
+    text-align: center;
+    padding: 3px;
+    width: 95%;
+    font-size: 12px;
+}
+
+#registro p {
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#registro p a {
+    color: rgba(0, 123, 255, 1);
+    margin-inline: 5px;
+    transition: color 0.2s ease;
+}
+
+#registro p a:hover {
+    color: rgba(0, 123, 255, 0.5);
+}
+
+.home {
+    display: block;
+    margin-top: 20px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.2s ease;
+}
+
+.home:hover {
+    color: rgba(0, 123, 255, 0.8);
+}

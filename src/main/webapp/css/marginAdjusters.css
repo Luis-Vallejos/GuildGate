@@ -1,0 +1,28 @@
+/* 
+    Created on : 26 jun. 2025, 10:07:22
+    Author     : Lavender
+*/
+/*Reajustador de Margenes*/
+html {
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    list-style-type: none;
+    font-family: Arial;
+}
+
+body {
+    position: relative;
+    min-height: 100vh;
+    padding-bottom: 12em;
+}

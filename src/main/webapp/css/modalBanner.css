@@ -1,0 +1,335 @@
+/* 
+    Created on : 25 jun. 2025, 21:31:52
+    Author     : Juan - Luis
+*/
+/*Banner*/
+/* Modal para cambiar la imagen del banner */
+#modal-banner {
+    position: fixed;
+    top: 23%;
+    left: 8%;
+    background-color: rgb(36, 58, 34);
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+    max-width: 1300px;
+    margin: auto;
+    padding: 15px;
+    z-index: 1001;
+    opacity: 1;
+}
+
+#banner-encabezado {
+    display: grid;
+    margin-top: 3px;
+    margin-left: 25px;
+}
+
+#banner-encabezado h2 {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #fff;
+}
+
+#banner-encabezado p {
+    color: #f4e1d2;
+    text-align: justify;
+}
+
+#seleccion-banner {
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 10px;
+    padding: 30px;
+}
+
+#btnBannerPredeterminado {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 90%;
+    max-height: 150px;
+    padding: 10px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#btnSubirBanner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 90%;
+    max-height: 150px;
+    padding: 10px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#btnBannerPredeterminado:hover, #btnSubirBanner:hover {
+    background-color: #333;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#imgBanner {
+    width: 100%;
+    height: auto;
+    max-height: 150px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+#ban {
+    width: 100%;
+    height: auto;
+}
+
+#bannerIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Tarjeta */
+#tarjeta-banner-predeterminado { 
+    position: fixed;
+    top: 1%;
+    left: 8%;
+    width: 100%;
+    height: auto;
+    max-width: 1300px;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(36, 58, 34);
+    margin: auto;
+    z-index: 1001;
+    opacity: 1;
+}
+
+#tarjeta-banner-personalizado {
+    position: fixed;
+    top: 4.5%;
+    left: 8%;
+    width: 100%;
+    height: auto;
+    max-width: 1300px;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(36, 58, 34);
+    margin: auto;
+    z-index: 1001;
+    opacity: 1;  
+}
+
+#encabezado-banner {
+    padding: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    border-top-right-radius: 50px;
+    border-top-left-radius: 50px;
+    background-color: rgb(36, 58, 34);
+}
+
+#titulo-banner, #titleBanner {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+#contenido-banner, #contentBanner {
+    padding: 1rem;
+}
+
+#banner-perfil, #bannerProfile {
+    position: relative;
+    width: 100%;
+    height: auto;
+    max-height: 390px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 0.375rem;
+}
+
+#banner-perfil img, #bannerProfile img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#super-banner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#bannerProfile:hover #super-banner {
+    opacity: 1;
+}
+
+#input-banner {
+    display: none;
+}
+
+#btnUploadBanner {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#iconUploadBanner {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke: #000;
+}
+
+#uploadText {
+    display: none;
+}
+
+/* Galeria de Banners para el modal Predeterminado */
+#galeria-banners {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+    max-height: 9.5rem;
+    overflow-y: auto;
+}
+
+#galeria-banners button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#galeria-banners button img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 0.375rem;
+}
+
+#galeria-banners button:hover {
+    transform: scaleY(1.05);
+    filter: brightness(105%);
+}
+
+/* Galeria de banners para el modal personalizado */
+#bannerUpload {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    max-height: 8rem;
+    overflow: hidden;
+}
+
+#bannerUpload button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#bannerUpload button img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 0.375rem;
+}
+
+#bannerUpload button:hover {
+    transform: scale(1.03);
+    filter: brightness(105%);
+}
+
+/* Pie de tarjeta de los Modales de Banner */
+#pie-banner,
+#bannerFoot {
+    padding: 1rem;
+    border-top: 1px solid #eaeaea;
+    background-color: rgb(36, 58, 34);
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#btnCancelarBanner,
+#btnCancelarBanner-Personalizado {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+#btnCancelarBanner:hover,
+#btnCancelarBanner-Personalizado:hover {
+    background-color: #D22B2B;
+    color: white;
+}
+
+#btnGuardarBanner,
+#btnGuardarBanner-Personalizado {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid #097969;
+    background-color: #097969;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    transition: all 0.3s ease-in-out;
+}
+
+#btnGuardarBanner:hover,
+#btnGuardarBanner-Personalizado:hover {
+    background-color: #00A36C;
+    color: black;
+}
+

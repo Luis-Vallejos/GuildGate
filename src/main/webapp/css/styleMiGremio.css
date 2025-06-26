@@ -1,0 +1,520 @@
+/* 
+    Created on : 25 jun. 2025, 18:12:12
+    Author     : Juan - Luis
+*/
+@import url('./marginAdjusters.css');
+@import url('./scrollbarDesign.css');
+@import url('./navDesign.css');
+@import url('./showModalDesign.css');
+@import url('./footerDesign.css');
+@import url('./clasesGenerales.css');
+@import url('./ModalAvatar.css');
+@import url('./ModalFondoGremio.css');
+
+body {
+    background-size: cover;
+    object-fit: cover;
+    background-position: center;
+}
+
+/* Sección Mi Gremio */
+#seccion-gremio {
+    padding-block: 10px;
+    padding-inline: 10px;
+    max-width: 100%;
+    height: 100%;
+    background: none;
+}
+
+#encabezado-gremio {
+    display: flex;
+    background-color: black;
+    padding: 15px;
+    border-radius: 10px;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Sección Imagen del Gremio */
+#gremio-imagen-contenedor {
+    position: relative;
+    width: 9rem;
+    height: 9rem;
+    border-radius: 50%;
+    margin-block: 15px;
+    margin-inline: 20px;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+}
+
+#gremio-imagen-contenedor:hover #imagen-gremio {
+    transform: scale(1.05);
+}
+
+#imagen-gremio {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+#cambiar-imagen {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#gremio-imagen-contenedor:hover #cambiar-imagen {
+    opacity: 1;
+}
+
+#boton-cambiar-imagen {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+/* Sección Info del Gremio */
+#info-gremio {
+    flex: 1;
+}
+
+#nombre-gremio {
+    font-size: 2em;
+    color: white;
+    font-weight: bolder;
+}
+
+#descripcion-gremio {
+    font-size: 1.2em;
+    margin: 5px 0 0;
+    color: white;
+}
+
+/* Sección Boton Cambiar Fondo del Gremio */
+#gremio-fondo-contenedor {
+    position: relative;
+    width: 4.7rem;
+    height: 4.7rem;
+    background-color: transparent;
+    border: none;
+    transform: translate(30%, 100%);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#cambiar-fondo {
+    position: absolute;
+    inset: 0;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#boton-cambiar-fondo:hover #icono-cambiar-fondo circle {
+    fill: white;
+}
+
+#boton-cambiar-fondo:hover #icono-cambiar-fondo path {
+    fill: darkorange;
+}
+
+#icono-cambiar-fondo {
+    width: 60px;
+    height: 60px;
+    transition: all 0.3s ease-in-out;
+}
+
+#icono-cambiar-fondo circle,
+#icono-cambiar-fondo path {
+    transition: all 0.3s ease-in-out;
+}
+
+#boton-cambiar-fondo {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: black;
+    outline: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Sección Roles del Usuario */
+#seccion-roles {
+    margin-top: 30px;
+}
+
+#titulo-roles {
+    font-size: 1.5em;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 25px;
+    padding: 15px;
+    width: 8%;
+    color: white;
+    font-weight: bolder;
+    margin-bottom: 20px;
+}
+
+#contenedor-roles {
+    display: grid;
+    grid-template-columns: repeat(5, 5fr);
+    gap: 20px;
+}
+
+.tarjeta-rol {
+    background-color: black;
+    padding: 15px;
+    border-radius: 10px;
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.tarjeta-rol h3 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+    color: white;
+    font-weight: bolder;
+}
+
+.tarjeta-rol p {
+    margin: 0;
+    font-size: 1em;
+    color: white;
+    text-align: justify;
+}
+
+/* Sección para el titulo de las actividades */
+#contenedor-titulos-actividades {
+    display: grid;
+    grid-template-columns: repeat(3, 3fr);
+    margin-top: 50px;
+}
+
+#participaciones-gremio {
+    margin-left: 80px;
+}
+
+#roles-gremio {
+    margin-left: 130px;
+}
+
+#raids-gremio {
+    margin-left: 140px;
+}
+
+.titulo-actividades {
+    font-size: 1.5em;
+    color: white;
+    font-weight: bolder;
+    margin-bottom: 20px;
+}
+
+#titulo-parti {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 25px;
+    padding: 15px;
+    width: 68%;
+}
+
+#titulo-rol {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 25px;
+    padding: 15px;
+    width: 56.3%;
+}
+
+#titulo-raids {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 25px;
+    padding: 15px;
+    width: 56.3%;
+}
+
+/* Sección Actividades del Gremio */
+#contenedor-actividades {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 496px;
+    width: 100%;
+}
+
+/* Sección Participantes Gremio */
+#participantes {
+    background-color: black;
+    color: white;
+    border-radius: 25px;
+    width: 452px;
+    height: auto;
+    overflow-y: auto;
+}
+
+.contenedor-lista-participantes {
+    padding: 15px;
+    border-radius: 25px;
+}
+
+.gremio-participantes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding-block: 16.5px;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.gremio-participantes:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.foto-participante {
+    background-color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.nombre-participante {
+    margin: 0 auto;
+    font-weight: bolder;
+    transform: translateY(35%);
+}
+
+.rol-participante {
+    margin: 0 auto;
+    font-weight: bolder;
+    transform: translateY(35%);
+}
+
+/* Sección Roles del Gremio */
+#roles {
+    background-color: black;
+    color: white;
+    width: 452px;
+    height: auto;
+    overflow-y: auto;
+    padding: 3px;
+    margin-inline: 60px;
+    border-radius: 25px;
+}
+
+.contenedor-lista-roles {
+    padding: 10px;
+    border-radius: 25px;
+}
+
+.gremio-roles {
+    padding-block: 19.4px;
+    padding-inline: 4.5px;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.gremio-roles:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nombre-rol-gremio {
+    font-weight: bolder;
+}
+
+.rol-descripcion {
+    text-align: justify;
+}
+
+/* Sección Raids del Gremio */
+#raids {
+    background-color: black;
+    color: white;
+    width: 452px;
+    height: auto;
+    overflow-y: auto;
+    padding: 5px;
+    border-radius: 25px;
+}
+
+.contenedor-lista-raids {
+    padding: 10px;
+    border-radius: 25px;
+}
+
+.gremio-raids {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    padding-block: 16.5px;
+    padding-inline: 10px;
+    border-radius: 25px;
+    transition: all 0.3s ease-in-out;
+}
+
+.gremio-raids:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.nombre-raid {
+    margin-left: auto;
+    padding-block: 20px;
+    font-weight: bolder;
+}
+
+.boton-ver-mas-raid {
+    height: 40%;
+    width: 40%;
+    margin: 15px auto;
+    border: 4px solid #FDDA0D;
+    background-color: #FFEA00;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bolder;
+    border-radius: 5px;
+    transition: all 0.4s ease-in-out;
+}
+
+.boton-ver-mas-raid:hover {
+    background-color: #FDDA0D;
+    animation: border-shine 3s;
+}
+
+@keyframes border-shine {
+    0% {
+        border-color: #FDDA0D;
+    }
+
+    50% {
+        border-color: #FFD700;
+    }
+
+    100% {
+        border-color: #FDDA0D;
+    }
+}
+
+#formBtnObtenerParticipantes,
+#formBtnObtenerRoles,
+#formBtnObtenerRaids {
+    display: inline-block;
+    width: 100%;
+    height: 100%;
+    align-content: center;
+    text-align: center;
+}
+
+.nomCarga {
+    display: flex;
+    font-family: Arial;
+    color: black;
+    margin: 10px auto;
+    font-weight: bolder;
+    transition: color 0.4s ease-in-out;
+}
+
+#cargaParticipantes {
+    width: 140px;
+}
+
+#cargaRaids,
+#cargaRoles {
+    width: 100px;
+}
+
+.icono-cargar {
+    display: inline-block;
+    width: 150px;
+    height: auto;
+    border: none;
+    background-color: transparent;
+    border-radius: 5px;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: all 0.4s ease-in-out;
+}
+
+.icono-cargar:hover~.nomCarga {
+    color: white;
+}
+
+.img-carga {
+    width: 100%;
+    height: auto;
+    transition: transform 0.3s, box-shadow 0.3s, border 0.3s, filter 0.3s;
+    filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));
+}
+
+.img-carga:hover {
+    transform: scale(1.2) rotate(7deg);
+    filter: drop-shadow(15px 15px 15px rgba(0, 0, 0, 0.5)) brightness(1.2);
+    cursor: pointer;
+}
+
+.img-carga:active {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1.3) rotate(5deg);
+    }
+
+    50% {
+        transform: scale(1.45) rotate(5deg);
+    }
+
+    100% {
+        transform: scale(1.3) rotate(5deg);
+    }
+}
+
+/* Botones de acción para las actividades del gremio */
+.botones-accion {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-block: 15px;
+    justify-items: center;
+    align-items: center;
+}
+
+.boton-accion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background: transparent;
+    border: white 2px solid;
+    color: white;
+    border-radius: 50%;
+    margin: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.boton-accion:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: scale(1.1);
+}
+
+.boton-accion svg {
+    width: 24px;
+    height: 24px;
+}
+
+.boton-accion svg {
+    display: block;
+    margin: auto;
+}

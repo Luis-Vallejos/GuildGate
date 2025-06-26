@@ -1,0 +1,111 @@
+/* 
+    Created on : 26 jun. 2025, 10:10:12
+    Author     : Juan - Luis
+*/
+footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 20px;
+    background-color: black;
+    color: beige;
+    gap: 20px;
+    width: 97.39%;
+    position: absolute;
+    bottom: 0;
+}
+
+.footer-section {
+    padding: 10px;
+}
+
+.footer-section h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.footer-section ul li {
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.footer-section ul li a {
+    color: beige;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.footer-section ul li a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: beige;
+    transition: width 0.3s;
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+}
+
+.footer-section ul li a:hover {
+    color: beige;
+}
+
+.footer-section ul li a:hover::after {
+    width: 100%;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+#Redes h2 {
+    text-align: center;
+}
+
+footer img {
+    width: 45px;
+    height: auto;
+    transition: transform 0.3s;
+}
+
+footer img:hover {
+    transform: scale(1.1);
+}
+
+footer .copyright {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+    width: 100%;
+}
+
+.copyright a {
+    color: beige;
+}
+
+.footer-section strong a {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+}
+
+.footer-section strong a::after {
+    content: '';
+    display: block;
+    width: 0;
+    height: 2px;
+    background: beige;
+    transition: width 0.3s;
+}
+
+.footer-section strong a:hover::after {
+    width: 100%;
+}

@@ -1,0 +1,130 @@
+/* 
+    Created on : 26 jun. 2025, 18:11:53
+    Author     : Juan - Luis
+*/
+@import url('./marginAdjusters.css');
+@import url('./showModalDesign.css');
+
+body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+}
+
+/*Formulario Creando Gremio*/
+#contenedor {
+    background-color: rgba(0, 0, 0, 0.85);
+    padding: 30px;
+    height: 100%;
+    width: 35%;
+    color: white;
+    margin: auto;
+}
+
+#contenedor form{
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    margin-left: 10px;
+}
+
+#imagenGremio {
+    padding: 2px;
+    margin-top: 5px;
+    text-align: center;
+}
+
+#imagenGremio img {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    background-size: cover;
+}
+
+#contenedor form label {
+    margin-left: 10px;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+#contenedor form input,
+#contenedor form select,
+#contenedor form textarea{
+    font-family: Arial;
+    margin-left: 10px;
+    margin-bottom: 25px;
+    width: 95%;
+    height: 40px;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: background-color 0.3s ease, color 0.3s ease, font-weigth 0.3s ease;
+}
+
+#contenedor form input:hover,
+#contenedor form select:hover,
+#contenedor form textarea:hover{
+    background-color: rgba(255, 255, 255, 0.9);
+    color: black;
+    font-weight: bolder;
+}
+
+#btn-gremio{
+    width: 95%;
+    padding: 10px 20px;
+    border: none;
+    background-color: rgba(0, 123, 255, 1);
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-block: 1px;
+    margin-left: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#btn-gremio:hover {
+    background-color: rgba(0, 123, 255, 0.5);
+}
+
+#links-section{
+    text-align: center;
+    padding: 3px;
+    width: 95%;
+}
+
+#contenedor p {
+    margin-top: 5px;
+    margin-left: 10px;
+    font-size: 14px;
+}
+
+#contenedor p a {
+    color: rgba(0, 123, 255, 1);
+    margin-inline: 5px;
+    transition: color 0.2s ease;
+}
+
+#contenedor p a:hover {
+    color: rgba(0, 123, 255, 0.5);
+}
+
+.home {
+    display: block;
+    margin-top: 20px;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.2s ease;
+}
+
+.home:hover {
+    color: rgba(0, 123, 255, 0.8);
+}

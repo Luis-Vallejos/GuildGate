@@ -1,0 +1,30 @@
+/* 
+    Created on : 26 jun. 2025, 10:09:14
+    Author     : Juan - Luis
+*/
+/* Scrollbar Diseño Prueba */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f4e1d2;
+    border-radius: 10px;
+    transition: background-color 0.10s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #826a5c;
+    border-radius: 10px;
+    transition: background-color 0.10s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #b7a293;
+}
+
+::-webkit-scrollbar-track:hover {
+    background-color: #d1b79c;
+}
+

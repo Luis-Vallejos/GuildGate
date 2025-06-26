@@ -1,0 +1,207 @@
+/* 
+    Created on : 26 jun. 2025, 16:39:43
+    Author     : Juan - Luis
+*/
+@import url('./marginAdjusters.css');
+@import url('./showModalDesign.css?v=1');
+@import url('./navDesign.css?v=1');
+@import url('./scrollbarDesign.css');
+@import url('./footerDesign.css');
+@import url('./modalBanner.css?v=8');
+@import url('./modalAvatar.css?v=2');
+@import url('./clasesGenerales.css');
+
+body {
+    background-color: rgb(60, 52, 52);
+}
+
+/*Sección Mi Perfil*/
+#contenedor {
+    width: 100%;
+}
+
+#banner-contenedor {
+    position: relative;
+    height: 48vh;
+    cursor: pointer;
+}
+
+#banner-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+#banner-contenedor:hover #banner-imagen,
+#banner-contenedor:hover #banner-gradiente {
+    transform: scaleY(1.02);
+    cursor: pointer;
+}
+
+#banner-gradiente {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    transition: transform 0.3s ease-in-out;
+}
+
+#perfil-contenedor {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem;
+    display: flex;
+    align-items: flex-end;
+}
+
+#perfil {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#perfil-imagen-contenedor {
+    position: relative;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+}
+
+#perfil-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.3s ease;
+}
+
+#perfil-imagen-contenedor:hover #perfil-imagen {
+    transform: scale(1.05);
+}
+
+#cambiar-imagen {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#perfil-imagen-contenedor:hover #cambiar-imagen {
+    opacity: 1;
+}
+
+#boton-cambiar-imagen {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+}
+
+#nombre {
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+}
+
+#detalles-perfil {
+    display: flex;
+    gap: 0.5rem;
+    font-size: 1rem;
+    color: white;
+}
+
+#detalles-perfil div {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-weight: bold;
+}
+
+#seccion-sobre {
+    max-width: 48rem;
+    margin: 2rem auto;
+    padding: 1rem;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#contenido {
+    padding: 2rem;
+}
+
+#seccion-sobre {
+    max-width: 48rem;
+    margin: 0 auto;
+}
+
+#titulo-sobre {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#titulo-sobre h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#boton-editar-perfil {
+    background-color: #FFEA00;
+    border: 4px solid #FDDA0D;
+    color: black;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.3s ease;
+}
+
+#boton-editar-perfil:hover {
+    background-color: #FDDA0D;
+    animation: border-shine 1s;
+}
+
+/*Animaciones*/
+@keyframes border-shine {
+    0% {
+        border-color: #FDDA0D;
+    }
+    50% {
+        border-color: #FFD700;
+    }
+    100% {
+        border-color: #FDDA0D;
+    }
+}
+
+#boton-editar-perfil svg {
+    width: 1rem;
+    height: 1rem;
+    color: black;
+}
+
+#descripcion-perfil {
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #666;
+    background: #fff;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#descripcion-perfil p {
+    margin: 0;
+}

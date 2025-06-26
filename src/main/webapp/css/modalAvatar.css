@@ -1,0 +1,489 @@
+/* 
+    Created on : 25 jun. 2025, 21:33:18
+    Author     : Juan - Luis
+*/
+/*Avatar*/
+/* Modal SubirAvatar o Seleccionar */
+#modal-pfp {
+    position: fixed;
+    top: 35%;
+    left: 33%;
+    background-color: rgb(36, 58, 34);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    padding: 15px;
+    z-index: 1001;
+    opacity: 1;
+}
+
+/* Sección Cabecera */
+#encabezado {
+    display: grid;
+    margin-top: 3px;
+    margin-left: 25px;
+}
+
+#encabezado h2 {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #fff;
+}
+
+#encabezado p {
+    color: #f4e1d2;
+    text-align: justify;
+}
+
+/* Sección Selección Avatar */
+#seleccion {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 10px;
+    padding: 30px;
+}
+
+#btnAvatarPredeterminado, #btnSubirAvatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    height: 150px;
+    padding: 10px;
+    margin: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: white;
+    font-weight: bolder;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in, color 0.3s ease-out, box-shadow 0.3s ease-in-out;
+}
+
+#btnAvatarPredeterminado:hover, #btnSubirAvatar:hover {
+    background-color: #333;
+    color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#imgAvatar {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+#pfp {
+    width: 100%;
+    height: auto;
+}
+
+#iconSubir {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* Tarjeta */
+#tarjeta-avatar-predeterminado {
+    position: fixed;
+    top: 1.4%;
+    left: 35%;
+    width: 100%;
+    max-width: 28rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(36, 58, 34);
+    z-index: 1001;
+    opacity: 1;
+}
+
+#tarjeta-avatar-personalizado {
+    position: fixed;
+    top: 2.5%;
+    left: 35%;
+    width: 100%;
+    max-width: 28rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: rgb(36, 58, 34);
+    z-index: 1001;
+    opacity: 1;
+}
+
+#encabezado-tarjeta, #encabezado-tarjeta-personalizado {
+    padding: 1rem;
+    border-bottom: 1px solid #eaeaea;
+    border-top-right-radius: 50px;
+    border-top-left-radius: 50px;
+    background-color: rgb(36, 58, 34);
+}
+
+#titulo-tarjeta, #titulo-tarjeta-personalizado {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin: 0;
+}
+
+#contenido-tarjeta, #contenido-tarjeta-personalizado {
+    padding: 1rem;
+}
+
+#foto-perfil, #foto-perfil-personalizado {
+    position: relative;
+    width: 400px;
+    height: 400px;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 0.375rem;
+}
+
+#foto-perfil img, #foto-perfil-personalizado img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#superposicion-personalizado {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#foto-perfil-personalizado:hover #superposicion-personalizado {
+    opacity: 1;
+}
+
+#input-archivo {
+    display: none;
+}
+
+#boton-subir-personalizado {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#icono-subir-personalizado {
+    width: 1.5rem;
+    height: 1.5rem;
+    stroke: #000;
+}
+
+#subir-texto-personalizado {
+    display: none;
+}
+
+/* Galería de fotos para el modal Predeterminado */
+#galeria-fotos {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+    margin-top: 1rem;
+    max-height: 8.65rem;
+    overflow-y: auto;
+}
+
+#galeria-fotos button {
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+#galeria-fotos button:hover {
+    transform: scaleY(1.2);
+    filter: brightness(105%);
+}
+
+#galeria-fotos img {
+    width: 100%;
+    height: 100%;
+    background: rgb(36, 58, 34);
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+    image-rendering: crisp-edges;
+}
+
+/* Galeria de fotos para el modal personalizado */
+#galeria-fotos-personalizado {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    max-height: 8.65rem;
+    overflow: hidden;
+}
+
+#galeria-fotos-personalizado button {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    border: 1px solid #ddd;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    margin: 0 auto;
+    transition: all 0.3s ease-in-out;
+}
+
+#galeria-fotos-personalizado button:hover {
+    transform: scaleX(1.1);
+    filter: brightness(105%);
+}
+
+#galeria-fotos-personalizado img {
+    width: 100%;
+    height: 100%;
+    background: rgb(36, 58, 34);
+    object-fit: cover;
+    background-size: cover;
+    background-position: center;
+    image-rendering: crisp-edges;
+}
+
+#pie-tarjeta,
+#pie-tarjeta-personalizado {
+    padding: 1rem;
+    border-top: 1px solid #eaeaea;
+    background-color: rgb(36, 58, 34);
+    border-bottom-right-radius: 50px;
+    border-bottom-left-radius: 50px;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+#boton-cancelar,
+#boton-cancelar-personalizado {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    color: #333;
+}
+
+#boton-cancelar:hover,
+#boton-cancelar-personalizado:hover {
+    background-color: #D22B2B;
+    color: white;
+}
+
+#boton-guardar,
+#boton-guardar-personalizado {
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid #097969;
+    background-color: #097969;
+    color: #fff;
+    border: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+#boton-guardar:hover,
+#boton-guardar-personalizado:hover {
+    background-color: #00A36C;
+    color: black;
+}
+
+/*Estilos para avatar y banner*/
+#btnSalir-pfp,  #btnSalir-banner{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    color: white;
+    transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+#btnSalir-pfp:hover, #btnSalir-banner:hover {
+    color: red;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#btnSalir-pfp svg, #btnSalir-banner svg {
+    margin-top: 3px;
+    margin-inline: 3px;
+}
+
+/*Modal Formulario Editar Perfil*/
+/*Modal entero*/
+#modal-editar {
+    position: fixed;
+    top: 15%;
+    left: 35%;
+    background-color: rgb(36, 58, 34);
+    border-radius: 10px;
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    padding: 15px;
+    z-index: 1001;
+    opacity: 1;
+}
+
+/*Seccion cabecera*/
+#seccion-cabecera {
+    display: grid;
+    margin-top: 3px;
+    margin-left: 25px;
+}
+
+#seccion-cabecera h2 {
+    font-size: 24px;
+    font-weight: bolder;
+    color: #fff;
+}
+
+#seccion-cabecera p {
+    color: #f4e1d2;
+    text-align: justify;
+}
+
+#btnCerrar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    color: white;
+    transition: all 0.3s ease-in-out;
+}
+
+#btnCerrar:hover {
+    color: red;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+#btnCerrar svg {
+    margin-top: 3px;
+    margin-inline: 3px;
+}
+
+/* Sección Formulario */
+#modal-editar form {
+    max-width: 450px;
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+}
+
+#formPerfil {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 10px;
+}
+
+.campoFormulario {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 5px;
+}
+
+.etiqueta {
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+}
+
+.entrada {
+    padding: 8px;
+    padding-right: 40px;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-size: 20px;
+    color: black;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.entrada:hover,
+#entradaContra:hover .entrada,
+#entradaContra:focus-within .entrada {
+    background-color: rgba(0, 0, 0, 1);
+    color: white;
+    font-weight: bolder;
+}
+
+#btnMostrarContra svg {
+    transition: color 0.3s ease;
+}
+
+#entradaContra:hover #btnMostrarContra svg,
+#entradaContra:focus-within #btnMostrarContra svg {
+    color: white;
+}
+
+#entradaContra {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+#entradaContra .entrada {
+    flex: 1;
+}
+
+#bio {
+    resize: none;
+}
+
+#btnMostrarContra {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#btnGuardar {
+    padding: 10px 20px;
+    background-color: #dab600;
+    color: white;
+    border: 2px solid #e9d700;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease-in-out;
+}
+
+#btnGuardar:hover {
+    background-color: #f8ed62;
+    border: 2px solid #f8ed62;
+    color: black;
+    font-weight: bold;
+}
