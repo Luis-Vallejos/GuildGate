@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import java.io.Serializable;
@@ -20,24 +16,14 @@ import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class UsuariosJpaController implements Serializable {
-
-    public UsuariosJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class UsuariosJpaController extends AbstractJpaController implements Serializable {
 
     public void create(Usuarios usuarios) {
         if (usuarios.getListaParticipaciones() == null) {
@@ -242,6 +228,105 @@ public class UsuariosJpaController implements Serializable {
         }
     }
 
+    public void editAvatarUser(int id, ImagenPerfil img) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Usuarios perUser = em.find(Usuarios.class, id);
+            if (perUser == null) {
+                throw new NonexistentEntityException("El usuario con id " + id + " ya no existe.");
+            }
+
+            perUser.setImg(img);
+
+            em.merge(perUser);
+            em.getTransaction().commit();
+        } catch (NonexistentEntityException ex) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                if (findUsuarios(id) == null) {
+                    throw new NonexistentEntityException("El usuario con id " + id + " ya no existe.");
+                }
+            }
+            throw new Exception("Error al editar el avatar del usuario", ex);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public void editBannerUser(int id, ImagenBanner img) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Usuarios perUser = em.find(Usuarios.class, id);
+            if (perUser == null) {
+                throw new NonexistentEntityException("El usuario con id " + id + " ya no existe.");
+            }
+
+            perUser.setImgB(img);
+
+            em.merge(perUser);
+            em.getTransaction().commit();
+        } catch (NonexistentEntityException ex) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                if (findUsuarios(id) == null) {
+                    throw new NonexistentEntityException("El usuario con id " + id + " ya no existe.");
+                }
+            }
+            throw new Exception("Error al editar el banner del usuario", ex);
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
+    public void editBasicInfo(int id, String nombre, String correo, String contrasena, String bio) throws NonexistentEntityException, Exception {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            em.getTransaction().begin();
+            Usuarios perUser = em.find(Usuarios.class, id);
+            if (perUser == null) {
+                throw new NonexistentEntityException("The usuarios with id " + id + " no longer exists.");
+            }
+
+            perUser.setNombre(nombre);
+            perUser.setCorreo(correo);
+            perUser.setContrasena(contrasena);
+            perUser.setBio(bio);
+
+            em.merge(perUser);
+            em.getTransaction().commit();
+        } catch (NonexistentEntityException ex) {
+            if (em != null) {
+                em.getTransaction().rollback();
+            }
+            String msg = ex.getLocalizedMessage();
+            if (msg == null || msg.length() == 0) {
+                if (findUsuarios(id) == null) {
+                    throw new NonexistentEntityException("The usuarios with id " + id + " no longer exists.");
+                }
+            }
+            throw ex;
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+    }
+
     public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
         EntityManager em = null;
         try {
@@ -341,5 +426,18 @@ public class UsuariosJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public long contarUsuariosPorGremio(int gremioId) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT COUNT(u) FROM Usuarios u WHERE u.gremiousuario.id = :gremioId";
+            Query query = em.createQuery(jpql);
+            query.setParameter("gremioId", gremioId);
+
+            Long count = (Long) query.getSingleResult();
+            return count;
+        } finally {
+            em.close();
+        }
+    }
 }
