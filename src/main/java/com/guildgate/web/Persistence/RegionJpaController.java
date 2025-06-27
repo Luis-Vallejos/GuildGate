@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import java.io.Serializable;
@@ -14,24 +10,14 @@ import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class RegionJpaController implements Serializable {
-
-    public RegionJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class RegionJpaController extends AbstractJpaController implements Serializable {
 
     public void create(Region region) {
         if (region.getListaGremios() == null) {
@@ -198,5 +184,5 @@ public class RegionJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
