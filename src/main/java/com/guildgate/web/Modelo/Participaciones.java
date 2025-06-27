@@ -1,19 +1,33 @@
 package com.guildgate.web.Modelo;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
+import java.time.LocalDate;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -22,115 +36,65 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(
         name = "Participaciones",
-        schema = "gremiosyraids"
+        schema = "gremiosyraids",
+        indexes = {
+            @Index(name = "idx_participaciones_usuario", columnList = "Id_Usuario"),
+            @Index(name = "idx_participaciones_boss", columnList = "Id_Boss"),
+            @Index(name = "idx_participaciones_raid", columnList = "Id_Participacion"),
+            @Index(name = "idx_participaciones_ronda", columnList = "Id_Ronda")
+        }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Participaciones implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participaciones_seq")
+    @SequenceGenerator(name = "participaciones_seq", sequenceName = "participaciones_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Integer id;
 
-    @Column(name = "Dano")
-    private long danio;
+    @Column(name = "Dano", nullable = false)
+    @NotNull
+    private Long danio;
 
-    @Column(name = "Fecha_Participacion")
+    @Column(name = "Fecha_Participacion", nullable = false)
     @Temporal(TemporalType.DATE)
-    private Date fecha;
+    @NotNull
+    private LocalDate fecha;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Usuario")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Usuario", nullable = false)
+    @NotNull
     private Usuarios userparti;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Boss")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Boss", nullable = false)
+    @NotNull
     private Bosses boss;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Participacion")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Participacion", nullable = false)
+    @NotNull
     private Raid raidparti;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Ronda")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Ronda", nullable = false)
+    @NotNull
     private Ronda partironda;
 
-    @OneToMany(mappedBy = "parti")
-    private List<ParticipacionesExtra> listaPartiExtra;
+    @OneToMany(mappedBy = "parti", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<ParticipacionesExtra> listaPartiExtra;
 
-    public Participaciones() {
-    }
-
-    public Participaciones(int id, long danio, Date fecha, Usuarios userparti, Bosses boss, Raid raidparti, Ronda partironda, List<ParticipacionesExtra> listaPartiExtra) {
-        this.id = id;
-        this.danio = danio;
-        this.fecha = fecha;
-        this.userparti = userparti;
-        this.boss = boss;
-        this.raidparti = raidparti;
-        this.partironda = partironda;
-        this.listaPartiExtra = listaPartiExtra;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getFecha() {
-        return fecha;
-    }
-
-    public void setFecha(Date fecha) {
-        this.fecha = fecha;
-    }
-
-    public long getDanio() {
-        return danio;
-    }
-
-    public void setDanio(long danio) {
-        this.danio = danio;
-    }
-
-    public Usuarios getUserparti() {
-        return userparti;
-    }
-
-    public void setUserparti(Usuarios userparti) {
-        this.userparti = userparti;
-    }
-
-    public Bosses getBoss() {
-        return boss;
-    }
-
-    public void setBoss(Bosses boss) {
-        this.boss = boss;
-    }
-
-    public Raid getRaidparti() {
-        return raidparti;
-    }
-
-    public void setRaidparti(Raid raidparti) {
-        this.raidparti = raidparti;
-    }
-
-    public List<ParticipacionesExtra> getListaPartiExtra() {
-        return listaPartiExtra;
-    }
-
-    public void setListaPartiExtra(List<ParticipacionesExtra> listaPartiExtra) {
-        this.listaPartiExtra = listaPartiExtra;
-    }
-
-    public Ronda getPartironda() {
-        return partironda;
-    }
-
-    public void setPartironda(Ronda partironda) {
-        this.partironda = partironda;
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }

@@ -1,15 +1,29 @@
 package com.guildgate.web.Modelo;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
-import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -20,222 +34,80 @@ import jakarta.persistence.UniqueConstraint;
         name = "Rol",
         schema = "gremiosyraids",
         uniqueConstraints = {
-            @UniqueConstraint(
-                    name = "nombreRol_unique",
-                    columnNames = "Nombre_Rol"
-            )
+            @UniqueConstraint(name = "nombreRol_unique", columnNames = "Nombre_Rol")
+        },
+        indexes = {
+            @Index(name = "idx_roles_nombre", columnList = "Nombre_Rol")
         }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Roles implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "Nombre_Rol")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_seq")
+    @SequenceGenerator(name = "roles_seq", sequenceName = "roles_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Integer id;
+
+    @Column(name = "Nombre_Rol", length = 100, nullable = false)
+    @NotNull
     private String nombre;
 
-    @Column(name = "Rol_Descripcion")
+    @Column(name = "Rol_Descripcion", length = 255)
     private String descripcion;
 
-    @Column(name = "Permiso_Cambiar_Avatar_Gremio")
+    @Column(name = "Permiso_Cambiar_Avatar_Gremio", nullable = false)
     private boolean permisoCambiarAvatarGremio;
 
-    @Column(name = "Permiso_Cambiar_Fondo_Gremio")
+    @Column(name = "Permiso_Cambiar_Fondo_Gremio", nullable = false)
     private boolean permisoCambiarFondoGremio;
 
-    @Column(name = "Permiso_Cambiar_Nombre_Gremio")
+    @Column(name = "Permiso_Cambiar_Nombre_Gremio", nullable = false)
     private boolean permisoCambiarNombreGremio;
 
-    @Column(name = "Permiso_Cambiar_Descripcion_Gremio")
+    @Column(name = "Permiso_Cambiar_Descripcion_Gremio", nullable = false)
     private boolean permisoCambiarDescripcionGremio;
 
-    @Column(name = "Permiso_Crear_Raids")
+    @Column(name = "Permiso_Crear_Raids", nullable = false)
     private boolean permisoCrearRaids;
 
-    @Column(name = "Permiso_Editar_Raids")
+    @Column(name = "Permiso_Editar_Raids", nullable = false)
     private boolean permisoEditarRaids;
 
-    @Column(name = "Permiso_Visualizar_Raids")
+    @Column(name = "Permiso_Visualizar_Raids", nullable = false)
     private boolean permisoVisualizarRaids;
 
-    @Column(name = "Permiso_Crear_Roles")
+    @Column(name = "Permiso_Crear_Roles", nullable = false)
     private boolean permisoCrearRoles;
 
-    @Column(name = "Permiso_Editar_Roles")
+    @Column(name = "Permiso_Editar_Roles", nullable = false)
     private boolean permisoEditarRoles;
 
-    @Column(name = "Permiso_Visualizar_Roles")
+    @Column(name = "Permiso_Visualizar_Roles", nullable = false)
     private boolean permisoVisualizarRoles;
 
-    @Column(name = "Permiso_Botar_Miembros")
+    @Column(name = "Permiso_Botar_Miembros", nullable = false)
     private boolean permisoBotarMiembros;
 
-    @Column(name = "Permiso_Salir_Gremio")
+    @Column(name = "Permiso_Salir_Gremio", nullable = false)
     private boolean permisoSalirGremio;
 
-    @Column(name = "Permiso_Eliminar_Gremio")
+    @Column(name = "Permiso_Eliminar_Gremio", nullable = false)
     private boolean permisoEliminarGremio;
 
-    @OneToMany(mappedBy = "roluserrol")
-    private List<UsuarioRoles> listaUsuariosRoles;
+    @OneToMany(mappedBy = "roluserrol", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<UsuarioRoles> listaUsuariosRoles;
 
-    public Roles() {
-    }
-
-    public Roles(int id, String nombre, String descripcion, boolean permisoCambiarAvatarGremio, boolean permisoCambiarFondoGremio, boolean permisoCambiarNombreGremio, boolean permisoCambiarDescripcionGremio, boolean permisoCrearRaids, boolean permisoEditarRaids, boolean permisoVisualizarRaids, boolean permisoCrearRoles, boolean permisoEditarRoles, boolean permisoVisualizarRoles, boolean permisoBotarMiembros, boolean permisoSalirGremio, boolean permisoEliminarGremio, List<UsuarioRoles> listaUsuariosRoles) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.permisoCambiarAvatarGremio = permisoCambiarAvatarGremio;
-        this.permisoCambiarFondoGremio = permisoCambiarFondoGremio;
-        this.permisoCambiarNombreGremio = permisoCambiarNombreGremio;
-        this.permisoCambiarDescripcionGremio = permisoCambiarDescripcionGremio;
-        this.permisoCrearRaids = permisoCrearRaids;
-        this.permisoEditarRaids = permisoEditarRaids;
-        this.permisoVisualizarRaids = permisoVisualizarRaids;
-        this.permisoCrearRoles = permisoCrearRoles;
-        this.permisoEditarRoles = permisoEditarRoles;
-        this.permisoVisualizarRoles = permisoVisualizarRoles;
-        this.permisoBotarMiembros = permisoBotarMiembros;
-        this.permisoSalirGremio = permisoSalirGremio;
-        this.permisoEliminarGremio = permisoEliminarGremio;
-        this.listaUsuariosRoles = listaUsuariosRoles;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public boolean isPermisoCambiarAvatarGremio() {
-        return permisoCambiarAvatarGremio;
-    }
-
-    public void setPermisoCambiarAvatarGremio(boolean permisoCambiarAvatarGremio) {
-        this.permisoCambiarAvatarGremio = permisoCambiarAvatarGremio;
-    }
-
-    public boolean isPermisoCambiarFondoGremio() {
-        return permisoCambiarFondoGremio;
-    }
-
-    public void setPermisoCambiarFondoGremio(boolean permisoCambiarFondoGremio) {
-        this.permisoCambiarFondoGremio = permisoCambiarFondoGremio;
-    }
-
-    public boolean isPermisoCambiarNombreGremio() {
-        return permisoCambiarNombreGremio;
-    }
-
-    public void setPermisoCambiarNombreGremio(boolean permisoCambiarNombreGremio) {
-        this.permisoCambiarNombreGremio = permisoCambiarNombreGremio;
-    }
-
-    public boolean isPermisoCambiarDescripcionGremio() {
-        return permisoCambiarDescripcionGremio;
-    }
-
-    public void setPermisoCambiarDescripcionGremio(boolean permisoCambiarDescripcionGremio) {
-        this.permisoCambiarDescripcionGremio = permisoCambiarDescripcionGremio;
-    }
-
-    public boolean isPermisoCrearRaids() {
-        return permisoCrearRaids;
-    }
-
-    public void setPermisoCrearRaids(boolean permisoCrearRaids) {
-        this.permisoCrearRaids = permisoCrearRaids;
-    }
-
-    public boolean isPermisoEditarRaids() {
-        return permisoEditarRaids;
-    }
-
-    public void setPermisoEditarRaids(boolean permisoEditarRaids) {
-        this.permisoEditarRaids = permisoEditarRaids;
-    }
-
-    public boolean isPermisoVisualizarRaids() {
-        return permisoVisualizarRaids;
-    }
-
-    public void setPermisoVisualizarRaids(boolean permisoVisualizarRaids) {
-        this.permisoVisualizarRaids = permisoVisualizarRaids;
-    }
-
-    public boolean isPermisoCrearRoles() {
-        return permisoCrearRoles;
-    }
-
-    public void setPermisoCrearRoles(boolean permisoCrearRoles) {
-        this.permisoCrearRoles = permisoCrearRoles;
-    }
-
-    public boolean isPermisoEditarRoles() {
-        return permisoEditarRoles;
-    }
-
-    public void setPermisoEditarRoles(boolean permisoEditarRoles) {
-        this.permisoEditarRoles = permisoEditarRoles;
-    }
-
-    public boolean isPermisoVisualizarRoles() {
-        return permisoVisualizarRoles;
-    }
-
-    public void setPermisoVisualizarRoles(boolean permisoVisualizarRoles) {
-        this.permisoVisualizarRoles = permisoVisualizarRoles;
-    }
-
-    public boolean isPermisoBotarMiembros() {
-        return permisoBotarMiembros;
-    }
-
-    public void setPermisoBotarMiembros(boolean permisoBotarMiembros) {
-        this.permisoBotarMiembros = permisoBotarMiembros;
-    }
-
-    public boolean isPermisoSalirGremio() {
-        return permisoSalirGremio;
-    }
-
-    public void setPermisoSalirGremio(boolean permisoSalirGremio) {
-        this.permisoSalirGremio = permisoSalirGremio;
-    }
-
-    public boolean isPermisoEliminarGremio() {
-        return permisoEliminarGremio;
-    }
-
-    public void setPermisoEliminarGremio(boolean permisoEliminarGremio) {
-        this.permisoEliminarGremio = permisoEliminarGremio;
-    }
-
-    public List<UsuarioRoles> getListaUsuariosRoles() {
-        return listaUsuariosRoles;
-    }
-
-    public void setListaUsuariosRoles(List<UsuarioRoles> listaUsuariosRoles) {
-        this.listaUsuariosRoles = listaUsuariosRoles;
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }

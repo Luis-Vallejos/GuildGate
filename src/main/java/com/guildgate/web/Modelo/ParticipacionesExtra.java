@@ -3,12 +3,24 @@ package com.guildgate.web.Modelo;
 import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -17,64 +29,44 @@ import jakarta.persistence.Table;
 @Entity
 @Table(
         name = "Participaciones_Extra",
-        schema = "gremiosyraids"
+        schema = "gremiosyraids",
+        indexes = {
+            @Index(name = "idx_participaciones_extra_participacion", columnList = "Id_Participacion"),
+            @Index(name = "idx_participaciones_extra_ronda", columnList = "Id_Ronda")
+        }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class ParticipacionesExtra implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "participaciones_extra_seq")
+    @SequenceGenerator(name = "participaciones_extra_seq", sequenceName = "participaciones_extra_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Integer id;
 
-    @Column(name = "Dano_Extra")
-    private long danoExtra;
+    @Column(name = "Dano_Extra", nullable = false)
+    @NotNull
+    private Long danoExtra;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Participacion")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Participacion", nullable = false)
+    @NotNull
     private Participaciones parti;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Ronda")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Ronda", nullable = false)
+    @NotNull
     private Ronda partiextraronda;
 
-    public ParticipacionesExtra() {
-    }
-
-    public ParticipacionesExtra(int id, long danoExtra, Participaciones parti, Ronda partiextraronda) {
-        this.id = id;
-        this.danoExtra = danoExtra;
-        this.parti = parti;
-        this.partiextraronda = partiextraronda;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public long getDanoExtra() {
-        return danoExtra;
-    }
-
-    public void setDanoExtra(long danoExtra) {
-        this.danoExtra = danoExtra;
-    }
-
-    public Participaciones getParti() {
-        return parti;
-    }
-
-    public void setParti(Participaciones parti) {
-        this.parti = parti;
-    }
-
-    public Ronda getPartiextraronda() {
-        return partiextraronda;
-    }
-
-    public void setPartiextraronda(Ronda partiextraronda) {
-        this.partiextraronda = partiextraronda;
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }
