@@ -1,7 +1,5 @@
 package com.guildgate.web.Modelo;
 
-import com.guildgate.web.Modelo.FondoGremio;
-import com.guildgate.web.Modelo.AvatarGremio;
 import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.Column;
@@ -14,15 +12,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import com.guildgate.web.Modelo.Mundos;
-import com.guildgate.web.Modelo.Raid;
-import com.guildgate.web.Modelo.Region;
-import com.guildgate.web.Modelo.UsuarioRoles;
-import com.guildgate.web.Modelo.Usuarios;
 
 /**
  *
- * @author Lavender
+ * @author Juan - Luis
  */
 @Entity
 @Table(
@@ -70,7 +63,7 @@ public class Gremio implements Serializable {
     @ManyToOne
     @JoinColumn(name = "Id_Avatar")
     private AvatarGremio img;
-    
+
     @ManyToOne
     @JoinColumn(name = "Id_Fondo")
     private FondoGremio imgF;

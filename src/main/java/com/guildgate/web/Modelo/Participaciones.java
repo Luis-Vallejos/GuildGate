@@ -1,6 +1,5 @@
 package com.guildgate.web.Modelo;
 
-import com.guildgate.web.Modelo.Bosses;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -15,10 +14,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import com.guildgate.web.Modelo.ParticipacionesExtra;
-import com.guildgate.web.Modelo.Raid;
-import com.guildgate.web.Modelo.Ronda;
-import com.guildgate.web.Modelo.Usuarios;
 
 /**
  *

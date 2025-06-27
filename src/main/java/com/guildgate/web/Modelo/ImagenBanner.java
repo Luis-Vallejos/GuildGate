@@ -2,8 +2,32 @@ package com.guildgate.web.Modelo;
 
 import java.io.Serializable;
 import java.util.List;
-import jakarta.persistence.*;
-import com.guildgate.web.Modelo.Usuarios;
+import com.guildgate.web.Utilities.Enum;
+import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -11,119 +35,59 @@ import com.guildgate.web.Modelo.Usuarios;
  */
 @Entity
 @Table(
-        name = "Imagenes_Banner",
-        schema = "gremiosyraids"
+        name = "Imagen_Banner",
+        schema = "gremiosyraids",
+        indexes = {
+            @Index(name = "idx_imagen_banner_nombre", columnList = "Nombre_Archivo")
+        }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class ImagenBanner implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "Id")
-    private long id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "imagen_banner_seq")
+    @SequenceGenerator(name = "imagen_banner_seq", sequenceName = "imagen_banner_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Long id;
 
     @Lob
-    @Column(name = "Data_Archivo")
+    @Basic(fetch = FetchType.LAZY)
+    @Column(name = "Data_Archivo", nullable = false)
+    @NotNull
     private byte[] data;
 
-    @Column(name = "Nombre_Archivo")
+    @Column(name = "Nombre_Archivo", length = 255, nullable = false)
+    @NotNull
     private String nomArchivo;
 
-    @Column(name = "Tipo_Archivo")
+    @Column(name = "Tipo_Archivo", length = 50, nullable = false)
+    @NotNull
     private String tipoArchivo;
 
-    @Column(name = "Posicion_X")
+    @Column(name = "Posicion_X", length = 100)
     private String posicionX;
 
-    @Column(name = "Posicion_Y")
+    @Column(name = "Posicion_Y", length = 100)
     private String posicionY;
-    
+
     @Enumerated(EnumType.STRING)
-    @Column(name = "Origen_Archivo")
-    private OrigenArchivo origenArchivo;
-    
-    @OneToMany(mappedBy = "imgB")
+    @Column(name = "Origen_Archivo", length = 20, nullable = false)
+    @NotNull
+    private Enum.OrigenArchivo origenArchivo;
+
+    @OneToMany(mappedBy = "imgB", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "imagen_banner_id")
     private List<Usuarios> listaJugadores;
 
-    public ImagenBanner() {
-    }
-
-    public ImagenBanner(long id, byte[] data, String nomArchivo, String tipoArchivo, String posicionX, String posicionY, OrigenArchivo origenArchivo, List<Usuarios> listaJugadores) {
-        this.id = id;
-        this.data = data;
-        this.nomArchivo = nomArchivo;
-        this.tipoArchivo = tipoArchivo;
-        this.posicionX = posicionX;
-        this.posicionY = posicionY;
-        this.origenArchivo = origenArchivo;
-        this.listaJugadores = listaJugadores;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public byte[] getData() {
-        return data;
-    }
-
-    public void setData(byte[] data) {
-        this.data = data;
-    }
-
-    public String getNomArchivo() {
-        return nomArchivo;
-    }
-
-    public void setNomArchivo(String nomArchivo) {
-        this.nomArchivo = nomArchivo;
-    }
-
-    public String getTipoArchivo() {
-        return tipoArchivo;
-    }
-
-    public void setTipoArchivo(String tipoArchivo) {
-        this.tipoArchivo = tipoArchivo;
-    }
-
-    public String getPosicionX() {
-        return posicionX;
-    }
-
-    public void setPosicionX(String posicionX) {
-        this.posicionX = posicionX;
-    }
-
-    public String getPosicionY() {
-        return posicionY;
-    }
-
-    public void setPosicionY(String posicionY) {
-        this.posicionY = posicionY;
-    }
-
-    public OrigenArchivo getOrigenArchivo() {
-        return origenArchivo;
-    }
-
-    public void setOrigenArchivo(OrigenArchivo origenArchivo) {
-        this.origenArchivo = origenArchivo;
-    }
-
-    public List<Usuarios> getListaJugadores() {
-        return listaJugadores;
-    }
-
-    public void setListaJugadores(List<Usuarios> listaJugadores) {
-        this.listaJugadores = listaJugadores;
-    }
-
-    public enum OrigenArchivo {
-        PREDETERMINADA,
-        USUARIO
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }

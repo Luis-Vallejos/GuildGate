@@ -32,9 +32,8 @@ import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Bean.UsuarioBean;
-import persistencia.ControladoraPersistencia;
+import com.guildgate.web.persistence.ControladoraPersistencia;
 import com.guildgate.web.Servlet.SvPerfil;
-import com.guildgate.web.Utilities.Mensajes;
 
 /**
  *

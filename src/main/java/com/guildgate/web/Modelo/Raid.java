@@ -1,8 +1,5 @@
 package com.guildgate.web.Modelo;
 
-import com.guildgate.web.Modelo.Participaciones;
-import com.guildgate.web.Modelo.Gremio;
-import com.guildgate.web.Modelo.Bosses;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,44 +14,43 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import com.guildgate.web.Modelo.Ronda;
 
 /**
  *
  * @author Juan - Luis
  */
-
 @Entity
 @Table(
         name = "Raids",
         schema = "gremiosyraids"
 )
 public class Raid implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int id;
-    
-    @Column(name="Nombre_Raid", nullable=false)
+
+    @Column(name = "Nombre_Raid", nullable = false)
     private String nombre;
-    
-    @Column(name="Fecha_Inicio")
+
+    @Column(name = "Fecha_Inicio")
     @Temporal(TemporalType.DATE)
     private Date fechaInicio;
-    
-    @Column(name="Fecha_Finalizacion")
+
+    @Column(name = "Fecha_Finalizacion")
     @Temporal(TemporalType.DATE)
     private Date fechaFinalizacion;
-    
+
     @ManyToOne
-    @JoinColumn(name="Id_Gremio")
+    @JoinColumn(name = "Id_Gremio")
     private Gremio raidgremio;
-    
+
     @OneToMany(mappedBy = "raidparti")
     private List<Participaciones> listaParticipaciones;
-    
+
     @OneToMany(mappedBy = "raidronda")
     private List<Ronda> listaRondas;
-    
+
     @OneToMany(mappedBy = "raidboss")
     private List<Bosses> listaBosses;
 

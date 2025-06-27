@@ -10,7 +10,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import com.guildgate.web.Modelo.UsuarioRoles;
 
 /**
  *
@@ -77,10 +76,10 @@ public class Roles implements Serializable {
 
     @Column(name = "Permiso_Eliminar_Gremio")
     private boolean permisoEliminarGremio;
-    
+
     @OneToMany(mappedBy = "roluserrol")
     private List<UsuarioRoles> listaUsuariosRoles;
-    
+
     public Roles() {
     }
 

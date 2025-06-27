@@ -12,12 +12,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import com.guildgate.web.Modelo.Participaciones;
-import com.guildgate.web.Modelo.Raid;
 
 /**
  *
- * @author Lavender
+ * @author Juan - Luis
  */
 @Entity
 @Table(

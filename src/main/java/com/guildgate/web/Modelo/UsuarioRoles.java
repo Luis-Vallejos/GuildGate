@@ -1,7 +1,5 @@
 package com.guildgate.web.Modelo;
 
-import com.guildgate.web.Modelo.Roles;
-import com.guildgate.web.Modelo.Gremio;
 import java.io.Serializable;
 import java.util.Date;
 import jakarta.persistence.Entity;
@@ -13,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import com.guildgate.web.Modelo.Usuarios;
 
 /**
  *

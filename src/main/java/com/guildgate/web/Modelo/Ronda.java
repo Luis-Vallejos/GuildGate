@@ -1,8 +1,5 @@
 package com.guildgate.web.Modelo;
 
-import com.guildgate.web.Modelo.Raid;
-import com.guildgate.web.Modelo.ParticipacionesExtra;
-import com.guildgate.web.Modelo.Participaciones;
 import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.Column;

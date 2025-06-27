@@ -1,6 +1,5 @@
 package com.guildgate.web.Modelo;
 
-import com.guildgate.web.Modelo.Gremio;
 import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.Column;
