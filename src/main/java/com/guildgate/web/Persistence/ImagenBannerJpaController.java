@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import com.guildgate.web.Modelo.ImagenBanner;
@@ -13,24 +9,15 @@ import jakarta.persistence.criteria.Root;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
+import com.guildgate.web.Utilities.Enum;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class ImagenBannerJpaController implements Serializable {
-
-    public ImagenBannerJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class ImagenBannerJpaController extends AbstractJpaController implements Serializable {
 
     public void create(ImagenBanner imagenBanner) {
         if (imagenBanner.getListaJugadores() == null) {
@@ -185,5 +172,31 @@ public class ImagenBannerJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public ImagenBanner findBannerByNombre(String nombreBanner) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM ImagenBanner i WHERE i.nomArchivo = :nombreBanner");
+            query.setParameter("nombreBanner", nombreBanner);
+            List<ImagenBanner> resultados = query.getResultList();
+            if (!resultados.isEmpty()) {
+                return resultados.get(0);
+            }
+        } finally {
+            em.close();
+        }
+        return null;
+    }
+
+    public List<ImagenBanner> getPredeterminedBanners() {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM ImagenBanner i WHERE i.origenArchivo = :origenArchivo");
+            query.setParameter("origenArchivo", Enum.OrigenArchivo.PREDETERMINADA);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }
