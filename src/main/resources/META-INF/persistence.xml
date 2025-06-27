@@ -2,6 +2,21 @@
 <persistence version="3.1" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
   <persistence-unit name="raid" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.guildgate.web.Modelo.AvatarGremio</class>
+    <class>com.guildgate.web.Modelo.Bosses</class>
+    <class>com.guildgate.web.Modelo.FondoGremio</class>
+    <class>com.guildgate.web.Modelo.Gremio</class>
+    <class>com.guildgate.web.Modelo.ImagenBanner</class>
+    <class>com.guildgate.web.Modelo.ImagenPerfil</class>
+    <class>com.guildgate.web.Modelo.Mundos</class>
+    <class>com.guildgate.web.Modelo.Participaciones</class>
+    <class>com.guildgate.web.Modelo.ParticipacionesExtra</class>
+    <class>com.guildgate.web.Modelo.Raid</class>
+    <class>com.guildgate.web.Modelo.Region</class>
+    <class>com.guildgate.web.Modelo.Roles</class>
+    <class>com.guildgate.web.Modelo.Ronda</class>
+    <class>com.guildgate.web.Modelo.UsuarioRoles</class>
+    <class>com.guildgate.web.Modelo.Usuarios</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://bd-lavender.mysql.database.azure.com:3306/gremiosyraids?serverTimezone=America/Lima&amp;useSSL=false"/>

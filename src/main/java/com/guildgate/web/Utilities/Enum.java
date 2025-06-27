@@ -7,7 +7,7 @@ package com.guildgate.web.Utilities;
 public class Enum {
     
     public static enum OrigenArchivo {
-        PREDETERMINADO,
+        PREDETERMINADA,
         USUARIO
     }
 }

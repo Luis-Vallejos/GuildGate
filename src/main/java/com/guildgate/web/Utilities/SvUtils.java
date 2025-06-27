@@ -32,7 +32,7 @@ import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Bean.UsuarioBean;
-import com.guildgate.web.persistence.ControladoraPersistencia;
+import com.guildgate.web.Persistence.ControladoraPersistencia;
 import com.guildgate.web.Servlet.SvPerfil;
 
 /**
@@ -127,14 +127,13 @@ public class SvUtils {
                 .map(UsuarioRoles::getRoluserrol)
                 .findFirst();
     }
-    
+
     public static Optional<Roles> obtenerObjetoRolPorId(int id, ArrayList<Roles> listaRoles) {
         return listaRoles.stream()
                 .filter(r -> r.getId() == id)
                 .findFirst();
     }
 
-    
     public static String obtenerRolUser(Usuarios usuario) {
         return usuario.getListaUsuariosRol().stream()
                 .map(UsuarioRoles::getRoluserrol)
@@ -147,11 +146,11 @@ public class SvUtils {
     public Optional<ImagenPerfil> findImagenByNombre(String nombre) {
         return Optional.ofNullable(cors.buscarImagenPorNombre(nombre));
     }
-    
+
     public Optional<AvatarGremio> findAvatarGremioByNombre(String nombre) {
         return Optional.ofNullable(cors.buscarAvatarGremioPorNombre(nombre));
     }
-    
+
     public Optional<FondoGremio> findFondoGremioByNombre(String nombre) {
         return Optional.ofNullable(cors.buscarFondoGremioPorNombre(nombre));
     }
@@ -223,7 +222,7 @@ public class SvUtils {
     //Metodo para asignar los variables como la imagen del gremio y el nombre a la sesión del usuario
     public static void processSuccesfulGuildCreation(HttpServletResponse response, HttpServletRequest request, Gremio gre, Usuarios user, Controladora control) throws IOException {
         Optional<Gremio> optGremio = findGremioById(gre.getId(), control.traerListaGremios());
-        
+
         if (!optGremio.isPresent()) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Mensajes.GREMIO_NO_ENCONTRADO);
             return;
@@ -273,7 +272,7 @@ public class SvUtils {
             usuarioBean.setPermisoBotarMiembros(roles != null && roles.isPermisoBotarMiembros());
             usuarioBean.setPermisoSalirGremio(roles != null && roles.isPermisoSalirGremio());
             usuarioBean.setPermisoEliminarGremio(roles != null && roles.isPermisoEliminarGremio());
-            
+
             usuarioBean.setNombreBanner(ava.getNomArchivo());
             usuarioBean.setImagenGremio(imagenBase64DataUrl);
             usuarioBean.setNombreFondoGremio(fondo.getNomArchivo());
@@ -375,10 +374,10 @@ public class SvUtils {
         if (optAvatar.isPresent() || optFondo.isPresent()) {
             AvatarGremio ava = optAvatar.get();
             FondoGremio fon = optFondo.get();
-            
+
             String imagenBase64DataUrl = encodeAvatarGremioToBase64(ava);
             String fondoBase64DataUrl = encodeFondoGremioToBase64(fon);
-            
+
             usuarioBean.setNombreAvatarGremio(ava.getNomArchivo());
             usuarioBean.setImagenGremio(imagenBase64DataUrl);
             usuarioBean.setNombreFondoGremio(fon.getNomArchivo());
@@ -390,39 +389,39 @@ public class SvUtils {
     }
 
     public static void manejarAvatarPredeterminado(HttpServletRequest request, HttpServletResponse response, String nomOriginalAvatar, int idUsuarioActual, Controladora control) throws IOException {
-            String nomArchivo = request.getParameter("nomAvatarArchivo");
-            SvUtils su = new SvUtils();
-            if(nomArchivo == null) {
-                respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_NO_ESCOGIDA);
-                return;
-            }else if(idUsuarioActual == 0) {
-                respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_NO_AUTENTICADO);
-                return;
-            }else if(nomArchivo.equalsIgnoreCase(nomOriginalAvatar)) {
-                respondWithError(response, HttpServletResponse.SC_CONFLICT, Mensajes.AVATAR_DUPLICADO);
-                return;
-            }
+        String nomArchivo = request.getParameter("nomAvatarArchivo");
+        SvUtils su = new SvUtils();
+        if (nomArchivo == null) {
+            respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_NO_ESCOGIDA);
+            return;
+        } else if (idUsuarioActual == 0) {
+            respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_NO_AUTENTICADO);
+            return;
+        } else if (nomArchivo.equalsIgnoreCase(nomOriginalAvatar)) {
+            respondWithError(response, HttpServletResponse.SC_CONFLICT, Mensajes.AVATAR_DUPLICADO);
+            return;
+        }
 
-            try {
-                control.cambioAvatarUsuario(nomArchivo, idUsuarioActual);
-                su.processUpdateAvatarData(request, nomArchivo, control);
-                respondWithSuccess(response, HttpServletResponse.SC_OK, Mensajes.AVATAR_MODIFICADO_CON_EXITO);
-            } catch (Exception ex) {
-                Logger.getLogger(SvPerfil.class.getName()).log(Level.SEVERE, null, ex);
-            }
+        try {
+            control.cambioAvatarUsuario(nomArchivo, idUsuarioActual);
+            su.processUpdateAvatarData(request, nomArchivo, control);
+            respondWithSuccess(response, HttpServletResponse.SC_OK, Mensajes.AVATAR_MODIFICADO_CON_EXITO);
+        } catch (Exception ex) {
+            Logger.getLogger(SvPerfil.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     public static void manejarAvatarPersonalizado(HttpServletRequest request, HttpServletResponse response, int idUsuarioActual, Controladora control) throws ServletException, IOException {
         Part filePart = request.getPart("fotoPerfilPersonalizada");
         long tamanoMaximo = 10485760; // 10MB en bytes
-        
+
         String avatarName = obtenerNombreArchivo(filePart);
         String avatarTipo = filePart.getContentType();
         long avatarTamano = filePart.getSize();
         byte[] byteAvatar = leerBytesEntradaCadena(filePart.getInputStream(), avatarTamano);
-        
+
         SvUtils su = new SvUtils();
-        
+
         if (isNullOrEmpty(avatarName) || isNullOrEmpty(avatarTipo) || (avatarTamano == 0)) {
             respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_NO_ESCOGIDA);
             return;
@@ -430,12 +429,12 @@ public class SvUtils {
             respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_NO_AUTENTICADO);
             return;
         }
-        
+
         if (avatarTamano > tamanoMaximo) {
             respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_SUPERA_TAMANO);
             return;
         }
-        
+
         try {
             control.cambioAvatarPersonalizadoUsuario(idUsuarioActual, avatarName, avatarTipo, avatarTamano, byteAvatar);
             su.processUpdateAvatarData(request, avatarName, control);
@@ -445,33 +444,33 @@ public class SvUtils {
             respondWithError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Mensajes.ERROR_PROCESAMIENTO);
         }
     }
-    
+
     public void processUpdateAvatarData(HttpServletRequest request, String nomImagen, Controladora control) throws IOException {
         ImagenPerfil img = cors.buscarImagenPorNombre(nomImagen);
-        
+
         String urlAvatar = getImageDataUrl(img, control);
-        
+
         HttpSession sesion = request.getSession(false);
         UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
-        
+
         usuarioBean.setNombreAvatar(img.getNomArchivo());
         usuarioBean.setImagenUsuario(urlAvatar);
     }
-    
+
     public static void manejarBannerPredeterminado(HttpServletRequest request, HttpServletResponse response, String nomOriginalBanner, int idUsuarioActual, Controladora control) throws IOException {
         String nomBanner = request.getParameter("nomBannerArchivo");
         SvUtils su = new SvUtils();
-        if(nomBanner == null) {
+        if (nomBanner == null) {
             respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_NO_ESCOGIDA);
             return;
-        }else if(idUsuarioActual == 0) {
+        } else if (idUsuarioActual == 0) {
             respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_NO_AUTENTICADO);
             return;
-        } else if(nomBanner.equalsIgnoreCase(nomOriginalBanner)) {
+        } else if (nomBanner.equalsIgnoreCase(nomOriginalBanner)) {
             respondWithError(response, HttpServletResponse.SC_CONFLICT, Mensajes.BANNER_DUPLICADO);
             return;
         }
-        
+
         try {
             control.cambioBannerUsuario(nomBanner, idUsuarioActual);
             su.processUpdateBannerData(request, nomBanner, control);
@@ -480,7 +479,7 @@ public class SvUtils {
             Logger.getLogger(SvPerfil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public static void manejarBannerPersonalizado(HttpServletRequest request, HttpServletResponse response, int idUsuarioActual, Controladora control) throws IOException, ServletException {
         Part filePart = request.getPart("fotoBanner");
         long tamanoMaximo = 10485760; // 10MB en bytes
@@ -514,19 +513,19 @@ public class SvUtils {
             respondWithError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Mensajes.ERROR_PROCESAMIENTO);
         }
     }
-    
+
     public void processUpdateBannerData(HttpServletRequest request, String nomBanner, Controladora control) throws IOException {
         ImagenBanner imgB = cors.buscarBannerPorNombre(nomBanner);
-        
+
         String urlAvatar = getBannerDataUrl(imgB, control);
-        
+
         HttpSession sesion = request.getSession(false);
         UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
-        
+
         usuarioBean.setNombreBanner(imgB.getNomArchivo());
         usuarioBean.setBanner(urlAvatar);
     }
-    
+
     /*Métodos para Imagenes*/
     public static String obtenerNombreArchivo(Part part) {
         for (String contenido : part.getHeader("content-disposition").split(";")) {
@@ -544,9 +543,8 @@ public class SvUtils {
         }
         return bytesArchivo;
     }
-    
+
     //CON CONTROL
-    
     //Método para obtener la url de una imagen de la base de datos por su Data
     public static String getImageDataUrl(ImagenPerfil img, Controladora control) {
         ImagenPerfil imagen = control.traerImagenPerfil(img.getId());
@@ -562,7 +560,7 @@ public class SvUtils {
         String tipoBanner = imagenB.getTipoArchivo();
         return "data:image/" + tipoBanner + ";base64," + bannerBase64;
     }
-    
+
     public static String getAvatarGremioDataUrl(AvatarGremio ava, Controladora control) {
         AvatarGremio avatar = control.traerAvatarGremio(ava.getId());
         String avatarBase64 = Base64.getEncoder().encodeToString(avatar.getData());
@@ -576,16 +574,15 @@ public class SvUtils {
         String tipoFondo = fon.getTipoArchivo();
         return "data:image/" + tipoFondo + ";base64," + fondoBase64;
     }
-    
+
     //SIN CONTROL
-    
     //Método para codificar imagen a Base64
     public static String encodeImageToBase64(ImagenPerfil imagen) {
         String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getData());
         String tipoArchivo = imagen.getTipoArchivo();
         return "data:image/" + tipoArchivo + ";base64," + imagenBase64;
     }
-    
+
     //AvatarGremio a Base64
     public static String encodeAvatarGremioToBase64(AvatarGremio ava) {
         String avatarBase64 = Base64.getEncoder().encodeToString(ava.getData());
@@ -599,10 +596,9 @@ public class SvUtils {
         return "data:image/" + tipoArchivo + ";base64," + fondoBase64;
     }
 
-    
     // Método para obtener o crear una imagen
     //Avatar usuario - Crear por primera vez sin data por directorio
-    public static ImagenPerfil obtenerOCrearImagenPerfilConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, ImagenPerfil.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenPerfil obtenerOCrearImagenPerfilConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenPerfil img = cors.buscarImagenPorNombre(nombreArchivo);
 
         if (img == null) {
@@ -621,10 +617,10 @@ public class SvUtils {
     }
 
     //Avatar usuario - Crear por primera vez con data y sin directorio
-    public static ImagenPerfil obtenerOCrearPerfilSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, ImagenPerfil.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenPerfil obtenerOCrearPerfilSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenPerfil img = cors.buscarImagenPorNombre(nombreArchivo);
-        
-        if(img == null) {
+
+        if (img == null) {
             img = new ImagenPerfil();
             img.setNomArchivo(nombreArchivo);
             img.setTipoArchivo(tipoArchivo);
@@ -632,12 +628,12 @@ public class SvUtils {
             img.setOrigenArchivo(origenArchivo);
             cors.guardarImagen(img);
         }
-        
+
         return img;
     }
-    
+
     //Banner usuario - Crear por primera vez sin data por directorio
-    public static ImagenBanner obtenerOCrearImagenBannerConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, ImagenBanner.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenBanner obtenerOCrearImagenBannerConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenBanner img = cors.buscarBannerPorNombre(nombreArchivo);
 
         if (img == null) {
@@ -654,9 +650,9 @@ public class SvUtils {
         }
         return img;
     }
-    
+
     //Banner usuario - Crear por primera vez con data y sin directorio
-    public static ImagenBanner obtenerOCrearBannerSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, ImagenBanner.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenBanner obtenerOCrearBannerSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenBanner imgB = cors.buscarBannerPorNombre(nombreArchivo);
 
         if (imgB == null) {
@@ -671,9 +667,9 @@ public class SvUtils {
         }
         return imgB;
     }
-    
+
     //AvatarGremio - Crear por primera vez sin data por directorio
-    public static AvatarGremio obtenerOCrearAvatarGremioConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, AvatarGremio.OrigenArchivo origenArchivo) throws IOException {
+    public static AvatarGremio obtenerOCrearAvatarGremioConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         AvatarGremio ava = cors.buscarAvatarGremioPorNombre(nombreArchivo);
 
         if (ava == null) {
@@ -690,12 +686,12 @@ public class SvUtils {
         }
         return ava;
     }
-    
+
     //AvatarGremio - Crear por primera vez con data y sin directorio
-    public static AvatarGremio obtenerOCrearAvatarGremioSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, AvatarGremio.OrigenArchivo origenArchivo) throws IOException {
+    public static AvatarGremio obtenerOCrearAvatarGremioSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         AvatarGremio ava = cors.buscarAvatarGremioPorNombre(nombreArchivo);
-        
-        if(ava == null) {
+
+        if (ava == null) {
             ava = new AvatarGremio();
             ava.setNomArchivo(nombreArchivo);
             ava.setTipoArchivo(tipoArchivo);
@@ -705,9 +701,9 @@ public class SvUtils {
         }
         return ava;
     }
-    
+
     //FondoGremio - Crear por primera vez sin data por directorio
-    public static FondoGremio obtenerOCrearFondoGremioConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, FondoGremio.OrigenArchivo origenArchivo) throws IOException {
+    public static FondoGremio obtenerOCrearFondoGremioConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         FondoGremio fondo = cors.buscarFondoGremioPorNombre(nombreArchivo);
 
         if (fondo == null) {
@@ -724,11 +720,11 @@ public class SvUtils {
         }
         return fondo;
     }
-    
-    public static FondoGremio obtenerOCrearFondoGremioSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, FondoGremio.OrigenArchivo origenArchivo) throws IOException {
+
+    public static FondoGremio obtenerOCrearFondoGremioSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         FondoGremio fondo = cors.buscarFondoGremioPorNombre(nombreArchivo);
-        
-        if(fondo == null) {
+
+        if (fondo == null) {
             fondo = new FondoGremio();
             fondo.setNomArchivo(nombreArchivo);
             fondo.setTipoArchivo(tipoArchivo);
@@ -738,7 +734,7 @@ public class SvUtils {
         }
         return fondo;
     }
-    
+
     /*Respuestas JSON*/
     //Respuesta JSON - General
     public static void respondWithJson(HttpServletResponse response, int statusCode, boolean success, String message) throws IOException {
