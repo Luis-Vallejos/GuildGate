@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import java.io.Serializable;
@@ -18,24 +14,14 @@ import com.guildgate.web.Modelo.Ronda;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class RondaJpaController implements Serializable {
-
-    public RondaJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class RondaJpaController extends AbstractJpaController implements Serializable {
 
     public void create(Ronda ronda) {
         if (ronda.getListaParticipaciones() == null) {
@@ -283,5 +269,5 @@ public class RondaJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
