@@ -8,12 +8,21 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -22,19 +31,33 @@ import jakarta.persistence.TemporalType;
 @Entity
 @Table(
         name = "Raids",
-        schema = "gremiosyraids"
+        schema = "gremiosyraids",
+        indexes = {
+            @Index(name = "idx_raid_nombre", columnList = "Nombre_Raid")
+        }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Raid implements Serializable {
 
+    private static final long serialVersionUID = 1L;
+    
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
 
-    @Column(name = "Nombre_Raid", nullable = false)
+    @Column(name = "Nombre_Raid", length = 100, nullable = false)
+    @NotNull
     private String nombre;
 
-    @Column(name = "Fecha_Inicio")
+    @Column(name = "Fecha_Inicio", nullable = false)
     @Temporal(TemporalType.DATE)
+    @NotNull
     private Date fechaInicio;
 
     @Column(name = "Fecha_Finalizacion")
@@ -53,82 +76,4 @@ public class Raid implements Serializable {
 
     @OneToMany(mappedBy = "raidboss")
     private List<Bosses> listaBosses;
-
-    public Raid() {
-    }
-
-    public Raid(int id, String nombre, Date fechaInicio, Date fechaFinalizacion, Gremio raidgremio, List<Participaciones> listaParticipaciones, List<Ronda> listaRondas, List<Bosses> listaBosses) {
-        this.id = id;
-        this.nombre = nombre;
-        this.fechaInicio = fechaInicio;
-        this.fechaFinalizacion = fechaFinalizacion;
-        this.raidgremio = raidgremio;
-        this.listaParticipaciones = listaParticipaciones;
-        this.listaRondas = listaRondas;
-        this.listaBosses = listaBosses;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Date getFechaInicio() {
-        return fechaInicio;
-    }
-
-    public void setFechaInicio(Date fechaInicio) {
-        this.fechaInicio = fechaInicio;
-    }
-
-    public Date getFechaFinalizacion() {
-        return fechaFinalizacion;
-    }
-
-    public void setFechaFinalizacion(Date fechaFinalizacion) {
-        this.fechaFinalizacion = fechaFinalizacion;
-    }
-
-    public Gremio getRaidgremio() {
-        return raidgremio;
-    }
-
-    public void setRaidgremio(Gremio raidgremio) {
-        this.raidgremio = raidgremio;
-    }
-
-    public List<Participaciones> getListaParticipaciones() {
-        return listaParticipaciones;
-    }
-
-    public void setListaParticipaciones(List<Participaciones> listaParticipaciones) {
-        this.listaParticipaciones = listaParticipaciones;
-    }
-
-    public List<Ronda> getListaRondas() {
-        return listaRondas;
-    }
-
-    public void setListaRondas(List<Ronda> listaRondas) {
-        this.listaRondas = listaRondas;
-    }
-
-    public List<Bosses> getListaBosses() {
-        return listaBosses;
-    }
-
-    public void setListaBosses(List<Bosses> listaBosses) {
-        this.listaBosses = listaBosses;
-    }
 }
