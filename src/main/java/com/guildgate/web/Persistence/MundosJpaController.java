@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import java.io.Serializable;
@@ -14,24 +10,14 @@ import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class MundosJpaController implements Serializable {
-
-    public MundosJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class MundosJpaController extends AbstractJpaController implements Serializable {
 
     public void create(Mundos mundos) {
         if (mundos.getListaGremios() == null) {
@@ -198,5 +184,5 @@ public class MundosJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
