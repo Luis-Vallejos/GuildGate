@@ -1,17 +1,31 @@
 package com.guildgate.web.Modelo;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
-import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -22,162 +36,77 @@ import jakarta.persistence.UniqueConstraint;
         name = "Gremio",
         schema = "gremiosyraids",
         uniqueConstraints = {
-            @UniqueConstraint(
-                    name = "nombre_unique",
-                    columnNames = "Nombre_Gremio"
-            )
+            @UniqueConstraint(name = "nombre_unique", columnNames = "Nombre_Gremio")
+        },
+        indexes = {
+            @Index(name = "idx_gremio_nombre", columnList = "Nombre_Gremio"),
+            @Index(name = "idx_gremio_region", columnList = "Id_Region"),
+            @Index(name = "idx_gremio_mundo", columnList = "Id_Mundo"),
+            @Index(name = "idx_gremio_avatar", columnList = "Id_Avatar"),
+            @Index(name = "idx_gremio_fondo", columnList = "Id_Fondo")
         }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Gremio implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "Nombre_Gremio")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gremio_seq")
+    @SequenceGenerator(name = "gremio_seq", sequenceName = "gremio_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Integer id;
+
+    @Column(name = "Nombre_Gremio", length = 100, nullable = false)
+    @NotNull
     private String nombre;
 
-    @Column(name = "Descripcion_Gremio")
+    @Column(name = "Descripcion_Gremio", length = 255)
     private String descripcion;
 
-    @Column(name = "CantMaxima_Gremio")
-    private int cantidad;
+    @Column(name = "CantMaxima_Gremio", nullable = false)
+    @NotNull
+    private Integer cantidad;
 
-    @OneToMany(mappedBy = "raidgremio")
-    private List<Raid> listaRaid;
+    @OneToMany(mappedBy = "raidgremio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<Raid> listaRaid;
 
-    @OneToMany(mappedBy = "gremiousuario")
-    private List<Usuarios> listaUsuarios;
+    @OneToMany(mappedBy = "gremiousuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<Usuarios> listaUsuarios;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Region")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Region", nullable = false)
+    @NotNull
     private Region gremioregion;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Mundo")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Mundo", nullable = false)
+    @NotNull
     private Mundos gremiomundo;
 
-    @OneToMany(mappedBy = "gremiouserrol")
-    private List<UsuarioRoles> listaUsuariosRoles;
+    @OneToMany(mappedBy = "gremiouserrol", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<UsuarioRoles> listaUsuariosRoles;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Avatar")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Avatar", nullable = false)
+    @NotNull
     private AvatarGremio img;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Fondo")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Fondo", nullable = false)
+    @NotNull
     private FondoGremio imgF;
 
-    public Gremio() {
-    }
-
-    public Gremio(int id, String nombre, String descripcion, int cantidad, List<Raid> listaRaid, List<Usuarios> listaUsuarios, Region gremioregion, Mundos gremiomundo, List<UsuarioRoles> listaUsuariosRoles, AvatarGremio img, FondoGremio imgF) {
-        this.id = id;
-        this.nombre = nombre;
-        this.descripcion = descripcion;
-        this.cantidad = cantidad;
-        this.listaRaid = listaRaid;
-        this.listaUsuarios = listaUsuarios;
-        this.gremioregion = gremioregion;
-        this.gremiomundo = gremiomundo;
-        this.listaUsuariosRoles = listaUsuariosRoles;
-        this.img = img;
-        this.imgF = imgF;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public int getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public List<Raid> getListaRaid() {
-        return listaRaid;
-    }
-
-    public void setListaRaid(List<Raid> listaRaid) {
-        this.listaRaid = listaRaid;
-    }
-
-    public List<Usuarios> setListaUsuarios() {
-        return listaUsuarios;
-    }
-
-    public void setListaJugadores(List<Usuarios> listaUsuarios) {
-        this.listaUsuarios = listaUsuarios;
-    }
-
-    public Region getGremioregion() {
-        return gremioregion;
-    }
-
-    public void setGremioregion(Region gremioregion) {
-        this.gremioregion = gremioregion;
-    }
-
-    public Mundos getGremiomundo() {
-        return gremiomundo;
-    }
-
-    public void setGremiomundo(Mundos gremiomundo) {
-        this.gremiomundo = gremiomundo;
-    }
-
-    public List<UsuarioRoles> getListaUsuariosRoles() {
-        return listaUsuariosRoles;
-    }
-
-    public void setListaUsuariosRoles(List<UsuarioRoles> listaUsuariosRoles) {
-        this.listaUsuariosRoles = listaUsuariosRoles;
-    }
-
-    public List<Usuarios> getListaUsuarios() {
-        return listaUsuarios;
-    }
-
-    public void setListaUsuarios(List<Usuarios> listaUsuarios) {
-        this.listaUsuarios = listaUsuarios;
-    }
-
-    public AvatarGremio getImg() {
-        return img;
-    }
-
-    public void setImg(AvatarGremio img) {
-        this.img = img;
-    }
-
-    public FondoGremio getImgF() {
-        return imgF;
-    }
-
-    public void setImgF(FondoGremio imgF) {
-        this.imgF = imgF;
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }

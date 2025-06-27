@@ -1,16 +1,31 @@
 package com.guildgate.web.Modelo;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
 import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.NotNull;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -19,75 +34,46 @@ import jakarta.persistence.Table;
 @Entity
 @Table(
         name = "Ronda",
-        schema = "gremiosyraids"
+        schema = "gremiosyraids",
+        indexes = {
+            @Index(name = "idx_ronda_raid", columnList = "Id_Raid")
+        }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Ronda implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "Nombre_Ronda")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ronda_seq")
+    @SequenceGenerator(name = "ronda_seq", sequenceName = "ronda_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Integer id;
+
+    @Column(name = "Nombre_Ronda", length = 100, nullable = false)
+    @NotNull
     private String nombre;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Raid")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "Id_Raid", nullable = false)
+    @NotNull
     private Raid raidronda;
 
-    @OneToMany(mappedBy = "partironda")
-    private List<Participaciones> listaParticipaciones;
+    @OneToMany(mappedBy = "partironda", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<Participaciones> listaParticipaciones;
 
-    @OneToMany(mappedBy = "partiextraronda")
-    private List<ParticipacionesExtra> listaParticipacionesExtra;
+    @OneToMany(mappedBy = "partiextraronda", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<ParticipacionesExtra> listaParticipacionesExtra;
 
-    public Ronda() {
-    }
-
-    public Ronda(int id, String nombre, Raid raidronda, List<Participaciones> listaParticipaciones, List<ParticipacionesExtra> listaParticipacionesExtra) {
-        this.id = id;
-        this.nombre = nombre;
-        this.raidronda = raidronda;
-        this.listaParticipaciones = listaParticipaciones;
-        this.listaParticipacionesExtra = listaParticipacionesExtra;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public Raid getRaidronda() {
-        return raidronda;
-    }
-
-    public void setRaidronda(Raid raidronda) {
-        this.raidronda = raidronda;
-    }
-
-    public List<Participaciones> getListaParticipaciones() {
-        return listaParticipaciones;
-    }
-
-    public void setListaParticipaciones(List<Participaciones> listaParticipaciones) {
-        this.listaParticipaciones = listaParticipaciones;
-    }
-
-    public List<ParticipacionesExtra> getListaParticipacionesExtra() {
-        return listaParticipacionesExtra;
-    }
-
-    public void setListaParticipacionesExtra(List<ParticipacionesExtra> listaParticipacionesExtra) {
-        this.listaParticipacionesExtra = listaParticipacionesExtra;
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }

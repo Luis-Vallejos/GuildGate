@@ -1,17 +1,32 @@
 package com.guildgate.web.Modelo;
 
+import jakarta.persistence.CascadeType;
 import java.io.Serializable;
-import java.util.List;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import java.util.Set;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -22,153 +37,73 @@ import jakarta.persistence.UniqueConstraint;
         name = "Usuarios",
         schema = "gremiosyraids",
         uniqueConstraints = {
-            @UniqueConstraint(
-                    name = "nombreUsuario_unique",
-                    columnNames = "Nombre_Usuario"
-            )
+            @UniqueConstraint(name = "nombreUsuario_unique", columnNames = "Nombre_Usuario")
+        },
+        indexes = {
+            @Index(name = "idx_usuarios_nombre", columnList = "Nombre_Usuario"),
+            @Index(name = "idx_usuarios_gremio", columnList = "Id_Gremio"),
+            @Index(name = "idx_usuarios_perfil", columnList = "Id_Perfil"),
+            @Index(name = "idx_usuarios_banner", columnList = "Id_Banner")
         }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Usuarios implements Serializable {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "Nombre_Usuario", nullable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "usuarios_seq")
+    @SequenceGenerator(name = "usuarios_seq", sequenceName = "usuarios_seq", allocationSize = 1)
+    @Column(name = "Id", updatable = false)
+    private Integer id;
+
+    @Column(name = "Nombre_Usuario", length = 100, nullable = false)
+    @NotNull
     private String nombre;
 
-    @Column(name = "Correo_Electronico", nullable = false)
+    @Column(name = "Correo_Electronico", length = 255, nullable = false)
+    @NotNull
+    @Email
     private String correo;
 
-    @Column(name = "Contrasenia", nullable = false)
+    @Column(name = "Contrasenia", length = 255, nullable = false)
+    @NotNull
     private String contrasena;
 
-    @Column(name = "Bio_Usuario")
+    @Column(name = "Bio_Usuario", length = 500)
     private String bio;
 
-    @Column(name = "Nivel")
-    private int nivel;
+    @Column(name = "Nivel", nullable = false)
+    @NotNull
+    private Integer nivel;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_Gremio")
     private Gremio gremiousuario;
 
-    @OneToMany(mappedBy = "userparti")
-    private List<Participaciones> listaParticipaciones;
+    @OneToMany(mappedBy = "userparti", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<Participaciones> listaParticipaciones;
 
-    @OneToMany(mappedBy = "usuariouserrol")
-    private List<UsuarioRoles> listaUsuariosRol;
+    @OneToMany(mappedBy = "usuariouserrol", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OrderBy("id ASC")
+    private Set<UsuarioRoles> listaUsuariosRol;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_Perfil")
     private ImagenPerfil img;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "Id_Banner")
     private ImagenBanner imgB;
 
-    public Usuarios() {
-    }
-
-    public Usuarios(int id, String nombre, String correo, String contrasena, String bio, int nivel, Gremio gremiousuario, List<Participaciones> listaParticipaciones, List<UsuarioRoles> listaUsuariosRol, ImagenPerfil img, ImagenBanner imgB) {
-        this.id = id;
-        this.nombre = nombre;
-        this.correo = correo;
-        this.contrasena = contrasena;
-        this.bio = bio;
-        this.nivel = nivel;
-        this.gremiousuario = gremiousuario;
-        this.listaParticipaciones = listaParticipaciones;
-        this.listaUsuariosRol = listaUsuariosRol;
-        this.img = img;
-        this.imgB = imgB;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public int getNivel() {
-        return nivel;
-    }
-
-    public void setNivel(int nivel) {
-        this.nivel = nivel;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
-    public String getBio() {
-        return bio;
-    }
-
-    public void setBio(String bio) {
-        this.bio = bio;
-    }
-
-    public List<Participaciones> getListaParticipaciones() {
-        return listaParticipaciones;
-    }
-
-    public void setListaParticipaciones(List<Participaciones> listaParticipaciones) {
-        this.listaParticipaciones = listaParticipaciones;
-    }
-
-    public Gremio getGremiousuario() {
-        return gremiousuario;
-    }
-
-    public void setGremiousuario(Gremio gremiousuario) {
-        this.gremiousuario = gremiousuario;
-    }
-
-    public List<UsuarioRoles> getListaUsuariosRol() {
-        return listaUsuariosRol;
-    }
-
-    public void setListaUsuariosRol(List<UsuarioRoles> listaUsuariosRol) {
-        this.listaUsuariosRol = listaUsuariosRol;
-    }
-
-    public ImagenPerfil getImg() {
-        return img;
-    }
-
-    public void setImg(ImagenPerfil img) {
-        this.img = img;
-    }
-
-    public ImagenBanner getImgB() {
-        return imgB;
-    }
-
-    public void setImgB(ImagenBanner imgB) {
-        this.imgB = imgB;
-    }
+    @Version
+    @Column(name = "Version")
+    private Long version;
 }
