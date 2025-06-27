@@ -99,111 +99,6 @@ public class Controladora {
 
     //Metodos Raid - DESDE SQL
     //Metodos Bosses - DESDE SQL
-    //Metodos Usuarios
-    public void anadirUsuario(String nomUser, String email, String contra) throws IOException {
-        Usuarios user = new Usuarios();
-
-        user.setNombre(nomUser);
-        user.setNivel(1);
-        user.setCorreo(email);
-        user.setContrasena(contra);
-
-        ImagenPerfil imgPerfil = SvUtils.obtenerOCrearImagenPerfilConPath(
-                cors,
-                "DefaultUserPic.png",
-                "D:/USUARIO DATOS/Documents/NetBeansProjects/GremiosYRaids/src/main/webapp/imagenes/Usuario/UserPics/",
-                Enum.OrigenArchivo.PREDETERMINADA
-        );
-        user.setImg(imgPerfil);
-
-        ImagenBanner imgBanner = SvUtils.obtenerOCrearImagenBannerConPath(
-                cors,
-                "DefaultUserBanner.jpg",
-                "D:/USUARIO DATOS/Documents/NetBeansProjects/GremiosYRaids/src/main/webapp/imagenes/Usuario/UserBannerPics/",
-                Enum.OrigenArchivo.PREDETERMINADA
-        );
-        user.setImgB(imgBanner);
-
-        cors.crearUsuario(user);
-    }
-
-    public void editarUsuario(String nickname, String correo, String contra, String bio, ArrayList<Usuarios> listaUsuarios, String nombreOriginal) {
-        if (nickname == null || nickname.isEmpty() || correo == null || correo.isEmpty()
-                || contra == null || contra.isEmpty() || bio == null || bio.isEmpty()) {
-            throw new IllegalArgumentException("Todos los campos son obligatorios.");
-        }
-
-        Optional<Usuarios> optUser = SvUtils.findUserByUsername(nombreOriginal, listaUsuarios);
-
-        if (!optUser.isPresent()) {
-            throw new IllegalArgumentException("Error buscando al usuario.");
-        }
-
-        Usuarios j = optUser.get();
-
-        try {
-            cors.editarInformacionBasica(j.getId(), nickname, correo, contra, bio);
-        } catch (Exception e) {
-            throw new RuntimeException("Error al editar el usuario", e);
-        }
-    }
-
-    public void asociarGremioaUsuario(String usuario, int gremioId, String rolNom) {
-        ArrayList<Usuarios> listaUsuarios = Optional.ofNullable(cors.traerListaUsuarios())
-                .orElseThrow(() -> new IllegalStateException("Hubo un error las listas están vacías!!"));
-        ArrayList<Gremio> listaGremios = Optional.ofNullable(cors.traerListaGremios())
-                .orElseThrow(() -> new IllegalStateException("Hubo un error las listas están vacías!!"));
-        ArrayList<Roles> listaRoles = Optional.ofNullable(cors.traerListaRoles())
-                .orElseThrow(() -> new IllegalStateException("Hubo un error las listas están vacías!!"));
-
-        Optional<Usuarios> optUsuario = listaUsuarios.stream()
-                .filter(j -> usuario.equalsIgnoreCase(j.getNombre()))
-                .findFirst();
-
-        optUsuario.ifPresentOrElse(user -> {
-            Optional<Gremio> optGremio = listaGremios.stream()
-                    .filter(g -> gremioId == g.getId())
-                    .findFirst();
-
-            optGremio.ifPresentOrElse(gre -> {
-                Optional<Roles> optRoles = listaRoles.stream()
-                        .filter(r -> rolNom.equalsIgnoreCase(r.getNombre()))
-                        .findFirst();
-
-                optRoles.ifPresentOrElse(rol -> {
-                    user.setGremiousuario(gre);
-                    cors.editarUsuario(user);
-
-                    UsuarioRoles ur = new UsuarioRoles();
-                    ur.setGremiouserrol(gre);
-                    ur.setUsuariouserrol(user);
-                    ur.setRoluserrol(rol);
-                    ur.setFechaAsignacion(LocalDate.now());
-                    cors.crearConexionJR(ur);
-
-                    System.out.println("Usuario asociado correctamente al gremio y rol asignado.");
-                }, () -> {
-                    System.out.println("Error: Rol no encontrado");
-                });
-            }, () -> {
-                System.out.println("Error: Gremio no encontrado");
-            });
-        }, () -> {
-            System.out.println("Error: Usuario no existe!");
-        });
-    }
-
-    public Usuarios traerUsuario(int id) {
-        return cors.traerUsuario(id);
-    }
-
-    public ArrayList<Usuarios> traerListaUsuarios() {
-        return cors.traerListaUsuarios();
-    }
-
-    public long contarUsuarioPorGremio(int gremioId) {
-        return cors.traerCantidadUsuarios(gremioId);
-    }
 
     //ImagenPerfil
     public ImagenPerfil traerImagenPerfil(long id) {
@@ -266,11 +161,7 @@ public class Controladora {
         }
 
         ImagenPerfil imgNew;
-        try {
-            imgNew = SvUtils.obtenerOCrearPerfilSinPath(cors, nomArchivo, tipoArchivo, archivoByte, Enum.OrigenArchivo.USUARIO);
-        } catch (IOException e) {
-            throw new IOException("Error al obtener o crear la imagen de perfil.", e);
-        }
+        imgNew = SvUtils.obtenerOCrearPerfilSinPath(cors, nomArchivo, tipoArchivo, archivoByte, Enum.OrigenArchivo.USUARIO);
 
         cors.editarNuevoAvatar(usuario, imgNew);
     }

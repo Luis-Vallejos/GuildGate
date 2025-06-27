@@ -1,5 +1,6 @@
 package com.guildgate.web.Utilities;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.io.BufferedInputStream;
@@ -32,8 +33,16 @@ import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Controller.GremioController;
+import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Persistence.ControladoraPersistencia;
+import com.guildgate.web.Service.BannerService;
+import com.guildgate.web.Service.PerfilService;
 import com.guildgate.web.Servlet.SvPerfil;
+import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -153,6 +162,34 @@ public class SvUtils {
 
     public Optional<FondoGremio> findFondoGremioByNombre(String nombre) {
         return Optional.ofNullable(cors.buscarFondoGremioPorNombre(nombre));
+    }
+
+    /**
+     * Convierte una List<T> en un ArrayList<T>. Si la lista pasada es null,
+     * retorna una lista vacía.
+     *
+     * @param <T> Tipo de elementos
+     * @param list Lista a convertir
+     * @return Un ArrayList con los mismos elementos
+     */
+    public static <T> ArrayList<T> toArrayList(List<? extends T> list) {
+        if (list == null) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(list);
+    }
+
+    public static Long parseLongParam(HttpServletRequest req, String name, HttpServletResponse resp)
+            throws IOException {
+        String s = req.getParameter(name);
+        System.out.println(s);
+        try {
+            System.out.println(Long.valueOf(s));
+            return Long.valueOf(s);
+        } catch (NumberFormatException e) {
+            respondWithJson(resp, SC_BAD_REQUEST, false, "ID inválido: " + e.getMessage() + s, null);
+            return null;
+        }
     }
 
     /*Metodos para procesar una gran cantidad de datos*/
@@ -311,12 +348,12 @@ public class SvUtils {
     }
 
     //Método para traer la información de un solo gremio
-    public static void processGuildInfo(HttpServletResponse response, HttpServletRequest request, Gremio gre, Controladora control) throws IOException {
+    public static void processGuildInfo(HttpServletResponse response, HttpServletRequest request, Gremio gre, UsuarioController uc) throws IOException {
         Map<String, Object> gremioInfo = new HashMap<>();
         gremioInfo.put("id", gre.getId());
         gremioInfo.put("nombre", gre.getNombre());
         gremioInfo.put("descripcion", gre.getDescripcion());
-        gremioInfo.put("miembros", control.contarUsuarioPorGremio(gre.getId()));
+        gremioInfo.put("miembros", uc.contarUsuarioPorGremio(gre.getId()));
         gremioInfo.put("limiteMiembros", gre.getCantidad());
 
         AvatarGremio img = gre.getImg();
@@ -333,10 +370,10 @@ public class SvUtils {
     }
 
     //Método para unirse a un gremio
-    public static void processJoinGuild(HttpServletResponse response, HttpServletRequest request, String usuario, int gremio, String rol, Controladora control) throws IOException {
-        control.asociarGremioaUsuario(usuario, gremio, rol);
+    public static void processJoinGuild(HttpServletResponse response, HttpServletRequest request, String usuario, int gremio, String rol, GremioController gc) throws IOException {
+        gc.asociarGremioaUsuario(usuario, gremio, rol);
 
-        Gremio gre = control.traerGremio(gremio);
+        Gremio gre = gc.traerGremio(gremio);
         String nomGremio = gre.getNombre();
         String descripcionGremio = (gre != null) ? gre.getDescripcion() : "No contienen descripción...";
 
@@ -598,8 +635,8 @@ public class SvUtils {
 
     // Método para obtener o crear una imagen
     //Avatar usuario - Crear por primera vez sin data por directorio
-    public static ImagenPerfil obtenerOCrearImagenPerfilConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
-        ImagenPerfil img = cors.buscarImagenPorNombre(nombreArchivo);
+    public static ImagenPerfil obtenerOCrearImagenPerfilConPath(PerfilService ps, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+        ImagenPerfil img = ps.buscarImagenPorNombre(nombreArchivo);
 
         if (img == null) {
             Path path = Paths.get(rutaArchivo + nombreArchivo);
@@ -611,14 +648,14 @@ public class SvUtils {
             img.setTipoArchivo(tipoArchivo);
             img.setData(datos);
             img.setOrigenArchivo(origenArchivo);
-            cors.guardarImagen(img);
+            ps.create(img);
         }
         return img;
     }
 
     //Avatar usuario - Crear por primera vez con data y sin directorio
-    public static ImagenPerfil obtenerOCrearPerfilSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
-        ImagenPerfil img = cors.buscarImagenPorNombre(nombreArchivo);
+    public static ImagenPerfil obtenerOCrearPerfilSinPath(PerfilService ps, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+        ImagenPerfil img = ps.buscarImagenPorNombre(nombreArchivo);
 
         if (img == null) {
             img = new ImagenPerfil();
@@ -626,15 +663,15 @@ public class SvUtils {
             img.setTipoArchivo(tipoArchivo);
             img.setData(data);
             img.setOrigenArchivo(origenArchivo);
-            cors.guardarImagen(img);
+            ps.create(img);
         }
 
         return img;
     }
 
     //Banner usuario - Crear por primera vez sin data por directorio
-    public static ImagenBanner obtenerOCrearImagenBannerConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
-        ImagenBanner img = cors.buscarBannerPorNombre(nombreArchivo);
+    public static ImagenBanner obtenerOCrearImagenBannerConPath(BannerService bs, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+        ImagenBanner img = bs.buscarBannerPorNombre(nombreArchivo);
 
         if (img == null) {
             Path path = Paths.get(rutaArchivo + nombreArchivo);
@@ -646,14 +683,14 @@ public class SvUtils {
             img.setTipoArchivo(tipoArchivo);
             img.setData(datos);
             img.setOrigenArchivo(origenArchivo);
-            cors.guardarBanner(img);
+            bs.create(img);
         }
         return img;
     }
 
     //Banner usuario - Crear por primera vez con data y sin directorio
-    public static ImagenBanner obtenerOCrearBannerSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
-        ImagenBanner imgB = cors.buscarBannerPorNombre(nombreArchivo);
+    public static ImagenBanner obtenerOCrearBannerSinPath(BannerService bs, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+        ImagenBanner imgB = bs.buscarBannerPorNombre(nombreArchivo);
 
         if (imgB == null) {
             imgB = new ImagenBanner();
@@ -663,7 +700,7 @@ public class SvUtils {
             imgB.setPosicionX("0");
             imgB.setPosicionY("50%");
             imgB.setOrigenArchivo(origenArchivo);
-            cors.guardarBanner(imgB);
+            bs.create(imgB);
         }
         return imgB;
     }
@@ -735,24 +772,95 @@ public class SvUtils {
         return fondo;
     }
 
-    /*Respuestas JSON*/
-    //Respuesta JSON - General
-    public static void respondWithJson(HttpServletResponse response, int statusCode, boolean success, String message) throws IOException {
-        Map<String, String> jsonResponse = new HashMap<>();
-        jsonResponse.put(success ? "message" : "error", message);
+    /* Respuestas JSON */
+    // Respuesta JSON - General - Sin data
+    public static void respondWithJson(HttpServletResponse response, int statusCode, boolean success, String message, Object data) throws IOException {
+        Map<String, Object> jsonResponse = new HashMap<>();
+        jsonResponse.put("success", success);
+        jsonResponse.put("message", message);
+        jsonResponse.put("status", statusCode);
+        if (data != null) {
+            jsonResponse.put("data", data);
+        }
         response.setStatus(statusCode);
+        response.setContentType("application/json;charset=UTF-8");
         Gson gson = new Gson();
         String jsonResponseString = gson.toJson(jsonResponse);
         response.getWriter().write(jsonResponseString);
     }
 
-    //Respuesta JSON - Error   
-    public static void respondWithError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
-        respondWithJson(response, statusCode, false, errorMessage);
+    // Respuesta JSON - General - Con data
+    public static void respondWithJsonList(HttpServletResponse respuesta, int codigoEstado, boolean checkSuccess, String mensaje, Object dataObjeto) throws IOException {
+        Map<String, Object> responseInfo = new HashMap<>();
+
+        responseInfo.put("success", checkSuccess);
+        responseInfo.put("message", mensaje);
+        responseInfo.put("data", dataObjeto instanceof Collection<?> ? dataObjeto : Collections.singletonList(dataObjeto));
+
+        respuesta.setStatus(codigoEstado);
+        respuesta.setContentType("application/json");
+        respuesta.setCharacterEncoding("UTF-8");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(responseInfo);
+
+        respuesta.getWriter().write(jsonResponse);
+        System.out.println(jsonResponse);
     }
 
-    //Respuesta JSON - Éxito
+    // Respuesta JSON - General - Con objeto específico
+    public static void respondWithJsonObject(HttpServletResponse respuesta, int codigoEstado, boolean checkSuccess, String mensaje, Map<String, Object> additionalData, Object mainData) throws IOException {
+        Map<String, Object> responseInfo = new HashMap<>();
+
+        responseInfo.put("success", checkSuccess);
+        responseInfo.put("message", mensaje);
+
+        responseInfo.put("data", mainData);
+
+        if (additionalData != null && !additionalData.isEmpty()) {
+            responseInfo.putAll(additionalData);
+        }
+
+        respuesta.setStatus(codigoEstado);
+        respuesta.setContentType("application/json");
+        respuesta.setCharacterEncoding("UTF-8");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResponse = objectMapper.writeValueAsString(responseInfo);
+
+        respuesta.getWriter().write(jsonResponse);
+        System.out.println(jsonResponse);
+    }
+
+    // Respuesta JSON - Añadido - Data
+    public static List<Map<String, Object>> anadirDataLista(List<?> listaOriginal, Map<String, Object> dataAdicional) {
+        List<Map<String, Object>> listaEnriquecida = new ArrayList<>();
+
+        listaOriginal.forEach(item -> {
+            Map<String, Object> itemData = new HashMap<>();
+            itemData.putAll(new ObjectMapper().convertValue(item, Map.class));
+            itemData.putAll(dataAdicional);
+            listaEnriquecida.add(itemData);
+        });
+        return listaEnriquecida;
+    }
+
+    // Respuesta JSON - Información - Éxito
     public static void respondWithSuccess(HttpServletResponse response, int statusCode, String message) throws IOException {
-        respondWithJson(response, statusCode, true, message);
+        respondWithJson(response, statusCode, true, message, null);
+    }
+
+    public static void respondWithSuccessDataObject(HttpServletResponse response, int statusCode, boolean checkSuccess, String mensaje, Map<String, Object> additionalData, Object mainData) throws IOException {
+        respondWithJsonObject(response, statusCode, checkSuccess, mensaje, additionalData, mainData);
+    }
+
+    // Respuesta JSON - Información - Éxito con Datos
+    public static void respondWithSuccessData(HttpServletResponse response, int statusCode, String message, Object data) throws IOException {
+        respondWithJsonList(response, statusCode, true, message, data);
+    }
+
+    // Respuesta JSON - Información - Error
+    public static void respondWithError(HttpServletResponse response, int statusCode, String errorMessage) throws IOException {
+        respondWithJson(response, statusCode, false, errorMessage, null);
     }
 }
