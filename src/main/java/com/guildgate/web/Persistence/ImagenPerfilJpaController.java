@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import com.guildgate.web.Modelo.ImagenPerfil;
@@ -13,24 +9,15 @@ import jakarta.persistence.criteria.Root;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
+import com.guildgate.web.Utilities.Enum;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class ImagenPerfilJpaController implements Serializable {
-
-    public ImagenPerfilJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class ImagenPerfilJpaController extends AbstractJpaController implements Serializable {
 
     public void create(ImagenPerfil imagenPerfil) {
         if (imagenPerfil.getListaUsuarios() == null) {
@@ -185,5 +172,30 @@ public class ImagenPerfilJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public ImagenPerfil findImagenByNombre(String nombreArchivo) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM ImagenPerfil i WHERE i.nomArchivo = :nombreArchivo");
+            query.setParameter("nombreArchivo", nombreArchivo);
+            List<ImagenPerfil> resultados = query.getResultList();
+            if (!resultados.isEmpty()) {
+                return resultados.get(0);
+            }
+        } finally {
+            em.close();
+        }
+        return null;
+    }
+
+    public List<ImagenPerfil> getPredeterminedPfps() {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM ImagenPerfil i WHERE i.origenArchivo = :origenArchivo");
+            query.setParameter("origenArchivo", Enum.OrigenArchivo.PREDETERMINADA);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
 }
