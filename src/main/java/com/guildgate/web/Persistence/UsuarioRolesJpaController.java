@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import java.io.Serializable;
@@ -15,23 +11,13 @@ import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.List;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class UsuarioRolesJpaController implements Serializable {
-
-    public UsuarioRolesJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class UsuarioRolesJpaController extends AbstractJpaController implements Serializable {
 
     public void create(UsuarioRoles usuarioRoles) {
         EntityManager em = null;
@@ -221,5 +207,5 @@ public class UsuarioRolesJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
