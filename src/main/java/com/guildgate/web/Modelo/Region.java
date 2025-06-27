@@ -7,9 +7,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  *
@@ -24,50 +33,30 @@ import jakarta.persistence.UniqueConstraint;
                     name = "nombreRegion_unique",
                     columnNames = "Nombre_Region"
             )
+        },
+        indexes = {
+            @Index(name = "idx_region_nombre", columnList = "Nombre_Region")
         }
 )
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@ToString
+@EqualsAndHashCode(of = "id")
 public class Region implements Serializable {
+    
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int id;
+    private Integer id;
 
-    @Column(name = "Nombre_Region")
+    @Column(name = "Nombre_Region", nullable = false)
+    @NotNull
     private String nombre;
 
     @OneToMany(mappedBy = "gremioregion")
     private List<Gremio> listaGremios;
-
-    public Region() {
-    }
-
-    public Region(int id, String nombre, List<Gremio> listaGremios) {
-        this.id = id;
-        this.nombre = nombre;
-        this.listaGremios = listaGremios;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public List<Gremio> getListaGremios() {
-        return listaGremios;
-    }
-
-    public void setListaGremios(List<Gremio> listaGremios) {
-        this.listaGremios = listaGremios;
-    }
 }
