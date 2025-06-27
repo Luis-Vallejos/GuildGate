@@ -12,6 +12,7 @@ import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
+import com.guildgate.web.Utilities.Enum;
 
 /**
  *
@@ -180,6 +181,32 @@ public class AvatarGremioJpaController extends AbstractJpaController implements 
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
+        } finally {
+            em.close();
+        }
+    }
+
+    public AvatarGremio findImagenByNombre(String nombreArchivo) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM AvatarGremio i WHERE i.nomArchivo = :nombreArchivo");
+            query.setParameter("nombreArchivo", nombreArchivo);
+            List<AvatarGremio> resultados = query.getResultList();
+            if (!resultados.isEmpty()) {
+                return resultados.get(0);
+            }
+        } finally {
+            em.close();
+        }
+        return null;
+    }
+
+    public List<AvatarGremio> getPredeterminedAvatarGremio() {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM AvatarGremio i WHERE i.origenArchivo = :origenArchivo");
+            query.setParameter("origenArchivo", Enum.OrigenArchivo.PREDETERMINADA);
+            return query.getResultList();
         } finally {
             em.close();
         }
