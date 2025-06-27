@@ -16,11 +16,12 @@ import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Modelo.Raid;
 import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
+import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 
 /**
  *
- * @author Lavender
+ * @author Juan - Luis
  */
 public class ControladoraPersistencia {
 
@@ -54,12 +55,15 @@ public class ControladoraPersistencia {
         }
     }
 
-    public void eliminarGremio(int id) {
+    public void eliminarGremio(Integer id) {
         try {
             gjc.destroy(id);
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public long traerCantidadUsuarios(int gremioId) {
@@ -89,12 +93,15 @@ public class ControladoraPersistencia {
         }
     }
 
-    public void eliminaRaid(int id) {
+    public void eliminaRaid(Integer id) {
         try {
             rajc.destroy(id);
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     public Raid traerRaid(int id) {
@@ -128,15 +135,17 @@ public class ControladoraPersistencia {
         }
     }
 
-    public void eliminarUsuario(int id) {
+    public void eliminarUsuario(Integer id) {
         try {
             ujc.destroy(id);
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-        //Metodos para elegir un nuevo Avatar o Banner para el usuario ya sea Predeterminado o Personalizado
+    //Metodos para elegir un nuevo Avatar o Banner para el usuario ya sea Predeterminado o Personalizado
     public void editarNuevoAvatar(int id, ImagenPerfil img) {
         try {
             ujc.editAvatarUser(id, img);
@@ -144,7 +153,7 @@ public class ControladoraPersistencia {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void editarNuevoBanner(int id, ImagenBanner img) {
         try {
             ujc.editBannerUser(id, img);
@@ -152,7 +161,7 @@ public class ControladoraPersistencia {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public Usuarios traerUsuario(int id) {
         return ujc.findUsuarios(id);
     }
@@ -212,9 +221,11 @@ public class ControladoraPersistencia {
         }
     }
 
-    public void eliminarRol(int id) {
+    public void eliminarRol(Integer id) {
         try {
             roljc.destroy(id);
+        } catch (IllegalOrphanException ex) {
+            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         } catch (NonexistentEntityException ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -253,7 +264,7 @@ public class ControladoraPersistencia {
     public void editarImagen(ImagenPerfil img) throws Exception {
         ijc.edit(img);
     }
-    
+
     public ImagenPerfil obtenerImagen(long id) {
         return ijc.findImagenPerfil(id);
     }
@@ -261,7 +272,7 @@ public class ControladoraPersistencia {
     public ImagenPerfil buscarImagenPorNombre(String nombreArchivo) {
         return ijc.findImagenByNombre(nombreArchivo);
     }
-    
+
     public ArrayList<ImagenPerfil> traerListaImagenes() {
         List<ImagenPerfil> lista = ijc.findImagenPerfilEntities();
         ArrayList<ImagenPerfil> listaImagenes = new ArrayList<>(lista);
@@ -302,54 +313,54 @@ public class ControladoraPersistencia {
         ArrayList<ImagenBanner> listaBannersPredeterminados = new ArrayList<>(lista);
         return listaBannersPredeterminados;
     }
-    
+
     //Metodos para avatarGremio
     public void guardarAvatarGremio(AvatarGremio ava) {
         agjc.create(ava);
     }
-    
+
     public AvatarGremio obtenerAvatarGremio(long id) {
         return agjc.findAvatarGremio(id);
     }
-    
+
     public AvatarGremio buscarAvatarGremioPorNombre(String nombreArchivo) {
         return agjc.findImagenByNombre(nombreArchivo);
     }
 
     public ArrayList<AvatarGremio> traerListaAvatarGremio() {
         List<AvatarGremio> lista = agjc.findAvatarGremioEntities();
-        ArrayList<AvatarGremio> listaAvataresGremio = new ArrayList<> (lista);
+        ArrayList<AvatarGremio> listaAvataresGremio = new ArrayList<>(lista);
         return listaAvataresGremio;
     }
-    
+
     public ArrayList<AvatarGremio> traerAvataresGremioPredeterminados() {
         List<AvatarGremio> lista = agjc.getPredeterminedAvatarGremio();
-        ArrayList<AvatarGremio> listaAvataresGremioPredeterminado = new ArrayList<> (lista);
+        ArrayList<AvatarGremio> listaAvataresGremioPredeterminado = new ArrayList<>(lista);
         return listaAvataresGremioPredeterminado;
     }
-    
+
     //Metodo para el fondo del Gremio
     public void guardarFondoGremio(FondoGremio fon) {
         fgjc.create(fon);
     }
-    
+
     public FondoGremio obtenerFondoGremio(long id) {
         return fgjc.findFondoGremio(id);
     }
-    
+
     public FondoGremio buscarFondoGremioPorNombre(String nombreArchivo) {
         return fgjc.findImagenByNombre(nombreArchivo);
     }
-    
+
     public ArrayList<FondoGremio> traerListaFondoGremio() {
         List<FondoGremio> lista = fgjc.findFondoGremioEntities();
-        ArrayList<FondoGremio> listaFondosGremio = new ArrayList<> (lista);
+        ArrayList<FondoGremio> listaFondosGremio = new ArrayList<>(lista);
         return listaFondosGremio;
     }
-    
+
     public ArrayList<FondoGremio> traerFondosGremioPredeterminado() {
         List<FondoGremio> lista = fgjc.getPredeterminedFondoGremio();
-        ArrayList<FondoGremio> listaFondosGremioPredeterminado = new ArrayList<> (lista);
+        ArrayList<FondoGremio> listaFondosGremioPredeterminado = new ArrayList<>(lista);
         return listaFondosGremioPredeterminado;
     }
 }
