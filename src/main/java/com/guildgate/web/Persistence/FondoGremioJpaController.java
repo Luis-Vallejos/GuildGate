@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import com.guildgate.web.Modelo.FondoGremio;
@@ -14,24 +10,15 @@ import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.List;
+import com.guildgate.web.Utilities.Enum;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class FondoGremioJpaController implements Serializable {
-
-    public FondoGremioJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class FondoGremioJpaController extends AbstractJpaController implements Serializable {
 
     public void create(FondoGremio fondoGremio) {
         if (fondoGremio.getListaGremios() == null) {
@@ -198,5 +185,31 @@ public class FondoGremioJpaController implements Serializable {
             em.close();
         }
     }
-    
+
+    public FondoGremio findImagenByNombre(String nombreArchivo) {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM FondoGremio i WHERE i.nomArchivo = :nombreArchivo");
+            query.setParameter("nombreArchivo", nombreArchivo);
+            List<FondoGremio> resultados = query.getResultList();
+            if (!resultados.isEmpty()) {
+                return resultados.get(0);
+            }
+        } finally {
+            em.close();
+        }
+        return null;
+    }
+
+    public List<FondoGremio> getPredeterminedFondoGremio() {
+        EntityManager em = getEntityManager();
+        try {
+            Query query = em.createQuery("SELECT i FROM FondoGremio i WHERE i.origenArchivo = :origenArchivo");
+            query.setParameter("origenArchivo", Enum.OrigenArchivo.PREDETERMINADA);
+            return query.getResultList();
+        } finally {
+            em.close();
+        }
+    }
+
 }
