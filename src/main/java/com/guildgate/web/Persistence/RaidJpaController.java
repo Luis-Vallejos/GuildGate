@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.guildgate.web.Persistence;
 
 import java.io.Serializable;
@@ -19,22 +15,12 @@ import com.guildgate.web.Modelo.Raid;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 
 /**
  *
- * @author hp
+ * @author Juan - Luis
  */
-public class RaidJpaController implements Serializable {
-
-    public RaidJpaController(EntityManagerFactory emf) {
-        this.emf = emf;
-    }
-    private EntityManagerFactory emf = null;
-
-    public EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
+public class RaidJpaController extends AbstractJpaController implements Serializable {
 
     public void create(Raid raid) {
         if (raid.getListaParticipaciones() == null) {
@@ -331,5 +317,5 @@ public class RaidJpaController implements Serializable {
             em.close();
         }
     }
-    
+
 }
