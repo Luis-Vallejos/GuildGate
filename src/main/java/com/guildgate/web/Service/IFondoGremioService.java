@@ -9,4 +9,5 @@ import com.guildgate.web.Service.generic.ICrudService;
  */
 public interface IFondoGremioService extends ICrudService<FondoGremio, Long> {
 
+    FondoGremio buscarFondoGremioPorNombre(String nombreArchivo);
 }

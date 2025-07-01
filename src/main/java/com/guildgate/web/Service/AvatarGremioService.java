@@ -89,4 +89,9 @@ public class AvatarGremioService implements IAvatarGremioService {
             return false;
         }
     }
+
+    @Override
+    public AvatarGremio buscarAvatarGremioPorNombre(String nombreArchivo) {
+        return agjc.findImagenByNombre(nombreArchivo);
+    }
 }

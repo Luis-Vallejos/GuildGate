@@ -90,4 +90,9 @@ public class FondoGremioService implements IFondoGremioService {
             return false;
         }
     }
+
+    @Override
+    public FondoGremio buscarFondoGremioPorNombre(String nombreArchivo) {
+        return fgjc.findImagenByNombre(nombreArchivo);
+    }
 }

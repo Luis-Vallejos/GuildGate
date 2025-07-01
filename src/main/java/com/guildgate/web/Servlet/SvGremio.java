@@ -25,11 +25,6 @@ public class SvGremio extends HttpServlet {
 
     Controladora control = null;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        /*Nothing*/
-    }
-
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -81,7 +76,7 @@ public class SvGremio extends HttpServlet {
 
         Optional<Usuarios> optUsuarios = SvUtils.findUserByUsername(usuarioActual, control.traerListaUsuarios());
         Usuarios user = optUsuarios.get();
-        
+
         int idRegion, idMundo;
         String nombre = request.getParameter("nomGremio");
         String descripcion = request.getParameter("descGremio");
@@ -116,10 +111,5 @@ public class SvGremio extends HttpServlet {
                 SvUtils.respondWithSuccess(response, HttpServletResponse.SC_CREATED, Mensajes.GREMIO_CREADO_EXITO);
             }
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

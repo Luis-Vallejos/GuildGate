@@ -9,4 +9,5 @@ import com.guildgate.web.Service.generic.ICrudService;
  */
 public interface IAvatarGremioService extends ICrudService<AvatarGremio, Long> {
     
+    AvatarGremio buscarAvatarGremioPorNombre(String nombreArchivo);
 }

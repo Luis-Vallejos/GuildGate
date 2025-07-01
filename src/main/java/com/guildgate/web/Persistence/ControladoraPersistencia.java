@@ -344,10 +344,6 @@ public class ControladoraPersistencia {
         return fgjc.findFondoGremio(id);
     }
 
-    public FondoGremio buscarFondoGremioPorNombre(String nombreArchivo) {
-        return fgjc.findImagenByNombre(nombreArchivo);
-    }
-
     public ArrayList<FondoGremio> traerListaFondoGremio() {
         List<FondoGremio> lista = fgjc.findFondoGremioEntities();
         ArrayList<FondoGremio> listaFondosGremio = new ArrayList<>(lista);

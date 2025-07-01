@@ -36,7 +36,9 @@ import com.guildgate.web.Bean.UsuarioBean;
 import com.guildgate.web.Controller.GremioController;
 import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Persistence.ControladoraPersistencia;
+import com.guildgate.web.Service.AvatarGremioService;
 import com.guildgate.web.Service.BannerService;
+import com.guildgate.web.Service.FondoGremioService;
 import com.guildgate.web.Service.PerfilService;
 import com.guildgate.web.Servlet.SvPerfil;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
@@ -706,8 +708,8 @@ public class SvUtils {
     }
 
     //AvatarGremio - Crear por primera vez sin data por directorio
-    public static AvatarGremio obtenerOCrearAvatarGremioConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
-        AvatarGremio ava = cors.buscarAvatarGremioPorNombre(nombreArchivo);
+    public static AvatarGremio obtenerOCrearAvatarGremioConPath(AvatarGremioService ags, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+        AvatarGremio ava = ags.buscarAvatarGremioPorNombre(nombreArchivo);
 
         if (ava == null) {
             Path path = Paths.get(rutaArchivo + nombreArchivo);
@@ -719,14 +721,14 @@ public class SvUtils {
             ava.setTipoArchivo(tipoArchivo);
             ava.setData(datos);
             ava.setOrigenArchivo(origenArchivo);
-            cors.guardarAvatarGremio(ava);
+            ags.create(ava);
         }
         return ava;
     }
 
     //AvatarGremio - Crear por primera vez con data y sin directorio
-    public static AvatarGremio obtenerOCrearAvatarGremioSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
-        AvatarGremio ava = cors.buscarAvatarGremioPorNombre(nombreArchivo);
+    public static AvatarGremio obtenerOCrearAvatarGremioSinPath(AvatarGremioService ags, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+        AvatarGremio ava = ags.buscarAvatarGremioPorNombre(nombreArchivo);
 
         if (ava == null) {
             ava = new AvatarGremio();
@@ -734,14 +736,14 @@ public class SvUtils {
             ava.setTipoArchivo(tipoArchivo);
             ava.setData(data);
             ava.setOrigenArchivo(origenArchivo);
-            cors.guardarAvatarGremio(ava);
+            ags.create(ava);
         }
         return ava;
     }
 
     //FondoGremio - Crear por primera vez sin data por directorio
-    public static FondoGremio obtenerOCrearFondoGremioConPath(ControladoraPersistencia cors, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
-        FondoGremio fondo = cors.buscarFondoGremioPorNombre(nombreArchivo);
+    public static FondoGremio obtenerOCrearFondoGremioConPath(FondoGremioService fgs, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+        FondoGremio fondo = fgs.buscarFondoGremioPorNombre(nombreArchivo);
 
         if (fondo == null) {
             Path path = Paths.get(rutaArchivo + nombreArchivo);
@@ -753,13 +755,13 @@ public class SvUtils {
             fondo.setTipoArchivo(tipoArchivo);
             fondo.setData(datos);
             fondo.setOrigenArchivo(origenArchivo);
-            cors.guardarFondoGremio(fondo);
+            fgs.create(fondo);
         }
         return fondo;
     }
 
-    public static FondoGremio obtenerOCrearFondoGremioSinPath(ControladoraPersistencia cors, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
-        FondoGremio fondo = cors.buscarFondoGremioPorNombre(nombreArchivo);
+    public static FondoGremio obtenerOCrearFondoGremioSinPath(FondoGremioService fgs, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+        FondoGremio fondo = fgs.buscarFondoGremioPorNombre(nombreArchivo);
 
         if (fondo == null) {
             fondo = new FondoGremio();
@@ -767,7 +769,7 @@ public class SvUtils {
             fondo.setTipoArchivo(tipoArchivo);
             fondo.setData(data);
             fondo.setOrigenArchivo(origenArchivo);
-            cors.guardarFondoGremio(fondo);
+            fgs.create(fondo);
         }
         return fondo;
     }

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
-import java.time.LocalDate;
 import com.guildgate.web.Persistence.ControladoraPersistencia;
 import com.guildgate.web.Persistence.exceptions.AvatarNotFoundException;
 import com.guildgate.web.Persistence.exceptions.BannerNotFoundException;
@@ -20,86 +18,8 @@ public class Controladora {
 
     ControladoraPersistencia cors = new ControladoraPersistencia();
 
-    //Metodos para gremios
-    // Método para crear un gremio
-    public void crearGremio(String nombre, String desc, int region, int mundo, String usuario) throws IOException {
-        ArrayList<Region> listaRegion = cors.traerListaRegiones();
-        ArrayList<Mundos> listaMundos = cors.traerListaMundos();
-        ArrayList<Roles> listaRoles = cors.traerListaRoles();
-
-        //Buscar la región
-        Optional<Region> optRegion = SvUtils.findRegionById(region, listaRegion);
-        if (!optRegion.isPresent()) {
-            System.out.println("Region no encontrada");
-            return;
-        }
-
-        //Buscar el mundo
-        Optional<Mundos> optMundo = SvUtils.findMundoById(mundo, listaMundos);
-        if (!optMundo.isPresent()) {
-            System.out.println("Mundo no encontrado");
-            return;
-        }
-
-        //Crear el gremio
-        Gremio gre = new Gremio();
-        gre.setNombre(nombre);
-        gre.setDescripcion(desc);
-        gre.setCantidad(30);
-        gre.setGremioregion(optRegion.get());
-        gre.setGremiomundo(optMundo.get());
-
-        String nombreImgGuild = "DefaultGuildPic.png";
-        String path = "D:/USUARIO DATOS/Documents/NetBeansProjects/GremiosYRaids/src/main/webapp/imagenes/Gremio/GuildPics/";
-
-        AvatarGremio img = SvUtils.obtenerOCrearAvatarGremioConPath(cors, nombreImgGuild, path, Enum.OrigenArchivo.PREDETERMINADA);
-        gre.setImg(img);
-
-        String nombreFondoGuild = "DefaultGuildBackground.jpg";
-        String pathFondo = "D:/USUARIO DATOS/Pictures/GremiosProject/";
-
-        FondoGremio imgF = SvUtils.obtenerOCrearFondoGremioConPath(cors, nombreFondoGuild, pathFondo, Enum.OrigenArchivo.PREDETERMINADA);
-        gre.setImgF(imgF);
-
-        int idGremio = cors.crearGremio(gre);
-
-        //Buscar el usuario
-        Optional<Usuarios> optUsuario = SvUtils.findUserByUsername(usuario, cors.traerListaUsuarios());
-        if (!optUsuario.isPresent()) {
-            System.out.println("Usuario no encontrado");
-            return;
-        }
-
-        //Asignación del rol dueño al creador del gremio
-        Optional<Roles> optRol = SvUtils.findRolById(1, listaRoles);
-        if (!optRol.isPresent()) {
-            System.out.println("Rol no encontrado");
-            return;
-        }
-
-        Usuarios user = optUsuario.get();
-        user.setGremiousuario(cors.traerGremio(idGremio));
-        cors.editarUsuario(user);
-
-        UsuarioRoles ur = new UsuarioRoles();
-        ur.setGremiouserrol(gre);
-        ur.setUsuariouserrol(user);
-        ur.setRoluserrol(optRol.get());
-        ur.setFechaAsignacion(LocalDate.now());
-        cors.crearConexionJR(ur);
-    }
-
-    public Gremio traerGremio(int id) {
-        return cors.traerGremio(id);
-    }
-
-    public ArrayList<Gremio> traerListaGremios() {
-        return cors.traerListaGremios();
-    }
-
     //Metodos Raid - DESDE SQL
     //Metodos Bosses - DESDE SQL
-
     //ImagenPerfil
     public ImagenPerfil traerImagenPerfil(long id) {
         return cors.obtenerImagen(id);
