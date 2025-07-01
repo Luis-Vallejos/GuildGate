@@ -2,14 +2,20 @@ package com.guildgate.web.Service;
 
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Persistence.ImagenBannerJpaController;
+import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Juan - Luis
  */
 public class BannerService implements IBannerService {
+
+    private static final Logger LOGGER = Logger.getLogger(UsuarioRolesService.class.getName());
 
     @Inject
     ImagenBannerJpaController ibjc;
@@ -20,31 +26,75 @@ public class BannerService implements IBannerService {
 
     @Override
     public ImagenBanner findById(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (id == null) {
+            LOGGER.log(Level.WARNING, "findById falló: id es null");
+            return null;
+        }
+        return ibjc.findImagenBanner(id);
     }
 
     @Override
     public ArrayList<ImagenBanner> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        return SvUtils.toArrayList(ibjc.findImagenBannerEntities());
     }
 
     @Override
     public boolean create(ImagenBanner entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (entity == null) {
+            LOGGER.log(Level.WARNING, "create falló: ImagenBanner es null");
+            return false;
+        }
+        try {
+            ibjc.create(entity);
+            return true;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error al crear ImagenBanner: {0}", ex.toString());
+            return false;
+        }
     }
 
     @Override
     public boolean edit(ImagenBanner entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (entity == null || entity.getId() == null) {
+            LOGGER.log(Level.WARNING, "edit falló: entidad o entidad.id es null");
+            return false;
+        }
+        try {
+            ibjc.edit(entity);
+            return true;
+        } catch (NonexistentEntityException nex) {
+            LOGGER.log(Level.WARNING, "edit falló: entidad inexistente con ID {0}", entity.getId());
+            return false;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error al editar ImagenBanner: {0}", ex.toString());
+            return false;
+        }
     }
 
     @Override
     public boolean delete(Long id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (id == null) {
+            LOGGER.log(Level.WARNING, "delete falló: id es null");
+            return false;
+        }
+        try {
+            ibjc.destroy(id);
+            return true;
+        } catch (NonexistentEntityException ex) {
+            LOGGER.log(Level.WARNING, "delete falló: no existe ImagenBanner con ID {0}", id);
+            return false;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error al eliminar ImagenBanner: {0}", ex.toString());
+            return false;
+        }
     }
 
     @Override
     public ImagenBanner buscarBannerPorNombre(String nombreBanner) {
+        if (nombreBanner == null) {
+            LOGGER.log(Level.WARNING, "buscarBannerPorNombre falló: nombreBanner es null");
+            return null;
+        }
         return ibjc.findBannerByNombre(nombreBanner);
     }
 }
