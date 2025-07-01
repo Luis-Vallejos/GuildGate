@@ -224,9 +224,7 @@ public class ControladoraPersistencia {
     public void eliminarRol(Integer id) {
         try {
             roljc.destroy(id);
-        } catch (IllegalOrphanException ex) {
-            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NonexistentEntityException ex) {
+        } catch (IllegalOrphanException | NonexistentEntityException ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

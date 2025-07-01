@@ -56,9 +56,7 @@ public class UsuarioService implements IUsuarioService {
     public boolean delete(Integer id) {
         try {
             ujc.destroy(id);
-        } catch (IllegalOrphanException ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NonexistentEntityException ex) {
+        } catch (IllegalOrphanException | NonexistentEntityException ex) {
             Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
         }
         return true;

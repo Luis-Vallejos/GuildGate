@@ -2,7 +2,6 @@ package com.guildgate.web.Modelo;
 
 import jakarta.persistence.Column;
 import java.io.Serializable;
-import java.util.Date;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
