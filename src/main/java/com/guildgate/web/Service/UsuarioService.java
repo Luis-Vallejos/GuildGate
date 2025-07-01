@@ -16,6 +16,8 @@ import java.util.logging.Logger;
  */
 public class UsuarioService implements IUsuarioService {
 
+    private static final Logger LOGGER = Logger.getLogger(UsuarioService.class.getName());
+
     @Inject
     UsuariosJpaController ujc;
 
@@ -25,45 +27,74 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuarios findById(Integer id) {
+        if (id == null) {
+            LOGGER.log(Level.WARNING, "findById falló: id es null");
+            return null;
+        }
         return ujc.findUsuarios(id);
     }
 
     @Override
     public ArrayList<Usuarios> findAll() {
-        ArrayList<Usuarios> users = SvUtils.toArrayList(ujc.findUsuariosEntities());
-        return users;
+        return SvUtils.toArrayList(ujc.findUsuariosEntities());
     }
 
     @Override
     public boolean create(Usuarios u) {
-        ujc.create(u);
-        return true;
+        if (u == null) {
+            LOGGER.log(Level.WARNING, "create falló: Usuarios es null");
+            return false;
+        }
+        try {
+            ujc.create(u);
+            return true;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error al crear Usuarios: {0}", ex.toString());
+            return false;
+        }
     }
 
     @Override
     public boolean edit(Usuarios u) {
+        if (u == null || u.getId() == null) {
+            LOGGER.log(Level.WARNING, "edit falló: entidad o entidad.id es null");
+            return false;
+        }
         try {
             ujc.edit(u);
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        } catch (NonexistentEntityException nex) {
+            LOGGER.log(Level.WARNING, "edit falló: entidad inexistente con ID {0}", u.getId());
+            return false;
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error al editar Usuarios: {0}", ex.toString());
+            return false;
         }
-        return true;
     }
 
     @Override
     public boolean delete(Integer id) {
+        if (id == null) {
+            LOGGER.log(Level.WARNING, "delete falló: id es null");
+            return false;
+        }
         try {
             ujc.destroy(id);
-        } catch (IllegalOrphanException | NonexistentEntityException ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        } catch (NonexistentEntityException ex) {
+            LOGGER.log(Level.WARNING, "delete falló: no existe Usuarios con ID {0}", id);
+            return false;
+        } catch (IllegalOrphanException ex) {
+            LOGGER.log(Level.SEVERE, "Error al eliminar Usuarios: {0}", ex.toString());
+            return false;
         }
-        return true;
     }
 
     @Override
     public void editarInformacionBasica(Integer id, String nombre, String correo, String contrasena, String bio) {
+        if (id == null || nombre == null || correo == null || contrasena == null || bio == null) {
+            LOGGER.log(Level.WARNING, "edit básico falló: los valores o el id son nulos");
+        }
         try {
             ujc.editBasicInfo(id, nombre, correo, contrasena, bio);
         } catch (Exception ex) {
@@ -73,6 +104,10 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public long traerCantidadUsuarios(Integer gremioId) {
+        if (gremioId == null) {
+            LOGGER.log(Level.WARNING, "traerCantidadUsuarios falló: id es null");
+            return -1;
+        }
         return ujc.contarUsuariosPorGremio(gremioId);
     }
 }

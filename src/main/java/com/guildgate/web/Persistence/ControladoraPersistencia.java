@@ -138,9 +138,7 @@ public class ControladoraPersistencia {
     public void eliminarUsuario(Integer id) {
         try {
             ujc.destroy(id);
-        } catch (IllegalOrphanException ex) {
-            Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NonexistentEntityException ex) {
+        } catch (IllegalOrphanException | NonexistentEntityException ex) {
             Logger.getLogger(ControladoraPersistencia.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

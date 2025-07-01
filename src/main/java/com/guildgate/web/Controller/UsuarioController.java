@@ -7,7 +7,10 @@ import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Service.BannerService;
+import com.guildgate.web.Service.GremioService;
 import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Service.RoleService;
+import com.guildgate.web.Service.UsuarioRolesService;
 import com.guildgate.web.Service.UsuarioService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
@@ -31,10 +34,22 @@ public class UsuarioController {
     @Inject
     BannerService bs;
 
+    @Inject
+    GremioService gs;
+
+    @Inject
+    RoleService rs;
+
+    @Inject
+    UsuarioRolesService urs;
+
     public UsuarioController() {
         this.us = new UsuarioService();
         this.ps = new PerfilService();
         this.bs = new BannerService();
+        this.gs = new GremioService();
+        this.rs = new RoleService();
+        this.urs = new UsuarioRolesService();
     }
 
     //Metodos Usuarios
@@ -89,9 +104,9 @@ public class UsuarioController {
     public void asociarGremioaUsuario(String usuario, int gremioId, String rolNom) {
         ArrayList<Usuarios> listaUsuarios = Optional.ofNullable(us.findAll())
                 .orElseThrow(() -> new IllegalStateException("Hubo un error las listas están vacías!!"));
-        ArrayList<Gremio> listaGremios = Optional.ofNullable(us.traerListaGremios())
+        ArrayList<Gremio> listaGremios = Optional.ofNullable(gs.findAll())
                 .orElseThrow(() -> new IllegalStateException("Hubo un error las listas están vacías!!"));
-        ArrayList<Roles> listaRoles = Optional.ofNullable(us.traerListaRoles())
+        ArrayList<Roles> listaRoles = Optional.ofNullable(rs.findAll())
                 .orElseThrow(() -> new IllegalStateException("Hubo un error las listas están vacías!!"));
 
         Optional<Usuarios> optUsuario = listaUsuarios.stream()
@@ -117,7 +132,7 @@ public class UsuarioController {
                     ur.setUsuariouserrol(user);
                     ur.setRoluserrol(rol);
                     ur.setFechaAsignacion(LocalDate.now());
-                    us.crearConexionJR(ur);
+                    urs.create(ur);
 
                     System.out.println("Usuario asociado correctamente al gremio y rol asignado.");
                 }, () -> {

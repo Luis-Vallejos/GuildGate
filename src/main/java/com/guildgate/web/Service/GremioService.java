@@ -16,6 +16,8 @@ import java.util.logging.Logger;
  */
 public class GremioService implements IGremioService {
 
+    private static final Logger LOGGER = Logger.getLogger(GremioService.class.getName());
+
     @Inject
     GremioJpaController gpc;
 
@@ -25,40 +27,66 @@ public class GremioService implements IGremioService {
 
     @Override
     public Gremio findById(Integer id) {
+        if (id == null) {
+            LOGGER.log(Level.WARNING, "findById falló: id es null");
+            return null;
+        }
         return gpc.findGremio(id);
     }
 
     @Override
     public ArrayList<Gremio> findAll() {
-        ArrayList<Gremio> gremios = SvUtils.toArrayList(gpc.findGremioEntities());
-        return gremios;
+        return SvUtils.toArrayList(gpc.findGremioEntities());
     }
 
     @Override
     public boolean create(Gremio entity) {
-        gpc.create(entity);
-        return true;
+        if (entity == null) {
+            LOGGER.log(Level.WARNING, "create falló: Gremio es null");
+            return false;
+        }
+        try {
+            gpc.create(entity);
+            return true;
+        } catch (Exception ex) {
+            LOGGER.log(Level.SEVERE, "Error al crear Gremio: {0}", ex.toString());
+            return false;
+        }
     }
 
     @Override
     public boolean edit(Gremio entity) {
+        if (entity == null || entity.getId() == null) {
+            LOGGER.log(Level.WARNING, "edit falló: entidad o entidad.id es null");
+            return false;
+        }
         try {
             gpc.edit(entity);
-        } catch (NonexistentEntityException ex) {
-            Logger.getLogger(GremioService.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        } catch (NonexistentEntityException nex) {
+            LOGGER.log(Level.WARNING, "edit falló: entidad inexistente con ID {0}", entity.getId());
+            return false;
         } catch (Exception ex) {
-            Logger.getLogger(GremioService.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error al editar Gremio: {0}", ex.toString());
+            return false;
         }
-        return true;
     }
 
     @Override
     public boolean delete(Integer id) {
+        if (id == null) {
+            LOGGER.log(Level.WARNING, "delete falló: id es null");
+            return false;
+        }
         try {
             gpc.destroy(id);
-        } catch (IllegalOrphanException | NonexistentEntityException ex) {
-            Logger.getLogger(GremioService.class.getName()).log(Level.SEVERE, null, ex);
+            return true;
+        } catch (NonexistentEntityException ex) {
+            LOGGER.log(Level.WARNING, "delete falló: no existe Gremio con ID {0}", id);
+            return false;
+        } catch (IllegalOrphanException ex) {
+            LOGGER.log(Level.SEVERE, "Error al eliminar Gremio: {0}", ex.toString());
+            return false;
         }
-        return true;
     }
 }
