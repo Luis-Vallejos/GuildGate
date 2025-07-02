@@ -2,6 +2,7 @@ package com.guildgate.web.Service;
 
 import com.guildgate.web.Modelo.FondoGremio;
 import com.guildgate.web.Persistence.FondoGremioJpaController;
+import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
@@ -85,7 +86,7 @@ public class FondoGremioService implements IFondoGremioService {
         } catch (NonexistentEntityException ex) {
             LOGGER.log(Level.WARNING, "delete falló: no existe FondoGremio con ID {0}", id);
             return false;
-        } catch (Exception ex) {
+        } catch (IllegalOrphanException ex) {
             LOGGER.log(Level.SEVERE, "Error al eliminar FondoGremio: {0}", ex.toString());
             return false;
         }

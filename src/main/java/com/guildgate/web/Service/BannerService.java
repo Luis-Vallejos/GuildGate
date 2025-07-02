@@ -8,6 +8,8 @@ import jakarta.inject.Inject;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import com.guildgate.web.Persistence.UsuariosJpaController;
+import java.util.List;
 
 /**
  *
@@ -19,6 +21,9 @@ public class BannerService implements IBannerService {
 
     @Inject
     ImagenBannerJpaController ibjc;
+    
+    @Inject
+    UsuariosJpaController ujc;
 
     public BannerService() {
         this.ibjc = new ImagenBannerJpaController();
@@ -96,5 +101,21 @@ public class BannerService implements IBannerService {
             return null;
         }
         return ibjc.findBannerByNombre(nombreBanner);
+    }
+
+    @Override
+    public void editarNuevoBanner(int id, ImagenBanner img) {
+        try {
+            ujc.editBannerUser(id, img);
+        } catch (Exception ex) {
+            Logger.getLogger(BannerService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public ArrayList<ImagenBanner> traerListaBannersPredeterminados() {
+        List<ImagenBanner> lista = ibjc.getPredeterminedBanners();
+        ArrayList<ImagenBanner> listaBannersPredeterminados = new ArrayList<>(lista);
+        return listaBannersPredeterminados;
     }
 }
