@@ -1,5 +1,7 @@
 package com.guildgate.web.Service;
 
+import com.guildgate.web.Modelo.ImagenBanner;
+import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.UsuariosJpaController;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
@@ -109,5 +111,23 @@ public class UsuarioService implements IUsuarioService {
             return -1;
         }
         return ujc.contarUsuariosPorGremio(gremioId);
+    }
+
+    @Override
+    public void editarNuevoAvatar(int id, ImagenPerfil img) {
+        try {
+            ujc.editAvatarUser(id, img);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void editarNuevoBanner(int id, ImagenBanner img) {
+        try {
+            ujc.editBannerUser(id, img);
+        } catch (Exception ex) {
+            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

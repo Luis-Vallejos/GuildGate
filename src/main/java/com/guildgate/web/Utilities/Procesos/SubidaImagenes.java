@@ -1,134 +1,46 @@
-package com.guildgate.web.Modelo;
+package com.guildgate.web.Utilities.Procesos;
 
+import com.guildgate.web.Modelo.AvatarGremio;
+import com.guildgate.web.Modelo.FondoGremio;
+import com.guildgate.web.Modelo.ImagenBanner;
+import com.guildgate.web.Modelo.ImagenPerfil;
+import com.guildgate.web.Service.AvatarGremioService;
+import com.guildgate.web.Service.BannerService;
+import com.guildgate.web.Service.FondoGremioService;
+import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import com.guildgate.web.Persistence.ControladoraPersistencia;
-import com.guildgate.web.Persistence.exceptions.AvatarNotFoundException;
-import com.guildgate.web.Persistence.exceptions.BannerNotFoundException;
-import com.guildgate.web.Utilities.SvUtils;
-import com.guildgate.web.Utilities.Enum;
 
 /**
  *
- * @author Joan - Luis
+ * @author Juan - Luis
  */
-public class Controladora {
+public class SubidaImagenes {
 
-    ControladoraPersistencia cors = new ControladoraPersistencia();
+    @Inject
+    PerfilService ps;
 
-    //Metodos Raid - DESDE SQL
-    //Metodos Bosses - DESDE SQL
-    //ImagenPerfil
-    public ImagenPerfil traerImagenPerfil(long id) {
-        return cors.obtenerImagen(id);
+    @Inject
+    BannerService bs;
+
+    @Inject
+    AvatarGremioService ags;
+
+    @Inject
+    FondoGremioService fgs;
+
+    public SubidaImagenes() {
     }
 
-    //ImagenBanner
-    public ImagenBanner traerImagenBanner(long id) {
-        return cors.obtenerBanner(id);
-    }
-
-    //AvatarGremio
-    public AvatarGremio traerAvatarGremio(long id) {
-        return cors.obtenerAvatarGremio(id);
-    }
-
-    //FondoGremio
-    public FondoGremio traerFondoGremio(long id) {
-        return cors.obtenerFondoGremio(id);
-    }
-
-    //Metodos Participaciones
-    //Metodos Participaciones Extra
-    //Metodos Ronda - DESDE SQL
-    //Metodos Roles -DESDE SQL PARCIALMENTE
-    public Roles traerRol(int id) {
-        return cors.traerRol(id);
-    }
-
-    public ArrayList<Roles> traerListaRoles() {
-        return cors.traerListaRoles();
-    }
-
-    //Metodos UsuarioRoles
-    //Imagenes de foto de perfil
-    public void cambioAvatarUsuario(String nomArchivo, int usuario) throws AvatarNotFoundException, Exception {
-        Usuarios user = cors.traerUsuario(usuario);
-
-        try {
-            ImagenPerfil img = cors.buscarImagenPorNombre(nomArchivo);
-            if (img == null) {
-                throw new AvatarNotFoundException("¡La imagen del avatar no fue encontrada!");
-            }
-            cors.editarNuevoAvatar(user.getId(), img);
-        } catch (AvatarNotFoundException e) {
-            throw new Exception("Error al cambiar el avatar del usuario", e);
-        }
-    }
-
-    public void cambioAvatarPersonalizadoUsuario(int usuario, String nomArchivo, String tipoArchivo, long tamanoArchivo, byte[] archivoByte) throws IOException {
-        if (usuario <= 0 || SvUtils.isNullOrEmpty(nomArchivo)
-                || SvUtils.isNullOrEmpty(tipoArchivo) || (tamanoArchivo == 0)) {
-            throw new IllegalArgumentException("Argumentos inválidos proporcionados.");
-        }
-
-        int tamanoMaximo = 10485760; // 10MB en bytes
-
-        if (tamanoArchivo > tamanoMaximo) {
-            throw new IOException("El tamaño del archivo supera el límite de 10MB.");
-        }
-
-        ImagenPerfil imgNew;
-        imgNew = SvUtils.obtenerOCrearPerfilSinPath(cors, nomArchivo, tipoArchivo, archivoByte, Enum.OrigenArchivo.USUARIO);
-
-        cors.editarNuevoAvatar(usuario, imgNew);
-    }
-
-    public void cambioBannerUsuario(String nomArchivo, int usuario) throws BannerNotFoundException, Exception {
-        Usuarios user = cors.traerUsuario(usuario);
-
-        try {
-            ImagenBanner img = cors.buscarBannerPorNombre(nomArchivo);
-            if (img == null) {
-                throw new BannerNotFoundException("¡La imagen del banner no fue encontrada!");
-            }
-            cors.editarNuevoBanner(user.getId(), img);
-        } catch (BannerNotFoundException e) {
-            throw new Exception("Error al cambiar el banner del usuario", e);
-        }
-    }
-
-    public void cambioBannerPersonalizadoUsuario(int usuario, String nomArchivo, String tipoArchivo, long tamanoArchivo, byte[] byteArchivo) throws IOException {
-        if (usuario <= 0 || SvUtils.isNullOrEmpty(nomArchivo)
-                || SvUtils.isNullOrEmpty(tipoArchivo) || (tamanoArchivo == 0)) {
-            throw new IllegalArgumentException("Argumentos inválidos proporcionados.");
-        }
-
-        int tamanoMaximo = 10485760; // 10MB en bytes
-
-        if (tamanoArchivo > tamanoMaximo) {
-            throw new IOException("El tamaño del archivo supera el límite de 10MB.");
-        }
-
-        ImagenBanner imgBNew;
-        try {
-            imgBNew = SvUtils.obtenerOCrearBannerSinPath(cors, nomArchivo, tipoArchivo, byteArchivo, Enum.OrigenArchivo.USUARIO);
-        } catch (IOException e) {
-            throw new IOException("Error al obtener o crear la imagen del banner.", e);
-        }
-
-        cors.editarNuevoBanner(usuario, imgBNew);
-    }
-
-    public ArrayList<ImagenPerfil> traerListaImagenesPredeterminadas() {
-        return cors.traerListaImagenesPredeterminadas();
-    }
-
-    //Imagenes de Banners predeterminados
-    public ArrayList<ImagenBanner> traerListaBannersPredeterminadas() {
-        return cors.traerListaBannersPredeterminados();
+    public SubidaImagenes(PerfilService ps, BannerService bs, AvatarGremioService ags, FondoGremioService fgs) {
+        this.ps = ps;
+        this.bs = bs;
+        this.ags = ags;
+        this.fgs = fgs;
     }
 
     //Metodos para subir imagenes a la base de datos
@@ -154,10 +66,10 @@ public class Controladora {
     public void guardarImagenes(List<String> archivos, String route) throws IOException {
         for (String filename : archivos) {
             ImagenPerfil imgPerfil = SvUtils.obtenerOCrearImagenPerfilConPath(
-                    cors,
+                    ps,
                     filename,
                     route,
-                    Enum.OrigenArchivo.PREDETERMINADA
+                    com.guildgate.web.Utilities.Enum.OrigenArchivo.PREDETERMINADA
             );
             System.out.println("Imagen guardada: " + filename);
         }
@@ -202,10 +114,10 @@ public class Controladora {
     public void guardarBanners(List<String> nombreArchivos, String ruta) throws IOException {
         for (String filename : nombreArchivos) {
             ImagenBanner imgBanner = SvUtils.obtenerOCrearImagenBannerConPath(
-                    cors,
+                    bs,
                     filename,
                     ruta,
-                    Enum.OrigenArchivo.PREDETERMINADA
+                    com.guildgate.web.Utilities.Enum.OrigenArchivo.PREDETERMINADA
             );
             System.out.println("Banner guardado: " + filename);
         }
@@ -244,10 +156,10 @@ public class Controladora {
     public void guardarAvataresGremio(List<String> nombreArchivos, String ruta) throws IOException {
         for (String filename : nombreArchivos) {
             AvatarGremio avatar = SvUtils.obtenerOCrearAvatarGremioConPath(
-                    cors,
+                    ags,
                     filename,
                     ruta,
-                    Enum.OrigenArchivo.PREDETERMINADA
+                    com.guildgate.web.Utilities.Enum.OrigenArchivo.PREDETERMINADA
             );
             System.out.println("Avatar para el gremio guardado: " + filename);
         }
@@ -295,10 +207,10 @@ public class Controladora {
     public void guardarFondosGremio(List<String> nombreArchivos, String ruta) throws IOException {
         for (String filename : nombreArchivos) {
             FondoGremio fondo = SvUtils.obtenerOCrearFondoGremioConPath(
-                    cors,
+                    fgs,
                     filename,
                     ruta,
-                    Enum.OrigenArchivo.PREDETERMINADA
+                    com.guildgate.web.Utilities.Enum.OrigenArchivo.PREDETERMINADA
             );
             System.out.println("Fondo para el gremio guardado: " + filename);
         }

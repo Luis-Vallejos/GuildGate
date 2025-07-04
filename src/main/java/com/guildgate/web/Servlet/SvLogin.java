@@ -1,5 +1,7 @@
 package com.guildgate.web.Servlet;
 
+import com.guildgate.web.Controller.AuthController;
+import com.guildgate.web.Controller.UsuarioController;
 import java.io.IOException;
 import java.util.Optional;
 import jakarta.servlet.ServletException;
@@ -7,10 +9,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Utilities.Mensajes;
+import com.guildgate.web.Utilities.Procesos.SubidaImagenes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -19,20 +22,27 @@ import com.guildgate.web.Utilities.SvUtils;
 @WebServlet(name = "SvLogin", urlPatterns = {"/SvLogin"})
 public class SvLogin extends HttpServlet {
 
-    Controladora control = null;
-    //Controladora control = new Controladora();
+    @Inject
+    AuthController ac;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    @Inject
+    UsuarioController uc;
 
+    @Inject
+    SubidaImagenes si;
+
+    @Override
+    public void init() throws ServletException {
+        this.ac = new AuthController();
+        this.uc = new UsuarioController();
+        this.si = new SubidaImagenes();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //control = new Controladora();
-        //control.todasLasImagenes();
-        //control.todosLosAvataresGremio();
+        si.todasLasImagenes();
+        si.todosLosAvataresGremio();
         response.sendRedirect("login.jsp");
     }
 
@@ -49,13 +59,12 @@ public class SvLogin extends HttpServlet {
             return;
         }
 
-        control = new Controladora();
-        Optional<Usuarios> optUsuarios = SvUtils.findUserByUsernameOrEmail(nomUser, control.traerListaUsuarios());
+        Optional<Usuarios> optUsuarios = SvUtils.findUserByUsernameOrEmail(nomUser, uc.traerListaUsuarios());
 
         if (optUsuarios.isPresent()) {
             Usuarios jug = optUsuarios.get();
             if (contra.equals(jug.getContrasena())) {
-                SvUtils.processSuccessfulLogin(response, request, jug, control);
+                ac.processSuccessfulLogin(response, request, jug);
                 SvUtils.respondWithSuccess(response, HttpServletResponse.SC_OK, Mensajes.USUARIO_LOGEADO + jug.getNombre());
             } else {
                 SvUtils.respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_CONTRA_INCORRECTA);
@@ -63,10 +72,5 @@ public class SvLogin extends HttpServlet {
         } else {
             SvUtils.respondWithError(response, HttpServletResponse.SC_NOT_FOUND, Mensajes.USUARIO_INEXISTENTE);
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

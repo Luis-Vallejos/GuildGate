@@ -39,7 +39,7 @@ public class ImagenBannerController {
             if (img == null) {
                 throw new BannerNotFoundException("¡La imagen del banner no fue encontrada!");
             }
-            bs.editarNuevoBanner(user.getId(), img);
+            us.editarNuevoBanner(user.getId(), img);
         } catch (BannerNotFoundException e) {
             throw new Exception("Error al cambiar el banner del usuario", e);
         }
