@@ -9,12 +9,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Controller.GremioController;
+import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -23,7 +25,17 @@ import com.guildgate.web.Utilities.SvUtils;
 @WebServlet(name = "SvGremio", urlPatterns = {"/SvGremio"})
 public class SvGremio extends HttpServlet {
 
-    Controladora control = null;
+    @Inject
+    UsuarioController uc;
+
+    @Inject
+    GremioController gc;
+
+    @Override
+    public void init() throws ServletException {
+        this.uc = new UsuarioController();
+        this.gc = new GremioController();
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -31,8 +43,7 @@ public class SvGremio extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         int idRegion, idMundo;
-        control = new Controladora();
-        ArrayList<Gremio> listaGremios = control.traerListaGremios();
+        ArrayList<Gremio> listaGremios = gc.traerListaGremios();
         String regionParam = request.getParameter("region");
         String mundoParam = request.getParameter("mundo");
 
@@ -56,7 +67,7 @@ public class SvGremio extends HttpServlet {
         }
 
         Gremio gre = optGremio.get();
-        SvUtils.processGuildLists(response, request, gre, control);
+        gc.processGuildLists(response, request, gre);
     }
 
     @Override
@@ -64,7 +75,6 @@ public class SvGremio extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json;charset=UTF-8");
 
-        control = new Controladora();
         HttpSession session = request.getSession(false);
         UsuarioBean usuarioBean = (UsuarioBean) session.getAttribute("usuarioBean");
         String usuarioActual = usuarioBean.getUsuarioActual();
@@ -74,7 +84,7 @@ public class SvGremio extends HttpServlet {
             return;
         }
 
-        Optional<Usuarios> optUsuarios = SvUtils.findUserByUsername(usuarioActual, control.traerListaUsuarios());
+        Optional<Usuarios> optUsuarios = SvUtils.findUserByUsername(usuarioActual, uc.traerListaUsuarios());
         Usuarios user = optUsuarios.get();
 
         int idRegion, idMundo;
@@ -96,18 +106,18 @@ public class SvGremio extends HttpServlet {
             return;
         }
 
-        Optional<Gremio> optGremio = SvUtils.findGremioByName(nombre, control.traerListaGremios());
+        Optional<Gremio> optGremio = SvUtils.findGremioByName(nombre, gc.traerListaGremios());
 
         if (optGremio.isPresent()) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_CONFLICT, Mensajes.GREMIO_NOMBRE_EXISTE);
         } else {
-            control.crearGremio(nombre, descripcion, idRegion, idMundo, usuarioActual);
+            gc.crearGremio(nombre, descripcion, idRegion, idMundo, usuarioActual);
 
-            Optional<Gremio> optNuevoGremio = SvUtils.findGremioByName(nombre, control.traerListaGremios());
+            Optional<Gremio> optNuevoGremio = SvUtils.findGremioByName(nombre, gc.traerListaGremios());
 
             if (optNuevoGremio.isPresent()) {
                 Gremio nuevoGremio = optNuevoGremio.get();
-                SvUtils.processSuccesfulGuildCreation(response, request, nuevoGremio, user, control);
+                gc.processSuccesfulGuildCreation(response, request, nuevoGremio, user);
                 SvUtils.respondWithSuccess(response, HttpServletResponse.SC_CREATED, Mensajes.GREMIO_CREADO_EXITO);
             }
         }
