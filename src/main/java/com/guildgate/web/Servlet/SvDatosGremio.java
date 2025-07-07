@@ -9,11 +9,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Controller.GremioController;
+import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -22,11 +24,16 @@ import com.guildgate.web.Utilities.SvUtils;
 @WebServlet(name = "SvDatosGremio", urlPatterns = {"/SvDatosGremio"})
 public class SvDatosGremio extends HttpServlet {
 
-    Controladora control = null;
+    @Inject
+    GremioController gc;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        /*Nothing*/
+    @Inject
+    UsuarioController uc;
+
+    @Override
+    public void init() throws ServletException {
+        this.gc = new GremioController();
+        this.uc = new UsuarioController();
     }
 
     @Override
@@ -49,8 +56,7 @@ public class SvDatosGremio extends HttpServlet {
             return;
         }
 
-        control = new Controladora();
-        ArrayList<Gremio> listaGremios = control.traerListaGremios();
+        ArrayList<Gremio> listaGremios = gc.traerListaGremios();
         Optional<Gremio> optGremio = SvUtils.findGremioById(idGremio, listaGremios);
 
         if (!optGremio.isPresent()) {
@@ -59,7 +65,7 @@ public class SvDatosGremio extends HttpServlet {
         }
 
         Gremio gre = optGremio.get();
-        SvUtils.processGuildInfo(response, request, gre, control);
+        gc.processGuildInfo(response, request, gre);
     }
 
     @Override
@@ -84,7 +90,6 @@ public class SvDatosGremio extends HttpServlet {
         }
 
         int idGremio;
-        control = new Controladora();
 
         try {
             idGremio = SvUtils.parseIntOrDefault(gremioParam, -1);
@@ -93,12 +98,6 @@ public class SvDatosGremio extends HttpServlet {
             return;
         }
 
-        SvUtils.processJoinGuild(response, request, usuarioActual, idGremio, rolNom, control);
+        gc.processJoinGuild(response, request, usuarioActual, idGremio, rolNom, uc);
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }
