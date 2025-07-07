@@ -1,5 +1,6 @@
 package com.guildgate.web.Servlet;
 
+import com.guildgate.web.Controller.UsuarioController;
 import java.io.IOException;
 import java.util.Optional;
 import jakarta.servlet.ServletException;
@@ -7,10 +8,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Utilities.Mensajes;
+import com.guildgate.web.Utilities.Procesos.SubidaImagenes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -19,20 +21,23 @@ import com.guildgate.web.Utilities.SvUtils;
 @WebServlet(name = "SvRegister", urlPatterns = {"/SvRegister"})
 public class SvRegister extends HttpServlet {
 
-    Controladora control = null;
-    //Controladora control = new Controladora();
+    @Inject
+    UsuarioController uc;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        /*Nothing*/
+    @Inject
+    SubidaImagenes si;
+
+    @Override
+    public void init() throws ServletException {
+        this.uc = new UsuarioController();
+        this.si = new SubidaImagenes();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //control = new Controladora();
-        //control.todosLosBanners();
-        //control.todosLosFondosGremio();
+        si.todosLosBanners();
+        si.todosLosFondosGremio();
         response.sendRedirect("registro.jsp");
     }
 
@@ -50,21 +55,14 @@ public class SvRegister extends HttpServlet {
             return;
         }
 
-        control = new Controladora();
-        Optional<Usuarios> optJugadores = SvUtils.findUsersByUsernameOrEmail(nombre, email, control.traerListaUsuarios());
+        Optional<Usuarios> optJugadores = SvUtils.findUsersByUsernameOrEmail(nombre, email, uc.traerListaUsuarios());
 
         if (optJugadores.isPresent()) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_CONFLICT, Mensajes.USUARIO_NOMBRE_EXISTE);
             return;
         }
-        
-        control.anadirUsuario(nombre, email, contra);
+
+        uc.anadirUsuario(nombre, email, contra);
         SvUtils.respondWithSuccess(response, HttpServletResponse.SC_OK, Mensajes.USUARIO_REGISTRADO);
     }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
-
 }

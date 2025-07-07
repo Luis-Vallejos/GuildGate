@@ -12,11 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -25,11 +26,12 @@ import com.guildgate.web.Utilities.SvUtils;
 @WebServlet(name = "SvUsuario", urlPatterns = {"/SvUsuario"})
 public class SvUsuario extends HttpServlet {
 
-    Controladora control = null;
+    @Inject
+    UsuarioController uc;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        /*Nothing*/
+    @Override
+    public void init() throws ServletException {
+        this.uc = new UsuarioController();
     }
 
     @Override
@@ -96,9 +98,8 @@ public class SvUsuario extends HttpServlet {
         }
 
         try {
-            control = new Controladora();
-            ArrayList<Usuarios> listaJugadores = control.traerListaUsuarios();
-            control.editarUsuario(nomUsuario, correo, contra, bio, listaJugadores, usuarioBean.getUsuarioActual());
+            ArrayList<Usuarios> listaJugadores = uc.traerListaUsuarios();
+            uc.editarUsuario(nomUsuario, correo, contra, bio, listaJugadores, usuarioBean.getUsuarioActual());
 
             usuarioBean.setUsuarioActual(nomUsuario);
             usuarioBean.setCorreo(correo);
@@ -109,10 +110,5 @@ public class SvUsuario extends HttpServlet {
         } catch (IOException e) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Mensajes.ERROR_PROCESAMIENTO);
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

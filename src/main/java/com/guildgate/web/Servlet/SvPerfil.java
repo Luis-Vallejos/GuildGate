@@ -15,11 +15,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Controller.ImagenPerfilController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -27,15 +28,16 @@ import com.guildgate.web.Utilities.SvUtils;
  */
 @WebServlet(name = "SvPerfil", urlPatterns = {"/SvPerfil"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB
-                 maxFileSize = 1024 * 1024 * 10,  // 10 MB
-                 maxRequestSize = 1024 * 1024 * 15) // 15 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15) // 15 MB
 public class SvPerfil extends HttpServlet {
 
-    Controladora control = null;
+    @Inject
+    ImagenPerfilController ipc;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        /*Nothing*/
+    @Override
+    public void init() throws ServletException {
+        this.ipc = new ImagenPerfilController();
     }
 
     @Override
@@ -44,8 +46,7 @@ public class SvPerfil extends HttpServlet {
         /*Bring all predetermined profile pictures*/
         response.setContentType("application/json;charset=UTF-8");
 
-        control = new Controladora();
-        ArrayList<ImagenPerfil> listaPfps = control.traerListaImagenesPredeterminadas();
+        ArrayList<ImagenPerfil> listaPfps = ipc.traerListaImagenesPredeterminadas();
         List<Map<String, String>> imagenesBase64 = new ArrayList<>();
 
         if (listaPfps != null) {
@@ -71,30 +72,23 @@ public class SvPerfil extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         HttpSession sesion = request.getSession(false);
         UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
-        
-        control = new Controladora();
-        
+
         String nomOriginalAvatar = usuarioBean.getNombreAvatar();
         int idUsuarioActual = usuarioBean.getId();
         String tipoCambioPre = request.getParameter("modalAvatarPre"); //value = AvatarPredeterminado
         String tipoCambioPer = request.getParameter("modalAvatarPer"); //value = AvatarPersonalizado
         String opcion = tipoCambioPre != null ? "AvatarPredeterminado" : (tipoCambioPer != null ? "AvatarPersonalizado" : "");
-        
-        switch(opcion) {
+
+        switch (opcion) {
             case "AvatarPredeterminado":
-                SvUtils.manejarAvatarPredeterminado(request, response, nomOriginalAvatar, idUsuarioActual, control);
+                ipc.manejarAvatarPredeterminado(request, response, nomOriginalAvatar, idUsuarioActual);
                 break;
             case "AvatarPersonalizado":
-                SvUtils.manejarAvatarPersonalizado(request, response, idUsuarioActual, control);
+                ipc.manejarAvatarPersonalizado(request, response, idUsuarioActual);
                 break;
             default:
                 SvUtils.respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_MODAL_OPCION);
                 break;
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }
