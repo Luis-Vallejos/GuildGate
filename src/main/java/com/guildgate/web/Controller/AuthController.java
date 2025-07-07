@@ -91,21 +91,6 @@ public class AuthController {
         usuarioBean.setContra(contraUsuario);
         usuarioBean.setCorreo(emailUsuario);
 
-        // Permisos por defecto en caso de que no haya rol
-        usuarioBean.setPermisoCambiarAvatarGremio(roles != null && roles.isPermisoCambiarAvatarGremio());
-        usuarioBean.setPermisoCambiarFondoGremio(roles != null && roles.isPermisoCambiarFondoGremio());
-        usuarioBean.setPermisoCambiarNombreGremio(roles != null && roles.isPermisoCambiarNombreGremio());
-        usuarioBean.setPermisoCambiarDescripcionGremio(roles != null && roles.isPermisoCambiarDescripcionGremio());
-        usuarioBean.setPermisoCrearRaids(roles != null && roles.isPermisoCrearRaids());
-        usuarioBean.setPermisoVisualizarRaids(roles != null && roles.isPermisoVisualizarRaids());
-        usuarioBean.setPermisoEditarRaids(roles != null && roles.isPermisoEditarRaids());
-        usuarioBean.setPermisoCrearRoles(roles != null && roles.isPermisoCrearRoles());
-        usuarioBean.setPermisoEditarRoles(roles != null && roles.isPermisoEditarRoles());
-        usuarioBean.setPermisoVisualizarRoles(roles != null && roles.isPermisoVisualizarRoles());
-        usuarioBean.setPermisoBotarMiembros(roles != null && roles.isPermisoBotarMiembros());
-        usuarioBean.setPermisoSalirGremio(roles != null && roles.isPermisoSalirGremio());
-        usuarioBean.setPermisoEliminarGremio(roles != null && roles.isPermisoEliminarGremio());
-
         sesion.setAttribute("usuarioBean", usuarioBean);
     }
 }

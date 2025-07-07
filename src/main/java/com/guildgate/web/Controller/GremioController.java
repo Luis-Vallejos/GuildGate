@@ -198,20 +198,6 @@ public class GremioController {
             usuarioBean.setGremioActual(gremio.getNombre());
             usuarioBean.setDescripcionGremio(descripcionGremio);
             usuarioBean.setRolUsuario(roles.getNombre());
-            // Permisos por defecto en caso de que no haya rol
-            usuarioBean.setPermisoCambiarAvatarGremio(roles != null && roles.isPermisoCambiarAvatarGremio());
-            usuarioBean.setPermisoCambiarFondoGremio(roles != null && roles.isPermisoCambiarFondoGremio());
-            usuarioBean.setPermisoCambiarNombreGremio(roles != null && roles.isPermisoCambiarNombreGremio());
-            usuarioBean.setPermisoCambiarDescripcionGremio(roles != null && roles.isPermisoCambiarDescripcionGremio());
-            usuarioBean.setPermisoCrearRaids(roles != null && roles.isPermisoCrearRaids());
-            usuarioBean.setPermisoVisualizarRaids(roles != null && roles.isPermisoVisualizarRaids());
-            usuarioBean.setPermisoEditarRaids(roles != null && roles.isPermisoEditarRaids());
-            usuarioBean.setPermisoCrearRoles(roles != null && roles.isPermisoCrearRoles());
-            usuarioBean.setPermisoEditarRoles(roles != null && roles.isPermisoEditarRoles());
-            usuarioBean.setPermisoVisualizarRoles(roles != null && roles.isPermisoVisualizarRoles());
-            usuarioBean.setPermisoBotarMiembros(roles != null && roles.isPermisoBotarMiembros());
-            usuarioBean.setPermisoSalirGremio(roles != null && roles.isPermisoSalirGremio());
-            usuarioBean.setPermisoEliminarGremio(roles != null && roles.isPermisoEliminarGremio());
 
             usuarioBean.setNombreBanner(ava.getNomArchivo());
             usuarioBean.setImagenGremio(imagenBase64DataUrl);
@@ -294,19 +280,6 @@ public class GremioController {
         usuarioBean.setGremioActual(nomGremio);
         usuarioBean.setDescripcionGremio(descripcionGremio);
         usuarioBean.setRolUsuario(roles.getNombre());
-        usuarioBean.setPermisoCambiarAvatarGremio(roles.isPermisoCambiarAvatarGremio());
-        usuarioBean.setPermisoCambiarFondoGremio(roles.isPermisoCambiarFondoGremio());
-        usuarioBean.setPermisoCambiarNombreGremio(roles.isPermisoCambiarNombreGremio());
-        usuarioBean.setPermisoCambiarDescripcionGremio(roles.isPermisoCambiarDescripcionGremio());
-        usuarioBean.setPermisoCrearRaids(roles.isPermisoCrearRaids());
-        usuarioBean.setPermisoVisualizarRaids(roles.isPermisoVisualizarRaids());
-        usuarioBean.setPermisoEditarRaids(roles.isPermisoEditarRaids());
-        usuarioBean.setPermisoCrearRoles(roles.isPermisoCrearRoles());
-        usuarioBean.setPermisoEditarRoles(roles.isPermisoEditarRoles());
-        usuarioBean.setPermisoVisualizarRoles(roles.isPermisoVisualizarRoles());
-        usuarioBean.setPermisoBotarMiembros(roles.isPermisoBotarMiembros());
-        usuarioBean.setPermisoSalirGremio(roles.isPermisoSalirGremio());
-        usuarioBean.setPermisoEliminarGremio(roles.isPermisoEliminarGremio());
 
         Optional<AvatarGremio> optAvatar = Optional.ofNullable(ags.findById(gre.getImg().getId()));
         Optional<FondoGremio> optFondo = Optional.ofNullable(fgs.findById(gre.getImgF().getId()));

@@ -1,20 +1,17 @@
 package com.guildgate.web.Modelo;
 
 import jakarta.persistence.CascadeType;
-import java.io.Serializable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import jakarta.persistence.Version;
+import java.io.Serializable;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,10 +27,9 @@ import lombok.ToString;
  */
 @Entity
 @Table(
-        name = "rol",
+        name = "permiso",
         schema = "gremiosyraids",
-        uniqueConstraints = @UniqueConstraint(name = "rol_nombre_unique", columnNames = "nombre"),
-        indexes = @Index(name = "idx_roles_nombre", columnList = "nombre")
+        uniqueConstraints = @UniqueConstraint(name = "permiso_codigo_unique", columnNames = "codigo")
 )
 @Getter
 @Setter
@@ -42,35 +38,27 @@ import lombok.ToString;
 @Builder
 @ToString
 @EqualsAndHashCode(of = "id")
-public class Roles implements Serializable {
+public class Permiso implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_seq")
-    @SequenceGenerator(name = "roles_seq", sequenceName = "roles_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "permiso_seq")
+    @SequenceGenerator(name = "permiso_seq", sequenceName = "permiso_seq", allocationSize = 1)
     @Column(name = "id", updatable = false)
     private Integer id;
 
-    @Column(name = "nombre", length = 100, nullable = false, unique = true)
-    private String nombre;
+    @Column(name = "codigo", length = 50, nullable = false, unique = true)
+    private String codigo;
 
     @Column(name = "descripcion", length = 255)
     private String descripcion;
 
     @OneToMany(
-            mappedBy = "rol",
+            mappedBy = "permiso",
             fetch = FetchType.LAZY,
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
     private Set<RolPermiso> rolPermisos;
-
-    @OneToMany(mappedBy = "roluserrol", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @OrderBy("id ASC")
-    private Set<UsuarioRoles> listaUsuariosRoles;
-
-    @Version
-    @Column(name = "version")
-    private Long version;
 }

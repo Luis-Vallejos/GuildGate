@@ -1,17 +1,18 @@
 package com.guildgate.web.Persistence;
 
-import com.guildgate.web.Modelo.Roles;
 import java.io.Serializable;
 import jakarta.persistence.Query;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
+import com.guildgate.web.Modelo.RolPermiso;
+import com.guildgate.web.Modelo.Roles;
+import java.util.HashSet;
+import java.util.Set;
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
 import jakarta.persistence.EntityManager;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,9 @@ import java.util.List;
 public class RolesJpaController extends AbstractJpaController implements Serializable {
 
     public void create(Roles roles) {
+        if (roles.getRolPermisos() == null) {
+            roles.setRolPermisos(new HashSet<RolPermiso>());
+        }
         if (roles.getListaUsuariosRoles() == null) {
             roles.setListaUsuariosRoles(new HashSet<UsuarioRoles>());
         }
@@ -29,6 +33,12 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
         try {
             em = getEntityManager();
             em.getTransaction().begin();
+            Set<RolPermiso> attachedRolPermisos = new HashSet<RolPermiso>();
+            for (RolPermiso rolPermisosRolPermisoToAttach : roles.getRolPermisos()) {
+                rolPermisosRolPermisoToAttach = em.getReference(rolPermisosRolPermisoToAttach.getClass(), rolPermisosRolPermisoToAttach.getId());
+                attachedRolPermisos.add(rolPermisosRolPermisoToAttach);
+            }
+            roles.setRolPermisos(attachedRolPermisos);
             Set<UsuarioRoles> attachedListaUsuariosRoles = new HashSet<UsuarioRoles>();
             for (UsuarioRoles listaUsuariosRolesUsuarioRolesToAttach : roles.getListaUsuariosRoles()) {
                 listaUsuariosRolesUsuarioRolesToAttach = em.getReference(listaUsuariosRolesUsuarioRolesToAttach.getClass(), listaUsuariosRolesUsuarioRolesToAttach.getId());
@@ -36,6 +46,15 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
             }
             roles.setListaUsuariosRoles(attachedListaUsuariosRoles);
             em.persist(roles);
+            for (RolPermiso rolPermisosRolPermiso : roles.getRolPermisos()) {
+                Roles oldRolOfRolPermisosRolPermiso = rolPermisosRolPermiso.getRol();
+                rolPermisosRolPermiso.setRol(roles);
+                rolPermisosRolPermiso = em.merge(rolPermisosRolPermiso);
+                if (oldRolOfRolPermisosRolPermiso != null) {
+                    oldRolOfRolPermisosRolPermiso.getRolPermisos().remove(rolPermisosRolPermiso);
+                    oldRolOfRolPermisosRolPermiso = em.merge(oldRolOfRolPermisosRolPermiso);
+                }
+            }
             for (UsuarioRoles listaUsuariosRolesUsuarioRoles : roles.getListaUsuariosRoles()) {
                 Roles oldRoluserrolOfListaUsuariosRolesUsuarioRoles = listaUsuariosRolesUsuarioRoles.getRoluserrol();
                 listaUsuariosRolesUsuarioRoles.setRoluserrol(roles);
@@ -59,9 +78,19 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
             em = getEntityManager();
             em.getTransaction().begin();
             Roles persistentRoles = em.find(Roles.class, roles.getId());
+            Set<RolPermiso> rolPermisosOld = persistentRoles.getRolPermisos();
+            Set<RolPermiso> rolPermisosNew = roles.getRolPermisos();
             Set<UsuarioRoles> listaUsuariosRolesOld = persistentRoles.getListaUsuariosRoles();
             Set<UsuarioRoles> listaUsuariosRolesNew = roles.getListaUsuariosRoles();
             List<String> illegalOrphanMessages = null;
+            for (RolPermiso rolPermisosOldRolPermiso : rolPermisosOld) {
+                if (!rolPermisosNew.contains(rolPermisosOldRolPermiso)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain RolPermiso " + rolPermisosOldRolPermiso + " since its rol field is not nullable.");
+                }
+            }
             for (UsuarioRoles listaUsuariosRolesOldUsuarioRoles : listaUsuariosRolesOld) {
                 if (!listaUsuariosRolesNew.contains(listaUsuariosRolesOldUsuarioRoles)) {
                     if (illegalOrphanMessages == null) {
@@ -73,6 +102,13 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
+            Set<RolPermiso> attachedRolPermisosNew = new HashSet<RolPermiso>();
+            for (RolPermiso rolPermisosNewRolPermisoToAttach : rolPermisosNew) {
+                rolPermisosNewRolPermisoToAttach = em.getReference(rolPermisosNewRolPermisoToAttach.getClass(), rolPermisosNewRolPermisoToAttach.getId());
+                attachedRolPermisosNew.add(rolPermisosNewRolPermisoToAttach);
+            }
+            rolPermisosNew = attachedRolPermisosNew;
+            roles.setRolPermisos(rolPermisosNew);
             Set<UsuarioRoles> attachedListaUsuariosRolesNew = new HashSet<UsuarioRoles>();
             for (UsuarioRoles listaUsuariosRolesNewUsuarioRolesToAttach : listaUsuariosRolesNew) {
                 listaUsuariosRolesNewUsuarioRolesToAttach = em.getReference(listaUsuariosRolesNewUsuarioRolesToAttach.getClass(), listaUsuariosRolesNewUsuarioRolesToAttach.getId());
@@ -81,6 +117,17 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
             listaUsuariosRolesNew = attachedListaUsuariosRolesNew;
             roles.setListaUsuariosRoles(listaUsuariosRolesNew);
             roles = em.merge(roles);
+            for (RolPermiso rolPermisosNewRolPermiso : rolPermisosNew) {
+                if (!rolPermisosOld.contains(rolPermisosNewRolPermiso)) {
+                    Roles oldRolOfRolPermisosNewRolPermiso = rolPermisosNewRolPermiso.getRol();
+                    rolPermisosNewRolPermiso.setRol(roles);
+                    rolPermisosNewRolPermiso = em.merge(rolPermisosNewRolPermiso);
+                    if (oldRolOfRolPermisosNewRolPermiso != null && !oldRolOfRolPermisosNewRolPermiso.equals(roles)) {
+                        oldRolOfRolPermisosNewRolPermiso.getRolPermisos().remove(rolPermisosNewRolPermiso);
+                        oldRolOfRolPermisosNewRolPermiso = em.merge(oldRolOfRolPermisosNewRolPermiso);
+                    }
+                }
+            }
             for (UsuarioRoles listaUsuariosRolesNewUsuarioRoles : listaUsuariosRolesNew) {
                 if (!listaUsuariosRolesOld.contains(listaUsuariosRolesNewUsuarioRoles)) {
                     Roles oldRoluserrolOfListaUsuariosRolesNewUsuarioRoles = listaUsuariosRolesNewUsuarioRoles.getRoluserrol();
@@ -122,6 +169,13 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
                 throw new NonexistentEntityException("The roles with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
+            Set<RolPermiso> rolPermisosOrphanCheck = roles.getRolPermisos();
+            for (RolPermiso rolPermisosOrphanCheckRolPermiso : rolPermisosOrphanCheck) {
+                if (illegalOrphanMessages == null) {
+                    illegalOrphanMessages = new ArrayList<String>();
+                }
+                illegalOrphanMessages.add("This Roles (" + roles + ") cannot be destroyed since the RolPermiso " + rolPermisosOrphanCheckRolPermiso + " in its rolPermisos field has a non-nullable rol field.");
+            }
             Set<UsuarioRoles> listaUsuariosRolesOrphanCheck = roles.getListaUsuariosRoles();
             for (UsuarioRoles listaUsuariosRolesOrphanCheckUsuarioRoles : listaUsuariosRolesOrphanCheck) {
                 if (illegalOrphanMessages == null) {
@@ -186,5 +240,5 @@ public class RolesJpaController extends AbstractJpaController implements Seriali
             em.close();
         }
     }
-
+    
 }

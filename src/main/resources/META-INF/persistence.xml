@@ -17,6 +17,8 @@
     <class>com.guildgate.web.Modelo.Ronda</class>
     <class>com.guildgate.web.Modelo.UsuarioRoles</class>
     <class>com.guildgate.web.Modelo.Usuarios</class>
+    <class>com.guildgate.web.Modelo.Permiso</class>
+    <class>com.guildgate.web.Modelo.RolPermiso</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://bd-lavender.mysql.database.azure.com:3306/gremiosyraids?serverTimezone=America/Lima&amp;useSSL=false"/>
