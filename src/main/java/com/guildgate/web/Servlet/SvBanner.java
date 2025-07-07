@@ -15,11 +15,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import com.guildgate.web.Modelo.Controladora;
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Controller.ImagenBannerController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
+import jakarta.inject.Inject;
 
 /**
  *
@@ -27,15 +28,16 @@ import com.guildgate.web.Utilities.SvUtils;
  */
 @WebServlet(name = "SvBanner", urlPatterns = {"/SvBanner"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024, // 1 MB
-                 maxFileSize = 1024 * 1024 * 10,  // 10 MB
-                 maxRequestSize = 1024 * 1024 * 15) // 15 MB
+        maxFileSize = 1024 * 1024 * 10, // 10 MB
+        maxRequestSize = 1024 * 1024 * 15) // 15 MB
 public class SvBanner extends HttpServlet {
 
-    Controladora control = null;
+    @Inject
+    ImagenBannerController bc;
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        /*Nothing*/
+    @Override
+    public void init() throws ServletException {
+        this.bc = new ImagenBannerController();
     }
 
     @Override
@@ -44,8 +46,7 @@ public class SvBanner extends HttpServlet {
         /*Bring all predetermined banners*/
         response.setContentType("application/json;charset=UTF-8");
 
-        control = new Controladora();
-        ArrayList<ImagenBanner> listaBanners = control.traerListaBannersPredeterminadas();
+        ArrayList<ImagenBanner> listaBanners = bc.traerListaBannersPredeterminadas();
         List<Map<String, String>> bannersBase64 = new ArrayList<>();
 
         if (listaBanners != null) {
@@ -71,30 +72,20 @@ public class SvBanner extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
         HttpSession sesion = request.getSession(false);
         UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
-        
-        control = new Controladora();
-        
+
         String nomOriginalBanner = usuarioBean.getNombreBanner();
         int idUsuarioActual = usuarioBean.getId();
         String tipoCambioPre = request.getParameter("modalBannerPre");
         String tipoCambioPer = request.getParameter("modalBannerPer");
         String opcion = tipoCambioPre != null ? "BannerPredeterminado" : (tipoCambioPer != null ? "BannerPersonalizado" : "");
-        
-        switch(opcion) {
-            case "BannerPredeterminado":
-                SvUtils.manejarBannerPredeterminado(request, response, nomOriginalBanner, idUsuarioActual, control);
-                break;
-            case "BannerPersonalizado":
-                SvUtils.manejarBannerPersonalizado(request, response, idUsuarioActual, control);
-                break;
-            default:
-                SvUtils.respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_MODAL_OPCION);
-                break;
-        }
-    }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
+        switch (opcion) {
+            case "BannerPredeterminado" ->
+                bc.manejarBannerPredeterminado(request, response, nomOriginalBanner, idUsuarioActual);
+            case "BannerPersonalizado" ->
+                bc.manejarBannerPersonalizado(request, response, idUsuarioActual);
+            default ->
+                SvUtils.respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.IMAGEN_MODAL_OPCION);
+        }
     }
 }
