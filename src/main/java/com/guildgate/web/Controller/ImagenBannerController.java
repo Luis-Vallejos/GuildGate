@@ -4,8 +4,8 @@ import com.guildgate.web.Bean.UsuarioBean;
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.BannerNotFoundException;
-import com.guildgate.web.Service.BannerService;
-import com.guildgate.web.Service.UsuarioService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
+import com.guildgate.web.Service.impl.UsuarioServiceImpl;
 import com.guildgate.web.Servlet.SvPerfil;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
@@ -27,14 +27,14 @@ import java.util.logging.Logger;
 public class ImagenBannerController {
 
     @Inject
-    BannerService bs;
+    BannerServiceImpl bs;
 
     @Inject
-    UsuarioService us;
+    UsuarioServiceImpl us;
 
     public ImagenBannerController() {
-        this.bs = new BannerService();
-        this.us = new UsuarioService();
+        this.bs = new BannerServiceImpl();
+        this.us = new UsuarioServiceImpl();
     }
 
     public ImagenBanner traerImagenBanner(long id) {
