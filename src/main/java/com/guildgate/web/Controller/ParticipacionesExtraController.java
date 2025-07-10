@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.ParticipacionesExtra;
-import com.guildgate.web.Service.ParticipacionesExtraService;
+import com.guildgate.web.Service.impl.ParticipacionesExtraServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class ParticipacionesExtraController {
 
     @Inject
-    ParticipacionesExtraService pes;
+    ParticipacionesExtraServiceImpl pes;
 
     public ParticipacionesExtraController() {
-        this.pes = new ParticipacionesExtraService();
+        this.pes = new ParticipacionesExtraServiceImpl();
     }
 
     public boolean creacion(ParticipacionesExtra pe) {
