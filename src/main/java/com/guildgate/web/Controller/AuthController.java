@@ -5,10 +5,10 @@ import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
-import com.guildgate.web.Service.BannerService;
-import com.guildgate.web.Service.FondoGremioService;
-import com.guildgate.web.Service.GremioService;
-import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
+import com.guildgate.web.Service.impl.FondoGremioServiceImpl;
+import com.guildgate.web.Service.impl.GremioServiceImpl;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,26 +24,26 @@ import java.util.Optional;
 public class AuthController {
 
     @Inject
-    GremioService gs;
+    GremioServiceImpl gs;
 
     @Inject
-    PerfilService ps;
+    PerfilServiceImpl ps;
 
     @Inject
-    BannerService bs;
+    BannerServiceImpl bs;
 
     @Inject
     AvatarGremioServiceImpl ags;
 
     @Inject
-    FondoGremioService fgs;
+    FondoGremioServiceImpl fgs;
 
     public AuthController() {
-        this.gs = new GremioService();
-        this.ps = new PerfilService();
-        this.bs = new BannerService();
+        this.gs = new GremioServiceImpl();
+        this.ps = new PerfilServiceImpl();
+        this.bs = new BannerServiceImpl();
         this.ags = new AvatarGremioServiceImpl();
-        this.fgs = new FondoGremioService();
+        this.fgs = new FondoGremioServiceImpl();
     }
 
     //Metodo para procesar el login y asignar variables a la sesión
