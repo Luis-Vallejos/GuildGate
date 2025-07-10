@@ -1,5 +1,7 @@
 package com.guildgate.web.Bean;
 
+import java.util.HashSet;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -24,4 +26,6 @@ public class SessionUserBean {
     private AvatarBean avatar;
     private BannerBean banner;
     private GuildBean gremio;
+    @Builder.Default
+    private Set<RolBean> roles = new HashSet<>();
 }

@@ -1,5 +1,6 @@
 package com.guildgate.web.Bean;
 
+import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,12 +18,10 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder
 @ToString
-public class GuildVisualBean {
 
-    private Long idBackground;
-    private Long idAvatar;
-    private String nomAvatarGremio;
-    private String avatarGremio;
-    private String nomFondoGremio;
-    private String fondoGremio;
+public class PermisoBean implements Serializable {
+
+    private Integer id;
+    private String codigo;
+    private String descripcion;
 }
