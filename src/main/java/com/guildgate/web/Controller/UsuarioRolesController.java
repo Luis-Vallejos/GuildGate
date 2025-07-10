@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.UsuarioRoles;
-import com.guildgate.web.Service.UsuarioRolesService;
+import com.guildgate.web.Service.impl.UsuarioRolesServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class UsuarioRolesController {
 
     @Inject
-    UsuarioRolesService urs;
+    UsuarioRolesServiceImpl urs;
 
     public UsuarioRolesController() {
-        this.urs = new UsuarioRolesService();
+        this.urs = new UsuarioRolesServiceImpl();
     }
 
     public boolean creacion(UsuarioRoles ur) {
