@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.Ronda;
-import com.guildgate.web.Service.RondaService;
+import com.guildgate.web.Service.impl.RondaServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class RondaController {
 
     @Inject
-    RondaService rs;
+    RondaServiceImpl rs;
 
     public RondaController() {
-        this.rs = new RondaService();
+        this.rs = new RondaServiceImpl();
     }
 
     public boolean creacion(Ronda r) {
