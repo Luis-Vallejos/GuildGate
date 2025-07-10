@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.Bosses;
-import com.guildgate.web.Service.BossesService;
+import com.guildgate.web.Service.impl.BossesServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class BossesController {
 
     @Inject
-    BossesService bs;
+    BossesServiceImpl bs;
 
     public BossesController() {
-        this.bs = new BossesService();
+        this.bs = new BossesServiceImpl();
     }
 
     public boolean creacion(Bosses b) {
