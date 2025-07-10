@@ -11,7 +11,7 @@ import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Modelo.Usuarios;
-import com.guildgate.web.Service.AvatarGremioService;
+import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
 import com.guildgate.web.Service.FondoGremioService;
 import com.guildgate.web.Service.GremioService;
 import com.guildgate.web.Service.MundosService;
@@ -57,7 +57,7 @@ public class GremioController {
     UsuarioRolesService urs;
 
     @Inject
-    AvatarGremioService ags;
+    AvatarGremioServiceImpl ags;
 
     @Inject
     FondoGremioService fgs;
@@ -69,7 +69,7 @@ public class GremioController {
         this.gs = new GremioService();
         this.us = new UsuarioService();
         this.urs = new UsuarioRolesService();
-        this.ags = new AvatarGremioService();
+        this.ags = new AvatarGremioServiceImpl();
         this.fgs = new FondoGremioService();
     }
 

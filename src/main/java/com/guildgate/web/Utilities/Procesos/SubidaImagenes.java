@@ -4,7 +4,7 @@ import com.guildgate.web.Modelo.AvatarGremio;
 import com.guildgate.web.Modelo.FondoGremio;
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Modelo.ImagenPerfil;
-import com.guildgate.web.Service.AvatarGremioService;
+import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
 import com.guildgate.web.Service.BannerService;
 import com.guildgate.web.Service.FondoGremioService;
 import com.guildgate.web.Service.PerfilService;
@@ -28,7 +28,7 @@ public class SubidaImagenes {
     BannerService bs;
 
     @Inject
-    AvatarGremioService ags;
+    AvatarGremioServiceImpl ags;
 
     @Inject
     FondoGremioService fgs;
@@ -36,7 +36,7 @@ public class SubidaImagenes {
     public SubidaImagenes() {
     }
 
-    public SubidaImagenes(PerfilService ps, BannerService bs, AvatarGremioService ags, FondoGremioService fgs) {
+    public SubidaImagenes(PerfilService ps, BannerService bs, AvatarGremioServiceImpl ags, FondoGremioService fgs) {
         this.ps = ps;
         this.bs = bs;
         this.ags = ags;

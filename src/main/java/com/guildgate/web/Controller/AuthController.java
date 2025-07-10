@@ -4,7 +4,7 @@ import com.guildgate.web.Bean.UsuarioBean;
 import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.Usuarios;
-import com.guildgate.web.Service.AvatarGremioService;
+import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
 import com.guildgate.web.Service.BannerService;
 import com.guildgate.web.Service.FondoGremioService;
 import com.guildgate.web.Service.GremioService;
@@ -33,7 +33,7 @@ public class AuthController {
     BannerService bs;
 
     @Inject
-    AvatarGremioService ags;
+    AvatarGremioServiceImpl ags;
 
     @Inject
     FondoGremioService fgs;
@@ -42,7 +42,7 @@ public class AuthController {
         this.gs = new GremioService();
         this.ps = new PerfilService();
         this.bs = new BannerService();
-        this.ags = new AvatarGremioService();
+        this.ags = new AvatarGremioServiceImpl();
         this.fgs = new FondoGremioService();
     }
 

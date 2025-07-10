@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.AvatarGremio;
-import com.guildgate.web.Service.AvatarGremioService;
+import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class AvatarGremioController {
 
     @Inject
-    AvatarGremioService ags;
+    AvatarGremioServiceImpl ags;
 
     public AvatarGremioController() {
-        this.ags = new AvatarGremioService();
+        this.ags = new AvatarGremioServiceImpl();
     }
 
     public boolean creacion(AvatarGremio av) {

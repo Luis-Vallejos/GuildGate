@@ -1,9 +1,10 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
 import com.guildgate.web.Modelo.AvatarGremio;
 import com.guildgate.web.Persistence.AvatarGremioJpaController;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IAvatarGremioService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -14,14 +15,14 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class AvatarGremioService implements IAvatarGremioService {
+public class AvatarGremioServiceImpl implements IAvatarGremioService {
 
-    private static final Logger LOGGER = Logger.getLogger(AvatarGremioService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AvatarGremioServiceImpl.class.getName());
 
     @Inject
     AvatarGremioJpaController agjc;
 
-    public AvatarGremioService() {
+    public AvatarGremioServiceImpl() {
         this.agjc = new AvatarGremioJpaController();
     }
 

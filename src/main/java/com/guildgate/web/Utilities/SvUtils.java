@@ -26,7 +26,7 @@ import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
-import com.guildgate.web.Service.AvatarGremioService;
+import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
 import com.guildgate.web.Service.BannerService;
 import com.guildgate.web.Service.FondoGremioService;
 import com.guildgate.web.Service.PerfilService;
@@ -203,7 +203,7 @@ public class SvUtils {
         return "data:image/" + tipoBanner + ";base64," + bannerBase64;
     }
 
-    public static String getAvatarGremioDataUrl(AvatarGremio ava, AvatarGremioService ags) {
+    public static String getAvatarGremioDataUrl(AvatarGremio ava, AvatarGremioServiceImpl ags) {
         AvatarGremio avatar = ags.findById(ava.getId());
         String avatarBase64 = Base64.getEncoder().encodeToString(avatar.getData());
         String tipoAvatar = avatar.getTipoArchivo();
@@ -311,7 +311,7 @@ public class SvUtils {
     }
 
     //AvatarGremio - Crear por primera vez sin data por directorio
-    public static AvatarGremio obtenerOCrearAvatarGremioConPath(AvatarGremioService ags, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static AvatarGremio obtenerOCrearAvatarGremioConPath(AvatarGremioServiceImpl ags, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         AvatarGremio ava = ags.buscarAvatarGremioPorNombre(nombreArchivo);
 
         if (ava == null) {
@@ -330,7 +330,7 @@ public class SvUtils {
     }
 
     //AvatarGremio - Crear por primera vez con data y sin directorio
-    public static AvatarGremio obtenerOCrearAvatarGremioSinPath(AvatarGremioService ags, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static AvatarGremio obtenerOCrearAvatarGremioSinPath(AvatarGremioServiceImpl ags, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         AvatarGremio ava = ags.buscarAvatarGremioPorNombre(nombreArchivo);
 
         if (ava == null) {
