@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.Mundos;
-import com.guildgate.web.Service.MundosService;
+import com.guildgate.web.Service.impl.MundosServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class MundosController {
 
     @Inject
-    MundosService ms;
+    MundosServiceImpl ms;
 
     public MundosController() {
-        this.ms = new MundosService();
+        this.ms = new MundosServiceImpl();
     }
 
     public boolean creacion(Mundos m) {

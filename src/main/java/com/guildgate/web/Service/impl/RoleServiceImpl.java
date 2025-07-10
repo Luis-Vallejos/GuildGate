@@ -1,9 +1,10 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
-import com.guildgate.web.Modelo.Bosses;
-import com.guildgate.web.Persistence.BossesJpaController;
+import com.guildgate.web.Modelo.Roles;
+import com.guildgate.web.Persistence.RolesJpaController;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IRoleService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -14,60 +15,60 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class BossesService implements IBossesService {
+public class RoleServiceImpl implements IRoleService {
 
-    private static final Logger LOGGER = Logger.getLogger(BossesService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(RoleServiceImpl.class.getName());
 
     @Inject
-    BossesJpaController bjc;
+    RolesJpaController rjc;
 
-    public BossesService() {
-        this.bjc = new BossesJpaController();
+    public RoleServiceImpl() {
+        this.rjc = new RolesJpaController();
     }
 
     @Override
-    public Bosses findById(Integer id) {
+    public Roles findById(Integer id) {
         if (id == null) {
             LOGGER.log(Level.WARNING, "findById falló: id es null");
             return null;
         }
-        return bjc.findBosses(id);
+        return rjc.findRoles(id);
     }
 
     @Override
-    public ArrayList<Bosses> findAll() {
-        return SvUtils.toArrayList(bjc.findBossesEntities());
+    public ArrayList<Roles> findAll() {
+        return SvUtils.toArrayList(rjc.findRolesEntities());
     }
 
     @Override
-    public boolean create(Bosses entity) {
+    public boolean create(Roles entity) {
         if (entity == null) {
-            LOGGER.log(Level.WARNING, "create falló: Bosses es null");
+            LOGGER.log(Level.WARNING, "create falló: Roles es null");
             return false;
         }
         try {
-            bjc.create(entity);
+            rjc.create(entity);
             return true;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error al crear Bosses: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al crear Roles: {0}", ex.toString());
             return false;
         }
     }
 
     @Override
-    public boolean edit(Bosses entity) {
+    public boolean edit(Roles entity) {
         if (entity == null || entity.getId() == null) {
             LOGGER.log(Level.WARNING, "edit falló: entidad o entidad.id es null");
             return false;
         }
         try {
-            bjc.edit(entity);
+            rjc.edit(entity);
             return true;
         } catch (NonexistentEntityException nex) {
             LOGGER.log(Level.WARNING, "edit falló: entidad inexistente con ID {0}", entity.getId());
             return false;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error al editar Bosses: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al editar Roles: {0}", ex.toString());
             return false;
         }
     }
@@ -79,13 +80,13 @@ public class BossesService implements IBossesService {
             return false;
         }
         try {
-            bjc.destroy(id);
+            rjc.destroy(id);
             return true;
         } catch (NonexistentEntityException ex) {
-            LOGGER.log(Level.WARNING, "delete falló: no existe Bosses con ID {0}", id);
+            LOGGER.log(Level.WARNING, "delete falló: no existe Roles con ID {0}", id);
             return false;
         } catch (IllegalOrphanException ex) {
-            LOGGER.log(Level.SEVERE, "Error al eliminar Bosses: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al eliminar Roles: {0}", ex.toString());
             return false;
         }
     }

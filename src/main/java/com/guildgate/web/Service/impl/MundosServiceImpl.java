@@ -1,9 +1,10 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
-import com.guildgate.web.Modelo.Gremio;
-import com.guildgate.web.Persistence.GremioJpaController;
+import com.guildgate.web.Modelo.Mundos;
+import com.guildgate.web.Persistence.MundosJpaController;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IMundosService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -14,60 +15,60 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class GremioService implements IGremioService {
+public class MundosServiceImpl implements IMundosService {
 
-    private static final Logger LOGGER = Logger.getLogger(GremioService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(MundosServiceImpl.class.getName());
 
     @Inject
-    GremioJpaController gpc;
+    MundosJpaController mjc;
 
-    public GremioService() {
-        this.gpc = new GremioJpaController();
+    public MundosServiceImpl() {
+        this.mjc = new MundosJpaController();
     }
 
     @Override
-    public Gremio findById(Integer id) {
+    public Mundos findById(Integer id) {
         if (id == null) {
             LOGGER.log(Level.WARNING, "findById falló: id es null");
             return null;
         }
-        return gpc.findGremio(id);
+        return mjc.findMundos(id);
     }
 
     @Override
-    public ArrayList<Gremio> findAll() {
-        return SvUtils.toArrayList(gpc.findGremioEntities());
+    public ArrayList<Mundos> findAll() {
+        return SvUtils.toArrayList(mjc.findMundosEntities());
     }
 
     @Override
-    public boolean create(Gremio entity) {
+    public boolean create(Mundos entity) {
         if (entity == null) {
-            LOGGER.log(Level.WARNING, "create falló: Gremio es null");
+            LOGGER.log(Level.WARNING, "create falló: Mundos es null");
             return false;
         }
         try {
-            gpc.create(entity);
+            mjc.create(entity);
             return true;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error al crear Gremio: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al crear Mundos: {0}", ex.toString());
             return false;
         }
     }
 
     @Override
-    public boolean edit(Gremio entity) {
+    public boolean edit(Mundos entity) {
         if (entity == null || entity.getId() == null) {
             LOGGER.log(Level.WARNING, "edit falló: entidad o entidad.id es null");
             return false;
         }
         try {
-            gpc.edit(entity);
+            mjc.edit(entity);
             return true;
         } catch (NonexistentEntityException nex) {
             LOGGER.log(Level.WARNING, "edit falló: entidad inexistente con ID {0}", entity.getId());
             return false;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error al editar Gremio: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al editar Mundos: {0}", ex.toString());
             return false;
         }
     }
@@ -79,14 +80,15 @@ public class GremioService implements IGremioService {
             return false;
         }
         try {
-            gpc.destroy(id);
+            mjc.destroy(id);
             return true;
         } catch (NonexistentEntityException ex) {
-            LOGGER.log(Level.WARNING, "delete falló: no existe Gremio con ID {0}", id);
+            LOGGER.log(Level.WARNING, "delete falló: no existe Mundos con ID {0}", id);
             return false;
         } catch (IllegalOrphanException ex) {
-            LOGGER.log(Level.SEVERE, "Error al eliminar Gremio: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al eliminar Mundos: {0}", ex.toString());
             return false;
         }
     }
+
 }

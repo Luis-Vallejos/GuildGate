@@ -5,9 +5,9 @@ import com.guildgate.web.Modelo.FondoGremio;
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
-import com.guildgate.web.Service.BannerService;
-import com.guildgate.web.Service.FondoGremioService;
-import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
+import com.guildgate.web.Service.impl.FondoGremioServiceImpl;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.io.IOException;
@@ -22,21 +22,21 @@ import java.util.List;
 public class SubidaImagenes {
 
     @Inject
-    PerfilService ps;
+    PerfilServiceImpl ps;
 
     @Inject
-    BannerService bs;
+    BannerServiceImpl bs;
 
     @Inject
     AvatarGremioServiceImpl ags;
 
     @Inject
-    FondoGremioService fgs;
+    FondoGremioServiceImpl fgs;
 
     public SubidaImagenes() {
     }
 
-    public SubidaImagenes(PerfilService ps, BannerService bs, AvatarGremioServiceImpl ags, FondoGremioService fgs) {
+    public SubidaImagenes(PerfilServiceImpl ps, BannerServiceImpl bs, AvatarGremioServiceImpl ags, FondoGremioServiceImpl fgs) {
         this.ps = ps;
         this.bs = bs;
         this.ags = ags;

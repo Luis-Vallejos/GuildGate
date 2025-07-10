@@ -6,20 +6,17 @@ import com.guildgate.web.Bean.GuildBean;
 import com.guildgate.web.Bean.RolBean;
 import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Bean.UserProfileBean;
-import com.guildgate.web.Bean.UsuarioBean;
 import com.guildgate.web.Modelo.Gremio;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.Usuarios;
-import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
-import com.guildgate.web.Service.BannerService;
-import com.guildgate.web.Service.FondoGremioService;
-import com.guildgate.web.Service.GremioService;
-import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
+import com.guildgate.web.Service.mapper.PerfilBeanMapper;
 import com.guildgate.web.Service.mapper.AvatarBeanMapper;
 import com.guildgate.web.Service.mapper.BannerBeanMapper;
 import com.guildgate.web.Service.mapper.GuildBeanMapper;
-import com.guildgate.web.Service.mapper.PerfilBeanMapper;
 import com.guildgate.web.Service.mapper.RolBeanMapper;
+import com.guildgate.web.Service.impl.GremioServiceImpl;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import jakarta.servlet.http.HttpServletRequest;
@@ -37,11 +34,13 @@ public class AuthController {
 
     // Service
     @Inject
-    GremioService gs;
+    GremioServiceImpl gs;
+
     @Inject
-    PerfilService ps;
+    PerfilServiceImpl ps;
+
     @Inject
-    BannerService bs;
+    BannerServiceImpl bs;
 
     // Mapper
     @Inject
@@ -56,9 +55,9 @@ public class AuthController {
     RolBeanMapper rbm;
 
     public AuthController() {
-        this.gs = new GremioService();
-        this.ps = new PerfilService();
-        this.bs = new BannerService();
+        this.gs = new GremioServiceImpl();
+        this.ps = new PerfilServiceImpl();
+        this.bs = new BannerServiceImpl();
         this.pbm = new PerfilBeanMapper();
         this.abm = new AvatarBeanMapper();
         this.bbm = new BannerBeanMapper();

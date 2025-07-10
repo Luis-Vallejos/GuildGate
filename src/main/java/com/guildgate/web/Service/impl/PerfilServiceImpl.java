@@ -1,8 +1,9 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
 import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Persistence.ImagenPerfilJpaController;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IPerfilService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class PerfilService implements IPerfilService {
+public class PerfilServiceImpl implements IPerfilService {
 
-    private static final Logger LOGGER = Logger.getLogger(PerfilService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PerfilServiceImpl.class.getName());
 
     @Inject
     ImagenPerfilJpaController ijc;
 
-    public PerfilService() {
+    public PerfilServiceImpl() {
         this.ijc = new ImagenPerfilJpaController();
     }
 

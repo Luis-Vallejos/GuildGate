@@ -2,7 +2,7 @@ package com.guildgate.web.Service.mapper;
 
 import com.guildgate.web.Bean.BannerBean;
 import com.guildgate.web.Modelo.ImagenBanner;
-import com.guildgate.web.Service.BannerService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 
 /**
@@ -11,7 +11,7 @@ import com.guildgate.web.Utilities.SvUtils;
  */
 public class BannerBeanMapper {
 
-    public BannerBean toBean(ImagenBanner imgB, BannerService bs) {
+    public BannerBean toBean(ImagenBanner imgB, BannerServiceImpl bs) {
         String url = null;
         if (imgB != null) {
             url = SvUtils.getBannerDataUrl(imgB, bs);

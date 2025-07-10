@@ -1,4 +1,4 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Modelo.ImagenPerfil;
@@ -6,6 +6,7 @@ import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.UsuariosJpaController;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IUsuarioService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -16,14 +17,14 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class UsuarioService implements IUsuarioService {
+public class UsuarioServiceImpl implements IUsuarioService {
 
-    private static final Logger LOGGER = Logger.getLogger(UsuarioService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UsuarioServiceImpl.class.getName());
 
     @Inject
     UsuariosJpaController ujc;
 
-    public UsuarioService() {
+    public UsuarioServiceImpl() {
         this.ujc = new UsuariosJpaController();
     }
 
@@ -100,7 +101,7 @@ public class UsuarioService implements IUsuarioService {
         try {
             ujc.editBasicInfo(id, nombre, correo, contrasena, bio);
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -118,7 +119,7 @@ public class UsuarioService implements IUsuarioService {
         try {
             ujc.editAvatarUser(id, img);
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -127,7 +128,7 @@ public class UsuarioService implements IUsuarioService {
         try {
             ujc.editBannerUser(id, img);
         } catch (Exception ex) {
-            Logger.getLogger(UsuarioService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UsuarioServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

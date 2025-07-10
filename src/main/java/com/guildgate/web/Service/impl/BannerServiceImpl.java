@@ -1,4 +1,4 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Persistence.ImagenBannerJpaController;
@@ -9,15 +9,16 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.guildgate.web.Persistence.UsuariosJpaController;
+import com.guildgate.web.Service.IBannerService;
 import java.util.List;
 
 /**
  *
  * @author Juan - Luis
  */
-public class BannerService implements IBannerService {
+public class BannerServiceImpl implements IBannerService {
 
-    private static final Logger LOGGER = Logger.getLogger(UsuarioRolesService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UsuarioRolesServiceImpl.class.getName());
 
     @Inject
     ImagenBannerJpaController ibjc;
@@ -25,7 +26,7 @@ public class BannerService implements IBannerService {
     @Inject
     UsuariosJpaController ujc;
 
-    public BannerService() {
+    public BannerServiceImpl() {
         this.ibjc = new ImagenBannerJpaController();
     }
 
@@ -108,7 +109,7 @@ public class BannerService implements IBannerService {
         try {
             ujc.editBannerUser(id, img);
         } catch (Exception ex) {
-            Logger.getLogger(BannerService.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(BannerServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

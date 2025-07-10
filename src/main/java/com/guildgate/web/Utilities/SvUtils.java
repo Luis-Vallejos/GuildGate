@@ -27,9 +27,9 @@ import com.guildgate.web.Modelo.Mundos;
 import com.guildgate.web.Modelo.Region;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
-import com.guildgate.web.Service.BannerService;
-import com.guildgate.web.Service.FondoGremioService;
-import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
+import com.guildgate.web.Service.impl.FondoGremioServiceImpl;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
 import static jakarta.servlet.http.HttpServletResponse.SC_BAD_REQUEST;
 import java.util.Collection;
 import java.util.Collections;
@@ -188,7 +188,7 @@ public class SvUtils {
 
     //CON CONTROL
     //Método para obtener la url de una imagen de la base de datos por su Data
-    public static String getImageDataUrl(ImagenPerfil img, PerfilService ps) {
+    public static String getImageDataUrl(ImagenPerfil img, PerfilServiceImpl ps) {
         ImagenPerfil imagen = ps.findById(img.getId());
         String imagenBase64 = Base64.getEncoder().encodeToString(imagen.getData());
         String tipoImagen = imagen.getTipoArchivo();
@@ -196,7 +196,7 @@ public class SvUtils {
     }
 
     //Banner datos de su url
-    public static String getBannerDataUrl(ImagenBanner imgB, BannerService bs) {
+    public static String getBannerDataUrl(ImagenBanner imgB, BannerServiceImpl bs) {
         ImagenBanner imagenB = bs.findById(imgB.getId());
         String bannerBase64 = Base64.getEncoder().encodeToString(imagenB.getData());
         String tipoBanner = imagenB.getTipoArchivo();
@@ -210,7 +210,7 @@ public class SvUtils {
         return "data:image/" + tipoAvatar + ";base64," + avatarBase64;
     }
 
-    public static String getFondoGremioDataUrl(FondoGremio fondo, FondoGremioService fgs) {
+    public static String getFondoGremioDataUrl(FondoGremio fondo, FondoGremioServiceImpl fgs) {
         FondoGremio fon = fgs.findById(fondo.getId());
         String fondoBase64 = Base64.getEncoder().encodeToString(fon.getData());
         String tipoFondo = fon.getTipoArchivo();
@@ -240,7 +240,7 @@ public class SvUtils {
 
     // Método para obtener o crear una imagen
     //Avatar usuario - Crear por primera vez sin data por directorio
-    public static ImagenPerfil obtenerOCrearImagenPerfilConPath(PerfilService ps, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenPerfil obtenerOCrearImagenPerfilConPath(PerfilServiceImpl ps, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenPerfil img = ps.buscarImagenPorNombre(nombreArchivo);
 
         if (img == null) {
@@ -259,7 +259,7 @@ public class SvUtils {
     }
 
     //Avatar usuario - Crear por primera vez con data y sin directorio
-    public static ImagenPerfil obtenerOCrearPerfilSinPath(PerfilService ps, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenPerfil obtenerOCrearPerfilSinPath(PerfilServiceImpl ps, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenPerfil img = ps.buscarImagenPorNombre(nombreArchivo);
 
         if (img == null) {
@@ -275,7 +275,7 @@ public class SvUtils {
     }
 
     //Banner usuario - Crear por primera vez sin data por directorio
-    public static ImagenBanner obtenerOCrearImagenBannerConPath(BannerService bs, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenBanner obtenerOCrearImagenBannerConPath(BannerServiceImpl bs, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenBanner img = bs.buscarBannerPorNombre(nombreArchivo);
 
         if (img == null) {
@@ -294,7 +294,7 @@ public class SvUtils {
     }
 
     //Banner usuario - Crear por primera vez con data y sin directorio
-    public static ImagenBanner obtenerOCrearBannerSinPath(BannerService bs, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static ImagenBanner obtenerOCrearBannerSinPath(BannerServiceImpl bs, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         ImagenBanner imgB = bs.buscarBannerPorNombre(nombreArchivo);
 
         if (imgB == null) {
@@ -345,7 +345,7 @@ public class SvUtils {
     }
 
     //FondoGremio - Crear por primera vez sin data por directorio
-    public static FondoGremio obtenerOCrearFondoGremioConPath(FondoGremioService fgs, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static FondoGremio obtenerOCrearFondoGremioConPath(FondoGremioServiceImpl fgs, String nombreArchivo, String rutaArchivo, Enum.OrigenArchivo origenArchivo) throws IOException {
         FondoGremio fondo = fgs.buscarFondoGremioPorNombre(nombreArchivo);
 
         if (fondo == null) {
@@ -363,7 +363,7 @@ public class SvUtils {
         return fondo;
     }
 
-    public static FondoGremio obtenerOCrearFondoGremioSinPath(FondoGremioService fgs, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
+    public static FondoGremio obtenerOCrearFondoGremioSinPath(FondoGremioServiceImpl fgs, String nombreArchivo, String tipoArchivo, byte[] data, Enum.OrigenArchivo origenArchivo) throws IOException {
         FondoGremio fondo = fgs.buscarFondoGremioPorNombre(nombreArchivo);
 
         if (fondo == null) {

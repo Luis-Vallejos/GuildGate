@@ -2,7 +2,7 @@ package com.guildgate.web.Service.mapper;
 
 import com.guildgate.web.Bean.AvatarBean;
 import com.guildgate.web.Modelo.ImagenPerfil;
-import com.guildgate.web.Service.PerfilService;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 
 /**
@@ -11,7 +11,7 @@ import com.guildgate.web.Utilities.SvUtils;
  */
 public class AvatarBeanMapper {
 
-    public AvatarBean toBean(ImagenPerfil img, PerfilService ps) {
+    public AvatarBean toBean(ImagenPerfil img, PerfilServiceImpl ps) {
         String dataUrl = null;
         if (img != null) {
             dataUrl = SvUtils.getImageDataUrl(img, ps);

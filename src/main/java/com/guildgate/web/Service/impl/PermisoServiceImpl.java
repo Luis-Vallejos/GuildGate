@@ -1,9 +1,10 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
-import com.guildgate.web.Modelo.Region;
-import com.guildgate.web.Persistence.RegionJpaController;
+import com.guildgate.web.Modelo.Permiso;
+import com.guildgate.web.Persistence.PermisoJpaController;
 import com.guildgate.web.Persistence.exceptions.IllegalOrphanException;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IPermisoService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -14,60 +15,60 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class RegionService implements IRegionService {
+public class PermisoServiceImpl implements IPermisoService {
 
-    private static final Logger LOGGER = Logger.getLogger(RegionService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(PermisoServiceImpl.class.getName());
 
     @Inject
-    RegionJpaController rjc;
+    PermisoJpaController pjc;
 
-    public RegionService() {
-        this.rjc = new RegionJpaController();
+    public PermisoServiceImpl() {
+        this.pjc = new PermisoJpaController();
     }
 
     @Override
-    public Region findById(Integer id) {
+    public Permiso findById(Integer id) {
         if (id == null) {
             LOGGER.log(Level.WARNING, "findById falló: id es null");
             return null;
         }
-        return rjc.findRegion(id);
+        return pjc.findPermiso(id);
     }
 
     @Override
-    public ArrayList<Region> findAll() {
-        return SvUtils.toArrayList(rjc.findRegionEntities());
+    public ArrayList<Permiso> findAll() {
+        return SvUtils.toArrayList(pjc.findPermisoEntities());
     }
 
     @Override
-    public boolean create(Region entity) {
+    public boolean create(Permiso entity) {
         if (entity == null) {
-            LOGGER.log(Level.WARNING, "create falló: Region es null");
+            LOGGER.log(Level.WARNING, "create falló: Permiso es null");
             return false;
         }
         try {
-            rjc.create(entity);
+            pjc.create(entity);
             return true;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error al crear Region: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al crear Permiso: {0}", ex.toString());
             return false;
         }
     }
 
     @Override
-    public boolean edit(Region entity) {
+    public boolean edit(Permiso entity) {
         if (entity == null || entity.getId() == null) {
             LOGGER.log(Level.WARNING, "edit falló: entidad o entidad.id es null");
             return false;
         }
         try {
-            rjc.edit(entity);
+            pjc.edit(entity);
             return true;
         } catch (NonexistentEntityException nex) {
             LOGGER.log(Level.WARNING, "edit falló: entidad inexistente con ID {0}", entity.getId());
             return false;
         } catch (Exception ex) {
-            LOGGER.log(Level.SEVERE, "Error al editar Region: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al editar Permiso: {0}", ex.toString());
             return false;
         }
     }
@@ -79,13 +80,13 @@ public class RegionService implements IRegionService {
             return false;
         }
         try {
-            rjc.destroy(id);
+            pjc.destroy(id);
             return true;
         } catch (NonexistentEntityException ex) {
-            LOGGER.log(Level.WARNING, "delete falló: no existe Region con ID {0}", id);
+            LOGGER.log(Level.WARNING, "delete falló: no existe Bosses con ID {0}", id);
             return false;
         } catch (IllegalOrphanException ex) {
-            LOGGER.log(Level.SEVERE, "Error al eliminar Region: {0}", ex.toString());
+            LOGGER.log(Level.SEVERE, "Error al eliminar Bosses: {0}", ex.toString());
             return false;
         }
     }

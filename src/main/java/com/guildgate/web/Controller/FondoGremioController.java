@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.FondoGremio;
-import com.guildgate.web.Service.FondoGremioService;
+import com.guildgate.web.Service.impl.FondoGremioServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class FondoGremioController {
 
     @Inject
-    FondoGremioService fgs;
+    FondoGremioServiceImpl fgs;
 
     public FondoGremioController() {
-        this.fgs = new FondoGremioService();
+        this.fgs = new FondoGremioServiceImpl();
     }
 
     public boolean creacion(FondoGremio fg) {

@@ -3,7 +3,7 @@ package com.guildgate.web.Service.mapper;
 import com.guildgate.web.Bean.GuildBean;
 import com.guildgate.web.Bean.GuildVisualBean;
 import com.guildgate.web.Modelo.Gremio;
-import com.guildgate.web.Service.FondoGremioService;
+import com.guildgate.web.Service.impl.FondoGremioServiceImpl;
 import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 
@@ -26,7 +26,7 @@ public class GuildBeanMapper {
                 .idBackground(gremio.getImgF() != null ? gremio.getImgF().getId() : null)
                 .nomFondoGremio(gremio.getImgF() != null ? gremio.getImgF().getNomArchivo() : null)
                 .fondoGremio(SvUtils.getFondoGremioDataUrl(
-                        gremio.getImgF(), new FondoGremioService()))
+                        gremio.getImgF(), new FondoGremioServiceImpl()))
                 .build();
 
         return GuildBean.builder()

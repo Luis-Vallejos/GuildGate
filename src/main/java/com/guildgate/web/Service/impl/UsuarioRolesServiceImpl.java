@@ -1,8 +1,9 @@
-package com.guildgate.web.Service;
+package com.guildgate.web.Service.impl;
 
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Persistence.UsuarioRolesJpaController;
 import com.guildgate.web.Persistence.exceptions.NonexistentEntityException;
+import com.guildgate.web.Service.IUsuarioRolesService;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
@@ -13,14 +14,14 @@ import java.util.logging.Logger;
  *
  * @author Juan - Luis
  */
-public class UsuarioRolesService implements IUsuarioRolesService {
+public class UsuarioRolesServiceImpl implements IUsuarioRolesService {
 
-    private static final Logger LOGGER = Logger.getLogger(UsuarioRolesService.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(UsuarioRolesServiceImpl.class.getName());
 
     @Inject
     UsuarioRolesJpaController urs;
 
-    public UsuarioRolesService() {
+    public UsuarioRolesServiceImpl() {
         this.urs = new UsuarioRolesJpaController();
     }
 

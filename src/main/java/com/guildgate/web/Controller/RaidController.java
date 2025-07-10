@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.Raid;
-import com.guildgate.web.Service.RaidService;
+import com.guildgate.web.Service.impl.RaidServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class RaidController {
 
     @Inject
-    RaidService rs;
+    RaidServiceImpl rs;
 
     public RaidController() {
-        this.rs = new RaidService();
+        this.rs = new RaidServiceImpl();
     }
 
     public boolean creacion(Raid r) {
