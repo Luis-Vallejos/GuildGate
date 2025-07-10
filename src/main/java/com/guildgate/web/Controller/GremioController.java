@@ -12,13 +12,13 @@ import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Service.impl.AvatarGremioServiceImpl;
-import com.guildgate.web.Service.FondoGremioService;
-import com.guildgate.web.Service.GremioService;
-import com.guildgate.web.Service.MundosService;
-import com.guildgate.web.Service.RegionService;
-import com.guildgate.web.Service.RoleService;
-import com.guildgate.web.Service.UsuarioRolesService;
-import com.guildgate.web.Service.UsuarioService;
+import com.guildgate.web.Service.impl.FondoGremioServiceImpl;
+import com.guildgate.web.Service.impl.GremioServiceImpl;
+import com.guildgate.web.Service.impl.MundosServiceImpl;
+import com.guildgate.web.Service.impl.RegionServiceImpl;
+import com.guildgate.web.Service.impl.RoleServiceImpl;
+import com.guildgate.web.Service.impl.UsuarioRolesServiceImpl;
+import com.guildgate.web.Service.impl.UsuarioServiceImpl;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
@@ -39,38 +39,38 @@ import java.util.Optional;
 public class GremioController {
 
     @Inject
-    RegionService res;
+    RegionServiceImpl res;
 
     @Inject
-    MundosService ms;
+    MundosServiceImpl ms;
 
     @Inject
-    RoleService rs;
+    RoleServiceImpl rs;
 
     @Inject
-    GremioService gs;
+    GremioServiceImpl gs;
 
     @Inject
-    UsuarioService us;
+    UsuarioServiceImpl us;
 
     @Inject
-    UsuarioRolesService urs;
+    UsuarioRolesServiceImpl urs;
 
     @Inject
     AvatarGremioServiceImpl ags;
 
     @Inject
-    FondoGremioService fgs;
+    FondoGremioServiceImpl fgs;
 
     public GremioController() {
-        this.res = new RegionService();
-        this.ms = new MundosService();
-        this.rs = new RoleService();
-        this.gs = new GremioService();
-        this.us = new UsuarioService();
-        this.urs = new UsuarioRolesService();
+        this.res = new RegionServiceImpl();
+        this.ms = new MundosServiceImpl();
+        this.rs = new RoleServiceImpl();
+        this.gs = new GremioServiceImpl();
+        this.us = new UsuarioServiceImpl();
+        this.urs = new UsuarioRolesServiceImpl();
         this.ags = new AvatarGremioServiceImpl();
-        this.fgs = new FondoGremioService();
+        this.fgs = new FondoGremioServiceImpl();
     }
 
     //Metodos para gremios
