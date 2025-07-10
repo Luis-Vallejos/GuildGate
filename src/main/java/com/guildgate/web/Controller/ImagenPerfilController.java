@@ -4,8 +4,8 @@ import com.guildgate.web.Bean.UsuarioBean;
 import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.AvatarNotFoundException;
-import com.guildgate.web.Service.PerfilService;
-import com.guildgate.web.Service.UsuarioService;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
+import com.guildgate.web.Service.impl.UsuarioServiceImpl;
 import com.guildgate.web.Servlet.SvPerfil;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
@@ -28,14 +28,14 @@ import java.util.logging.Logger;
 public class ImagenPerfilController {
 
     @Inject
-    PerfilService ps;
+    PerfilServiceImpl ps;
 
     @Inject
-    UsuarioService us;
+    UsuarioServiceImpl us;
 
     public ImagenPerfilController() {
-        this.ps = new PerfilService();
-        this.us = new UsuarioService();
+        this.ps = new PerfilServiceImpl();
+        this.us = new UsuarioServiceImpl();
     }
 
     public void cambioAvatarUsuario(String nomArchivo, int usuario) throws AvatarNotFoundException, Exception {
