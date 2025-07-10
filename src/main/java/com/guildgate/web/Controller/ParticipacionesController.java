@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.Participaciones;
-import com.guildgate.web.Service.ParticipacionesService;
+import com.guildgate.web.Service.impl.ParticipacionesServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class ParticipacionesController {
 
     @Inject
-    ParticipacionesService ps;
+    ParticipacionesServiceImpl ps;
 
-    public ParticipacionesController(ParticipacionesService ps) {
-        this.ps = new ParticipacionesService();
+    public ParticipacionesController(ParticipacionesServiceImpl ps) {
+        this.ps = new ParticipacionesServiceImpl();
     }
 
     public boolean creacion(Participaciones p) {
