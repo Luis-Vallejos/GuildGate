@@ -1,7 +1,7 @@
 package com.guildgate.web.Controller;
 
 import com.guildgate.web.Modelo.Region;
-import com.guildgate.web.Service.RegionService;
+import com.guildgate.web.Service.impl.RegionServiceImpl;
 import jakarta.inject.Inject;
 import java.util.ArrayList;
 
@@ -12,10 +12,10 @@ import java.util.ArrayList;
 public class RegionController {
 
     @Inject
-    RegionService rs;
+    RegionServiceImpl rs;
 
     public RegionController() {
-        this.rs = new RegionService();
+        this.rs = new RegionServiceImpl();
     }
 
     public boolean creacion(Region r) {
