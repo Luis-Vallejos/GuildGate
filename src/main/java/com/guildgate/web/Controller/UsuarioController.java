@@ -6,12 +6,12 @@ import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Modelo.Roles;
 import com.guildgate.web.Modelo.UsuarioRoles;
 import com.guildgate.web.Modelo.Usuarios;
-import com.guildgate.web.Service.BannerService;
-import com.guildgate.web.Service.GremioService;
-import com.guildgate.web.Service.PerfilService;
-import com.guildgate.web.Service.RoleService;
-import com.guildgate.web.Service.UsuarioRolesService;
-import com.guildgate.web.Service.UsuarioService;
+import com.guildgate.web.Service.impl.BannerServiceImpl;
+import com.guildgate.web.Service.impl.GremioServiceImpl;
+import com.guildgate.web.Service.impl.PerfilServiceImpl;
+import com.guildgate.web.Service.impl.RoleServiceImpl;
+import com.guildgate.web.Service.impl.UsuarioRolesServiceImpl;
+import com.guildgate.web.Service.impl.UsuarioServiceImpl;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
 import java.io.IOException;
@@ -26,30 +26,30 @@ import java.util.Optional;
 public class UsuarioController {
 
     @Inject
-    UsuarioService us;
+    UsuarioServiceImpl us;
 
     @Inject
-    PerfilService ps;
+    PerfilServiceImpl ps;
 
     @Inject
-    BannerService bs;
+    BannerServiceImpl bs;
 
     @Inject
-    GremioService gs;
+    GremioServiceImpl gs;
 
     @Inject
-    RoleService rs;
+    RoleServiceImpl rs;
 
     @Inject
-    UsuarioRolesService urs;
+    UsuarioRolesServiceImpl urs;
 
     public UsuarioController() {
-        this.us = new UsuarioService();
-        this.ps = new PerfilService();
-        this.bs = new BannerService();
-        this.gs = new GremioService();
-        this.rs = new RoleService();
-        this.urs = new UsuarioRolesService();
+        this.us = new UsuarioServiceImpl();
+        this.ps = new PerfilServiceImpl();
+        this.bs = new BannerServiceImpl();
+        this.gs = new GremioServiceImpl();
+        this.rs = new RoleServiceImpl();
+        this.urs = new UsuarioRolesServiceImpl();
     }
 
     //Metodos Usuarios
