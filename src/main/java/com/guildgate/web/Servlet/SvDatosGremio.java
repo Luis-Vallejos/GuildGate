@@ -10,7 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.guildgate.web.Modelo.Gremio;
-import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Controller.GremioController;
 import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Utilities.Mensajes;
@@ -75,8 +75,8 @@ public class SvDatosGremio extends HttpServlet {
         String rolNom = "miembro";
 
         HttpSession session = request.getSession(false);
-        UsuarioBean usuarioBean = (UsuarioBean) session.getAttribute("usuarioBean");
-        String usuarioActual = usuarioBean.getUsuarioActual();
+        SessionUserBean sessionUserBean = (SessionUserBean) session.getAttribute("sessionUserBean");
+        String usuarioActual = sessionUserBean.getPerfil().getNomUserActual();
 
         if (SvUtils.isNullOrEmpty(usuarioActual)) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_NO_AUTENTICADO);
