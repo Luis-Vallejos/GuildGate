@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.guildgate.web.Modelo.ImagenPerfil;
-import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Controller.ImagenPerfilController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
@@ -71,10 +71,10 @@ public class SvPerfil extends HttpServlet {
         /*Upload any personalized profile pictures or set any predetermined pfp*/
         response.setContentType("application/json;charset=UTF-8");
         HttpSession sesion = request.getSession(false);
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
 
-        String nomOriginalAvatar = usuarioBean.getNombreAvatar();
-        int idUsuarioActual = usuarioBean.getId();
+        String nomOriginalAvatar = sessionUserBean.getAvatar().getNombreAvatar();
+        int idUsuarioActual = sessionUserBean.getPerfil().getId();
         String tipoCambioPre = request.getParameter("modalAvatarPre"); //value = AvatarPredeterminado
         String tipoCambioPer = request.getParameter("modalAvatarPer"); //value = AvatarPersonalizado
         String opcion = tipoCambioPre != null ? "AvatarPredeterminado" : (tipoCambioPer != null ? "AvatarPersonalizado" : "");
