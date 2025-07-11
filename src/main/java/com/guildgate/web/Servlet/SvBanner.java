@@ -2,6 +2,7 @@ package com.guildgate.web.Servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.guildgate.web.Bean.SessionUserBean;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -16,7 +17,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.guildgate.web.Modelo.ImagenBanner;
-import com.guildgate.web.Bean.UsuarioBean;
 import com.guildgate.web.Controller.ImagenBannerController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
@@ -71,10 +71,10 @@ public class SvBanner extends HttpServlet {
         /*Upload any personalized banners or set a new Predetermined banner for the user*/
         response.setContentType("application/json;charset=UTF-8");
         HttpSession sesion = request.getSession(false);
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
 
-        String nomOriginalBanner = usuarioBean.getNombreBanner();
-        int idUsuarioActual = usuarioBean.getId();
+        String nomOriginalBanner = sessionUserBean.getBanner().getNombreBanner();
+        int idUsuarioActual = sessionUserBean.getPerfil().getId();
         String tipoCambioPre = request.getParameter("modalBannerPre");
         String tipoCambioPer = request.getParameter("modalBannerPer");
         String opcion = tipoCambioPre != null ? "BannerPredeterminado" : (tipoCambioPer != null ? "BannerPersonalizado" : "");

@@ -13,7 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import com.guildgate.web.Modelo.Usuarios;
-import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Controller.UsuarioController;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
@@ -41,12 +41,12 @@ public class SvUsuario extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         HttpSession sesion = request.getSession(false);
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
 
-        String nomUsuario = usuarioBean.getUsuarioActual();
-        String correoUsuario = usuarioBean.getCorreo();
-        String contraUsuario = usuarioBean.getContra();
-        String bioUsuario = usuarioBean.getBioUsuario();
+        String nomUsuario = sessionUserBean.getPerfil().getNomUserActual();
+        String correoUsuario = sessionUserBean.getPerfil().getCorreo();
+        String contraUsuario = sessionUserBean.getPerfil().getContrasenia();
+        String bioUsuario = sessionUserBean.getPerfil().getBiografia();
 
         if (SvUtils.isNullOrEmpty(nomUsuario) || SvUtils.isNullOrEmpty(correoUsuario)
                 || SvUtils.isNullOrEmpty(contraUsuario) || SvUtils.isNullOrEmpty(bioUsuario)) {
@@ -73,12 +73,12 @@ public class SvUsuario extends HttpServlet {
         response.setContentType("application/json;charset=UTF-8");
 
         HttpSession sesion = request.getSession(false);
-        if (sesion == null || sesion.getAttribute("usuarioBean") == null) {
+        if (sesion == null || sesion.getAttribute("sessionUserBean") == null) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_UNAUTHORIZED, Mensajes.USUARIO_NO_AUTENTICADO);
             return;
         }
 
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
 
         String nomUsuario = request.getParameter("nomusuario");
         String correo = request.getParameter("correousuario");
@@ -89,22 +89,22 @@ public class SvUsuario extends HttpServlet {
                 || SvUtils.isNullOrEmpty(contra) || SvUtils.isNullOrEmpty(bio)) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.CAMPOS_VACIOS);
             return;
-        } else if (nomUsuario.equalsIgnoreCase(usuarioBean.getUsuarioActual())
-                && correo.equalsIgnoreCase(usuarioBean.getCorreo())
-                && contra.equalsIgnoreCase(usuarioBean.getContra())
-                && bio.equalsIgnoreCase(usuarioBean.getBioUsuario())) {
+        } else if (nomUsuario.equalsIgnoreCase(sessionUserBean.getPerfil().getNomUserActual())
+                && correo.equalsIgnoreCase(sessionUserBean.getPerfil().getCorreo())
+                && contra.equalsIgnoreCase(sessionUserBean.getPerfil().getContrasenia())
+                && bio.equalsIgnoreCase(sessionUserBean.getPerfil().getBiografia())) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_BAD_REQUEST, Mensajes.USUARIO_DATOS_DUPLICADOS);
             return;
         }
 
         try {
             ArrayList<Usuarios> listaJugadores = uc.traerListaUsuarios();
-            uc.editarUsuario(nomUsuario, correo, contra, bio, listaJugadores, usuarioBean.getUsuarioActual());
+            uc.editarUsuario(nomUsuario, correo, contra, bio, listaJugadores, sessionUserBean.getPerfil().getNomUserActual());
 
-            usuarioBean.setUsuarioActual(nomUsuario);
-            usuarioBean.setCorreo(correo);
-            usuarioBean.setContra(contra);
-            usuarioBean.setBioUsuario(bio);
+            sessionUserBean.getPerfil().setNomUserActual(nomUsuario);
+            sessionUserBean.getPerfil().setCorreo(correo);
+            sessionUserBean.getPerfil().setContrasenia(contra);
+            sessionUserBean.getPerfil().setBiografia(bio);
 
             SvUtils.respondWithSuccess(response, HttpServletResponse.SC_OK, Mensajes.USUARIO_DATOS_MODIFICADOS);
         } catch (IOException e) {
