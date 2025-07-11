@@ -1,6 +1,6 @@
 package com.guildgate.web.Controller;
 
-import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Modelo.ImagenBanner;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.BannerNotFoundException;
@@ -138,10 +138,10 @@ public class ImagenBannerController {
         String urlAvatar = SvUtils.getBannerDataUrl(imgB, bs);
 
         HttpSession sesion = request.getSession(false);
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
 
-        usuarioBean.setNombreBanner(imgB.getNomArchivo());
-        usuarioBean.setBanner(urlAvatar);
+        sessionUserBean.getBanner().setNombreBanner(imgB.getNomArchivo());
+        sessionUserBean.getBanner().setBannerUsuario(urlAvatar);
     }
 
     public ArrayList<ImagenBanner> traerListaBannersPredeterminadas() {

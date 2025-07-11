@@ -1,6 +1,6 @@
 package com.guildgate.web.Controller;
 
-import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Modelo.ImagenPerfil;
 import com.guildgate.web.Modelo.Usuarios;
 import com.guildgate.web.Persistence.exceptions.AvatarNotFoundException;
@@ -135,10 +135,10 @@ public class ImagenPerfilController {
         String urlAvatar = SvUtils.getImageDataUrl(img, ps);
 
         HttpSession sesion = request.getSession(false);
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
 
-        usuarioBean.setNombreAvatar(img.getNomArchivo());
-        usuarioBean.setImagenUsuario(urlAvatar);
+        sessionUserBean.getAvatar().setNombreAvatar(img.getNomArchivo());
+        sessionUserBean.getAvatar().setAvatarUsuario(urlAvatar);
     }
 
     public ImagenPerfil traerImagenPerfil(Long id) {

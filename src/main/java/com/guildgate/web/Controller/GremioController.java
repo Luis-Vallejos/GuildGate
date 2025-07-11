@@ -2,7 +2,8 @@ package com.guildgate.web.Controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.guildgate.web.Bean.UsuarioBean;
+import com.guildgate.web.Bean.RolBean;
+import com.guildgate.web.Bean.SessionUserBean;
 import com.guildgate.web.Modelo.AvatarGremio;
 import com.guildgate.web.Modelo.FondoGremio;
 import com.guildgate.web.Modelo.Gremio;
@@ -19,6 +20,7 @@ import com.guildgate.web.Service.impl.RegionServiceImpl;
 import com.guildgate.web.Service.impl.RoleServiceImpl;
 import com.guildgate.web.Service.impl.UsuarioRolesServiceImpl;
 import com.guildgate.web.Service.impl.UsuarioServiceImpl;
+import com.guildgate.web.Service.mapper.RolBeanMapper;
 import com.guildgate.web.Utilities.Mensajes;
 import com.guildgate.web.Utilities.SvUtils;
 import jakarta.inject.Inject;
@@ -40,27 +42,24 @@ public class GremioController {
 
     @Inject
     RegionServiceImpl res;
-
     @Inject
     MundosServiceImpl ms;
-
     @Inject
     RoleServiceImpl rs;
-
     @Inject
     GremioServiceImpl gs;
-
     @Inject
     UsuarioServiceImpl us;
-
     @Inject
     UsuarioRolesServiceImpl urs;
-
     @Inject
     AvatarGremioServiceImpl ags;
-
     @Inject
     FondoGremioServiceImpl fgs;
+
+    // Mappers
+    @Inject
+    RolBeanMapper rbm;
 
     public GremioController() {
         this.res = new RegionServiceImpl();
@@ -71,6 +70,7 @@ public class GremioController {
         this.urs = new UsuarioRolesServiceImpl();
         this.ags = new AvatarGremioServiceImpl();
         this.fgs = new FondoGremioServiceImpl();
+        this.rbm = new RolBeanMapper();
     }
 
     //Metodos para gremios
@@ -181,6 +181,8 @@ public class GremioController {
                 return;
             }
 
+            RolBean rolBean = rbm.toBean(roles);
+
             AvatarGremio ava = optAvatarGremio.get();
             FondoGremio fondo = optFondoGremio.get();
             String imagenBase64DataUrl = SvUtils.encodeAvatarGremioToBase64(ava);
@@ -188,21 +190,22 @@ public class GremioController {
             String descripcionGremio = (gremio != null) ? gremio.getDescripcion() : "No contienen descripción...";
 
             HttpSession session = request.getSession(false);
-            UsuarioBean usuarioBean = (UsuarioBean) session.getAttribute("usuarioBean");
+            SessionUserBean sessionUserBean = (SessionUserBean) session.getAttribute("sessionUserBean");
 
-            if (usuarioBean == null) {
-                usuarioBean = new UsuarioBean();
-                session.setAttribute("usuarioBean", usuarioBean);
+            if (sessionUserBean == null) {
+                sessionUserBean = new SessionUserBean();
+                session.setAttribute("sessionUserBean", sessionUserBean);
             }
 
-            usuarioBean.setGremioActual(gremio.getNombre());
-            usuarioBean.setDescripcionGremio(descripcionGremio);
-            usuarioBean.setRolUsuario(roles.getNombre());
+            sessionUserBean.getGremio().setNomGremioActual(gremio.getNombre());
+            sessionUserBean.getGremio().setDescripcion(descripcionGremio);
+            sessionUserBean.getRoles().clear();
+            sessionUserBean.getRoles().add(rolBean);
 
-            usuarioBean.setNombreBanner(ava.getNomArchivo());
-            usuarioBean.setImagenGremio(imagenBase64DataUrl);
-            usuarioBean.setNombreFondoGremio(fondo.getNomArchivo());
-            usuarioBean.setImagenFondoGremio(fondoBase64DataUrl);
+            sessionUserBean.getGremio().getGv().setNomAvatarGremio(ava.getNomArchivo());
+            sessionUserBean.getGremio().getGv().setAvatarGremio(imagenBase64DataUrl);
+            sessionUserBean.getGremio().getGv().setNomFondoGremio(fondo.getNomArchivo());
+            sessionUserBean.getGremio().getGv().setFondoGremio(fondoBase64DataUrl);
         } catch (IOException e) {
             SvUtils.respondWithError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Mensajes.IMAGEN_ERROR_OBTENCION);
         }
@@ -269,17 +272,20 @@ public class GremioController {
         Optional<Roles> optRol = SvUtils.obtenerObjetoRolPorId(2, rs.findAll());
         Roles roles = optRol.get();
 
-        HttpSession sesion = request.getSession();
-        UsuarioBean usuarioBean = (UsuarioBean) sesion.getAttribute("usuarioBean");
+        RolBean rolBean = rbm.toBean(roles);
 
-        if (usuarioBean == null) {
-            usuarioBean = new UsuarioBean();
-            sesion.setAttribute("usuarioBean", usuarioBean);
+        HttpSession sesion = request.getSession();
+        SessionUserBean sessionUserBean = (SessionUserBean) sesion.getAttribute("sessionUserBean");
+
+        if (sessionUserBean == null) {
+            sessionUserBean = new SessionUserBean();
+            sesion.setAttribute("sessionUserBean", sessionUserBean);
         }
 
-        usuarioBean.setGremioActual(nomGremio);
-        usuarioBean.setDescripcionGremio(descripcionGremio);
-        usuarioBean.setRolUsuario(roles.getNombre());
+        sessionUserBean.getGremio().setNomGremioActual(nomGremio);
+        sessionUserBean.getGremio().setDescripcion(descripcionGremio);
+        sessionUserBean.getRoles().clear();
+        sessionUserBean.getRoles().add(rolBean);
 
         Optional<AvatarGremio> optAvatar = Optional.ofNullable(ags.findById(gre.getImg().getId()));
         Optional<FondoGremio> optFondo = Optional.ofNullable(fgs.findById(gre.getImgF().getId()));
@@ -291,10 +297,10 @@ public class GremioController {
             String imagenBase64DataUrl = SvUtils.encodeAvatarGremioToBase64(ava);
             String fondoBase64DataUrl = SvUtils.encodeFondoGremioToBase64(fon);
 
-            usuarioBean.setNombreAvatarGremio(ava.getNomArchivo());
-            usuarioBean.setImagenGremio(imagenBase64DataUrl);
-            usuarioBean.setNombreFondoGremio(fon.getNomArchivo());
-            usuarioBean.setImagenFondoGremio(fondoBase64DataUrl);
+            sessionUserBean.getGremio().getGv().setNomAvatarGremio(ava.getNomArchivo());
+            sessionUserBean.getGremio().getGv().setAvatarGremio(imagenBase64DataUrl);
+            sessionUserBean.getGremio().getGv().setNomFondoGremio(fon.getNomArchivo());
+            sessionUserBean.getGremio().getGv().setFondoGremio(fondoBase64DataUrl);
             SvUtils.respondWithSuccess(response, HttpServletResponse.SC_OK, Mensajes.USUARIO_UNIDO_GREMIO + nomGremio + "!");
         } else {
             SvUtils.respondWithError(response, HttpServletResponse.SC_INTERNAL_SERVER_ERROR, Mensajes.IMAGEN_ERROR_OBTENCION);
@@ -308,5 +314,4 @@ public class GremioController {
     public ArrayList<Gremio> traerListaGremios() {
         return gs.findAll();
     }
-
 }
