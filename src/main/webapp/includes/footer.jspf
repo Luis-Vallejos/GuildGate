@@ -1,22 +1,14 @@
-<%-- 
-    Document   : footer
-    Created on : 25 jun. 2025, 12:26:14
-    Author     : Juan - Luis
---%>
-<!--Footer de la página-->
+<!-- Footer de la página -->
 <footer id="pie">
     <div id="Contactos" class="footer-section">
         <h2>Contáctanos</h2>
         <ul>
             <li>Callao, Callao</li>
-            <li>
-                <a href="tel:+51993718514">+51 993 718 514</a>
-            </li>
-            <li>
-                <a href="mailto:gercermagden@gmail.com">gercermagden@gmail.com</a>
-            </li>
-            <li>
-                <a href="http://www.portafolioLavender.com" target="_blank">www.portafolioLavender.com</a>
+            <li><a href="tel:+51993718514">+51 993 718 514</a></li>
+            <li><a href="mailto:gercermagden@gmail.com">gercermagden@gmail.com</a></li>
+            <li><a href="http://www.portafolioLavender.com" target="_blank">
+                    www.portafolioLavender.com
+                </a>
             </li>
         </ul>
     </div>
@@ -43,12 +35,14 @@
                 <a href="https://x.com/JoanLavender21" target="_blank">
                     <img class="RedesImg" src="imagenes/twitter.png" alt="Twitter" loading="lazy">
                 </a>
-            </li>          
+            </li>
         </ul>
-        <p class="copyright">© Copyright 
+        <p class="copyright">
+            © Copyright
             <strong>
                 <a href="https://github.com/LavenderEdit" target="_blank">Lavender.</a>
-            </strong>Reservados todos los derechos.
+            </strong>
+            Reservados todos los derechos.
         </p>
     </div>
 
@@ -56,8 +50,8 @@
         <h2>Información</h2>
         <ul>
             <li><a href="index.jsp#autor-sec">Sobre el autor</a></li>
-            <li><a href="index.jsp#gt-porque">Porque elegi Guardian Tales</a></li>
-            <li><a href="index.jsp#gt-memoria">Memorias de Guardian Tales</a></li>
+            <li><a href="index.jsp#gt-porque">Porque elegí Guardian Tales</a></li>
+            <li><a href="index.jsp#gt-memoria">Memorias de Guardian Tales</a></li>
             <li><a href="index.jsp#gt-registro">¿Tengo que registrarme?</a></li>
         </ul>
     </div>

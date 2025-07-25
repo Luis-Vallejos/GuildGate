@@ -1,0 +1,121 @@
+<%@ taglib prefix="c"   uri="jakarta.tags.core" %>
+<jsp:useBean id="sub"
+             class="com.guildgate.web.Bean.SessionUserBean"
+             scope="session" />
+
+<!-- Navegador, Logo, Sección Cuenta -->
+<header id="navegador">
+    <div id="logo">
+        <a href="${pageContext.request.contextPath}/index.jsp" id="link-logo">
+            <img src="<%=(sub.getGremio().getGv().getAvatarGremio() != null && !sub.getGremio().getGv().getAvatarGremio().isEmpty())
+                    ? sub.getGremio().getGv().getAvatarGremio()
+                    : "/GremiosYRaids/imagenes/Gremio/GuildPics/DefaultGuildPic.png"%>"
+                 alt="logoGremio"
+                 loading="lazy">
+            <h1 id="nomGremio">
+                <%=(sub.getGremio().getNomGremioActual() != null && !sub.getGremio().getNomGremioActual().isEmpty())
+                        ? sub.getGremio().getNomGremioActual()
+                        : "Sin Gremio"%>
+            </h1>
+        </a>
+    </div>
+    <nav>
+        <div id="nav-container">
+            <ul id="nav-links">
+                <li>
+                    <a href="${pageContext.request.contextPath}/index.jsp"
+                       class="link-item"
+                       data-usuario="<%=sub.getPerfil().getNomUserActual()%>">
+                        Inicio
+                    </a>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#"
+                       class="link-item"
+                       data-usuario="<%=sub.getPerfil().getNomUserActual()%>">
+                        Gremios
+                    </a>
+                    <div class="dropdown-content">
+                        <% if (sub.getPerfil().getNomUserActual() != null) {
+                                if (sub.getGremio().getNomGremioActual().equals("Sin Gremio")) {%>
+                        <a href="gremio.jsp#container-buscarGremio" class="dropdown-item">
+                            Buscar un Gremio
+                        </a>
+                        <a href="crear-gremio.jsp?user=<%=sub.getPerfil().getNomUserActual()%>"
+                           class="dropdown-item">
+                            Crear un Gremio
+                        </a>
+                        <%   } else { %>
+                        <a href="migremio.jsp" class="dropdown-item">Mi Gremio</a>
+                        <%   }
+                            }%>
+                    </div>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#"
+                       class="link-item"
+                       data-usuario="<%=sub.getPerfil().getNomUserActual()%>">
+                        Raids
+                    </a>
+                    <div class="dropdown-content">
+                        <% if (sub.getPerfil().getNomUserActual() != null) {
+                                if (sub.getGremio().getNomGremioActual().equals("Sin Gremio")) { %>
+                        <a href="index.jsp" class="dropdown-item">
+                            ¡Necesitas crear/unirte a un <strong>GREMIO</strong> para acceder a esta sección!
+                        </a>
+                        <%   } else if (sub.tienePermiso("CREAR_RAIDS")) { %>
+                        <a href="raids.jsp" class="dropdown-item">Raids del Gremio</a>
+                        <a href="crear-raid.jsp" class="dropdown-item">Crear una Raid</a>
+                        <%   } else { %>
+                        <a href="raids.jsp" class="dropdown-item">Raids del Gremio</a>
+                        <%   }
+                            }%>
+                    </div>
+                </li>
+                <li>
+                    <a href="index.jsp#Info"
+                       class="link-item"
+                       data-usuario="<%=sub.getPerfil().getNomUserActual()%>">
+                        Información
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="nav-buttons">
+        <% if (sub.getPerfil().getNomUserActual() == null) { %>
+        <div id="nav-log-reg">
+            <form action="SvLogin" id="login-form" method="GET">
+                <button type="submit" class="btnLR" name="login">Iniciar Sesión</button>
+            </form>
+            <form action="SvRegister" id="register-form" method="GET">
+                <button type="submit" class="btnLR" name="register">Registrarme</button>
+            </form>
+        </div>
+        <% } else {%>
+        <div id="user-dropdown">
+            <button id="btn-account" aria-haspopup="true" aria-expanded="false">
+                <div id="avatar">
+                    <img id="imgUsuario"
+                         src="<%=(sub.getAvatar().getAvatarUsuario() != null && !sub.getAvatar().getAvatarUsuario().isEmpty())
+                                 ? sub.getAvatar().getAvatarUsuario()
+                                 : "/GremiosYRaids/imagenes/Usuario/UserPics/DefaultUserPic.png"%>"
+                         alt="pfpUser"
+                         loading="lazy">
+                </div>
+            </button>
+            <span id="nomUsuario">
+                <%=(sub.getPerfil().getNomUserActual() != null && !sub.getPerfil().getNomUserActual().isEmpty())
+                        ? sub.getPerfil().getNomUserActual()
+                        : "Usuario"%>
+            </span>
+            <div id="user-dropdown-content">
+                <a href="miperfil.jsp" class="dropdown-item">Mi Perfil</a>
+                <form action="SvLogout" method="POST">
+                    <button id="logout-button" class="dropdown-item">Cerrar Sesión</button>
+                </form>
+            </div>
+        </div>
+        <% }%>
+    </div>
+</header>

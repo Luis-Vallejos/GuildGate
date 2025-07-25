@@ -28,4 +28,16 @@ public class SessionUserBean {
     private GuildBean gremio;
     @Builder.Default
     private Set<RolBean> roles = new HashSet<>();
+
+    /**
+     * Devuelve true si alguno de sus roles contiene el permiso cuyo código es
+     * igual al que se le pasa.
+     * @param codigoPermiso
+     * @return 
+     */
+    public boolean tienePermiso(String codigoPermiso) {
+        return roles.stream()
+                .flatMap(r -> r.getPermisos().stream())
+                .anyMatch(p -> p.getCodigo().equalsIgnoreCase(codigoPermiso));
+    }
 }

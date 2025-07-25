@@ -3,7 +3,7 @@
 
 <jsp:include page="base.jsp">
     <jsp:param name="title" value="⚔ GuildGate ⚔"/>
-    <jsp:param name="css" value="css/pages/index.css?v=4"/>
-    <jsp:param name="contenido" value="includes/content/contentIndex.jspf"/>
-    <jsp:param name="js" value="scriptIndex.js"/>
+    <jsp:param name="css" value="css/pages/crear-gremio.css?v=4"/>
+    <jsp:param name="contenido" value="includes/content/contentCrearGremio.jspf"/>
+    <jsp:param name="js" value="crear-gremio.css?v=4"/>
 </jsp:include>
