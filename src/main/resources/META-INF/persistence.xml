@@ -11,17 +11,17 @@
     <class>com.guildgate.web.Modelo.Mundos</class>
     <class>com.guildgate.web.Modelo.Participaciones</class>
     <class>com.guildgate.web.Modelo.ParticipacionesExtra</class>
+    <class>com.guildgate.web.Modelo.Permiso</class>
     <class>com.guildgate.web.Modelo.Raid</class>
     <class>com.guildgate.web.Modelo.Region</class>
+    <class>com.guildgate.web.Modelo.RolPermiso</class>
     <class>com.guildgate.web.Modelo.Roles</class>
     <class>com.guildgate.web.Modelo.Ronda</class>
     <class>com.guildgate.web.Modelo.UsuarioRoles</class>
     <class>com.guildgate.web.Modelo.Usuarios</class>
-    <class>com.guildgate.web.Modelo.Permiso</class>
-    <class>com.guildgate.web.Modelo.RolPermiso</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://bd-lavender.mysql.database.azure.com:3306/gremiosyraids?serverTimezone=America/Lima&amp;useSSL=false"/>
+      <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://bd-lavender.mysql.database.azure.com:3306/GremiosYRaids?serverTimezone=America/Lima&amp;useSSL=false"/>
       <property name="jakarta.persistence.jdbc.user" value="g3Admin"/>
       <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
       <property name="jakarta.persistence.jdbc.password" value="contraseniaSegura_123"/>
